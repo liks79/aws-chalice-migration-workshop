@@ -32,7 +32,7 @@ class EmailIndex(GlobalSecondaryIndex):
     email = UnicodeAttribute(hash_key=True)
 
 
-class UserModel(Model, UserMixin):
+class User(Model, UserMixin):
     """
     User table for DynamoDB
     """
@@ -48,7 +48,7 @@ class UserModel(Model, UserMixin):
     password = UnicodeAttribute(null=False)
 
 
-class PhotoModel(Model):
+class Photo(Model):
     """
     User table for DynamoDB
     """
@@ -85,6 +85,6 @@ def load_user(id):
     :return: user record from User table
     """
 
-    user_item = UserModel.get(id)
+    user_item = User.get(id)
     return user_item
 
