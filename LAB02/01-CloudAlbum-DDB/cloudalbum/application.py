@@ -51,18 +51,6 @@ def init_app(app):
 
     # # Setup application configuration
     app.secret_key = conf['FLASK_SECRET']
-    # app.config['SQLALCHEMY_DATABASE_URI'] = conf['DB_URL']
-    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = conf['SQLALCHEMY_TRACK_MODIFICATIONS']
-    # app.config['SQLALCHEMY_ECHO'] = conf['DB_ECHO_FLAG']
-    #
-    # # SQLITE doesn't support DB connection pool
-    # if 'sqlite' not in conf['DB_URL'].lower():
-    #     app.config['SQLALCHEMY_POOL_SIZE'] = conf['DB_POOL_SIZE']
-    #     app.config['SQLALCHEMY_MAX_OVERFLOW'] = conf['DB_MAX_OVERFLOW']
-    #     app.config['SQLALCHEMY_POOL_TIMEOUT'] = conf['DB_SQLALCHEMY_POOL_TIMEOUT']
-    #     app.config['SQLALCHEMY_POOL_RECYCLE'] = conf['DB_SQLALCHEMY_POOL_RECYCLE']
-
-
     app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
     # Logger setup
@@ -87,15 +75,6 @@ def init_app(app):
     # Setup LoginManager
     login.init_app(app)
     login.login_view = 'userView.signin'
-
-    # Setup models for DB operations
-    # with app.app_context():
-    #     models.db.init_app(app)
-    #     try:
-    #         models.db.create_all()
-    #     except Exception as e:
-    #         app.logger.error(e)
-    #         exit(-1)
 
     return app
 

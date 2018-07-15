@@ -140,6 +140,16 @@ def check_variables():
         exit(-1)
 
 
+def check_variables_gmaps():
+    """
+    Check the key variables for application running
+    :return: if verification failed, exit with -1
+    """
+    if conf['GMAPS_KEY'] is None:
+        print('GMAPS_KEY are not configured!', file=sys.stderr)
+        print('Check your environment variables!', file=sys.stderr)
+        exit(-1)
+
 def log_path_check(log_path):
     """
 

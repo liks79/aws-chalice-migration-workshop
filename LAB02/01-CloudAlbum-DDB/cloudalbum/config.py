@@ -3,7 +3,6 @@ import os
 conf = {
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
-    'DB_URL': os.getenv('DB_URL', None),
 
     # Default config values
     'APP_HOST': os.getenv('APP_HOST', '0.0.0.0'),
