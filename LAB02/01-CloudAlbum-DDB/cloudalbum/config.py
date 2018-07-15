@@ -1,6 +1,6 @@
 import os
 
-options = {
+conf = {
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
     'DB_URL': os.getenv('DB_URL', None),
@@ -32,12 +32,6 @@ options = {
     'AWS_REGION': os.getenv('AWS_REGION', 'ap-southeast-1'),
     'DDB_RCU': os.getenv('DDB_RCU', 10),
     'DDB_WCU': os.getenv('DDB_WCU', 10),
-
-    # For Twitter federation.(Not mandatory)
-    'TWIT_APP_KEY':  os.getenv('TWIT_APP_KEY', ''),
-    'TWIT_APP_SECRET': os.getenv('TWIT_APP_SECRET', ''),
-    'TWIT_CALLBACK_SERVER': os.getenv('TWIT_CALLBACK_SERVER', '')
-
 
 }
 

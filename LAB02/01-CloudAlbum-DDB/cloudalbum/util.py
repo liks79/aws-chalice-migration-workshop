@@ -9,7 +9,7 @@
 
 import os
 import sys
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from PIL import Image
 import collections
 import time
@@ -24,7 +24,7 @@ def allowed_file_ext(filename):
     :return: True or False
     """
     return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in options['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in conf['ALLOWED_EXTENSIONS']
 
 
 def email_normalize(email):
@@ -46,7 +46,7 @@ def save(upload_file, filename, email, app):
     :param app: Flask.app
     :return: file size (byte)
     """
-    path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(email))
+    path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(email))
 
     try:
         if not os.path.exists(path):
@@ -74,7 +74,7 @@ def save(upload_file, filename, email, app):
 #     :return: None
 #     """
 #     try:
-#         path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(current_user.email))
+#         path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(current_user.email))
 #         thumbnail = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
 #         original = os.path.join(path, photo.filename)
 #         if os.path.exists(thumbnail):
@@ -96,7 +96,7 @@ def delete(app, filename, current_user):
     :return: None
     """
     try:
-        path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(current_user.email))
+        path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(current_user.email))
         thumbnail = os.path.join(os.path.join(path, "thumbnail"), filename)
         original = os.path.join(path, filename)
         if os.path.exists(thumbnail):
@@ -130,7 +130,7 @@ def make_thumbnails(path, filename, app):
 
         im = Image.open(os.path.join(path, filename))
         im = im.convert('RGB')
-        im.thumbnail((options['THUMBNAIL_WIDTH'], options['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
         im.save(thumb_full_path)
 
     except Exception as e:
@@ -156,7 +156,7 @@ def check_variables():
     Check the key variables for application running
     :return: if verification failed, exit with -1
     """
-    if (options['DB_URL'] is None) or (options['GMAPS_KEY'] is None):
+    if (conf['DB_URL'] is None) or (conf['GMAPS_KEY'] is None):
         print('DB_URL or GMAPS_KEY are not configured!', file=sys.stderr)
         print('Check your environment variables!', file=sys.stderr)
         exit(-1)
@@ -173,31 +173,6 @@ def log_path_check(log_path):
             os.makedirs(log_path)
     except Exception as e:
         raise e
-
-
-def count(iterable):
-    """
-    Count the number of items that `iterable` yields.
-    Equivalent to the expression
-    ::
-      len(iterable)
-    … but it also works for iterables that do not support ``len()``.
-      >>> import cardinality
-      >>> cardinality.count([1, 2, 3])
-      3
-      >>> cardinality.count(i for i in range(500))
-      500
-      >>> def gen():
-      ...     yield 'hello'
-      ...     yield 'world'
-      >>> cardinality.count(gen())
-      2
-    """
-    if hasattr(iterable, '__len__'):
-        return len(iterable)
-
-    d = collections.deque(enumerate(iterable, 1), maxlen=1)
-    return d[0][0] if d else 0
 
 
 current_milli_time = lambda: int(round(time.time() * 1000))

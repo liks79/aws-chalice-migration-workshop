@@ -174,7 +174,7 @@ var GMaps = (function(global) {
    * Creates a new GMaps instance, including a Google Maps map.
    * @class GMaps
    * @constructs
-   * @param {object} options - `options` accepts all the [MapOptions](https://developers.google.com/maps/documentation/javascript/reference#MapOptions) and [events](https://developers.google.com/maps/documentation/javascript/reference#Map) listed in the Google Maps API. Also accepts:
+   * @param {object} options - `conf` accepts all the [MapOptions](https://developers.google.com/maps/documentation/javascript/reference#MapOptions) and [events](https://developers.google.com/maps/documentation/javascript/reference#Map) listed in the Google Maps API. Also accepts:
    * * `lat` (number): Latitude of the map's center
    * * `lng` (number): Longitude of the map's center
    * * `el` (string or HTMLElement): container where the map will be rendered
@@ -438,9 +438,9 @@ var GMaps = (function(global) {
     /**
      * Add a context menu for a map or a marker.
      *
-     * @param {object} options - The `options` object should contain:
+     * @param {object} options - The `conf` object should contain:
      * * `control` (string): Kind of control the context menu will be attached. Can be "map" or "marker".
-     * * `options` (array): A collection of context menu items:
+     * * `conf` (array): A collection of context menu items:
      *   * `title` (string): Item's title shown in the context menu.
      *   * `name` (string): Item's identifier.
      *   * `action` (function): Function triggered after selecting the context menu item.
@@ -704,7 +704,7 @@ GMaps.prototype.createControl = function(options) {
 /**
  * Add a custom control to the map UI.
  *
- * @param {object} options - The `options` object should contain:
+ * @param {object} options - The `conf` object should contain:
  * * `style` (object): The keys and values of this object should be valid CSS properties and values.
  * * `id` (string): The HTML id for the custom control.
  * * `classes` (string): A string containing all the HTML classes for the custom control.
@@ -1905,7 +1905,7 @@ GMaps.staticMapURL = function(options){
   var polyline = options.polyline;
   delete options.polyline;
 
-  /** Map options **/
+  /** Map conf **/
   if (options.center) {
     parameters.push('center=' + options.center);
     delete options.center;

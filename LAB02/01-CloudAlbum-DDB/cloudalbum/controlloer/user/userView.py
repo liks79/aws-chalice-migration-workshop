@@ -16,7 +16,7 @@ from cloudalbum.controlloer.errors import errorHandler
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import jsonify
-from cloudalbum.model.models_ddb import UserModel
+from cloudalbum.model.models_ddb import User
 import uuid
 
 blueprint = Blueprint('userView', __name__)
@@ -36,7 +36,7 @@ def signin():
         app.logger.debug(form.data)
         try:
             user = None
-            for item in UserModel.email_index.query(form.email.data):
+            for item in User.email_index.query(form.email.data):
                 user = item
 
             password_matched = check_password_hash(user.password, form.password.data)
@@ -75,11 +75,11 @@ def signup():
 
         try:
             user_exist = None
-            for item in UserModel.email_index.query(form.email.data):
+            for item in User.email_index.query(form.email.data):
                 user_exist = item.email
 
             if not user_exist:
-                user = UserModel(uuid.uuid4().hex)
+                user = User(uuid.uuid4().hex)
                 user.email = form.email.data
                 user.password = generate_password_hash(form.password.data)
                 user.username = form.username.data
@@ -112,7 +112,7 @@ def edit(user_id):
 
     if request.method == 'GET':
         try:
-            user = UserModel.get(user_id)
+            user = User.get(user_id)
             app.logger.debug(user)
         except Exception as e:
             app.logger.error(e)
@@ -120,12 +120,12 @@ def edit(user_id):
 
     if request.method == 'PUT':
         try:
-            user = UserModel.get(user_id)
+            user = User.get(user_id)
             data = request.get_json()
             app.logger.debug(data)
             user.update(actions=[
-                UserModel.username.set(data['username']),
-                UserModel.password.set(generate_password_hash(data['password']))
+                User.username.set(data['username']),
+                User.password.set(generate_password_hash(data['password']))
             ])
             return jsonify(update='success')
 

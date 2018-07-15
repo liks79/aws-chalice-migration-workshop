@@ -101,7 +101,7 @@ def load_user(id):
     """
     # user = User.query.get(int(id))
     #
-    # minutes = options['SESSION_TIMEOUT']
+    # minutes = conf['SESSION_TIMEOUT']
     #
     # if user.last_seen < (datetime.utcnow() - datetime.timedelta(minutes=minutes)):
     #     # Session has timed out

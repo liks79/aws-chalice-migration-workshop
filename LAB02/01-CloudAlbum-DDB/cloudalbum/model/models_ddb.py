@@ -12,7 +12,7 @@ from flask_login import UserMixin
 from pynamodb.indexes import GlobalSecondaryIndex, IncludeProjection
 from cloudalbum import login
 from cloudalbum import util
-from cloudalbum.config import options
+from cloudalbum.config import conf
 
 
 class EmailIndex(GlobalSecondaryIndex):
@@ -32,14 +32,14 @@ class EmailIndex(GlobalSecondaryIndex):
     email = UnicodeAttribute(hash_key=True)
 
 
-class UserModel(Model, UserMixin):
+class User(Model, UserMixin):
     """
     User table for DynamoDB
     """
 
     class Meta:
         table_name = 'User'
-        region = options['AWS_REGION']
+        region = conf['AWS_REGION']
 
     id = UnicodeAttribute(hash_key=True)
     email_index = EmailIndex()
@@ -48,14 +48,14 @@ class UserModel(Model, UserMixin):
     password = UnicodeAttribute(null=False)
 
 
-class PhotoModel(Model):
+class Photo(Model):
     """
     User table for DynamoDB
     """
 
     class Meta:
         table_name = 'Photo'
-        region = options['AWS_REGION']
+        region = conf['AWS_REGION']
 
     user_id = UnicodeAttribute(hash_key=True)
     id = NumberAttribute(range_key=True)
@@ -85,6 +85,6 @@ def load_user(id):
     :return: user record from User table
     """
 
-    user_item = UserModel.get(id)
+    user_item = User.get(id)
     return user_item
 
