@@ -13,7 +13,6 @@ from cloudalbum.config import conf
 from PIL import Image
 from io import BytesIO
 from flask import flash
-import collections
 import time
 import os
 import sys

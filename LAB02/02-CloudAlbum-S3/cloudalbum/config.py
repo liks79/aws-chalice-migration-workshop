@@ -1,6 +1,6 @@
 import os
 
-options = {
+conf = {
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
     'DB_URL': os.getenv('DB_URL', None),
@@ -35,13 +35,6 @@ options = {
 
     # S3
     'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop'),
-
-    # For Twitter federation.(Not mandatory)
-    'TWIT_APP_KEY':  os.getenv('TWIT_APP_KEY', ''),
-    'TWIT_APP_SECRET': os.getenv('TWIT_APP_SECRET', ''),
-    'TWIT_CALLBACK_SERVER': os.getenv('TWIT_CALLBACK_SERVER', '')
-
-
 }
 
 

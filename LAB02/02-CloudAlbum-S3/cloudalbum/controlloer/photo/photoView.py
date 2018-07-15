@@ -23,7 +23,6 @@ from cloudalbum.config import conf
 from cloudalbum.model.models_ddb import Photo
 import uuid
 import os
-import boto3
 
 
 blueprint = Blueprint('photoView', __name__)
