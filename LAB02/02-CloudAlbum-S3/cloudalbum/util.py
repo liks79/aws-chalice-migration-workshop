@@ -98,7 +98,6 @@ def save_s3(upload_file_stream, filename, email, app):
         s3_client.put_object(
                 Bucket=conf['S3_PHOTO_BUCKET'],
                 Key=key_thumb,
-                # Body=resize_image(upload_file_stream, (conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'])),
                 Body=make_thumbnails_s3(upload_file_stream, app),
                 ContentType='image/jpeg',
                 StorageClass='ONEZONE_IA'
