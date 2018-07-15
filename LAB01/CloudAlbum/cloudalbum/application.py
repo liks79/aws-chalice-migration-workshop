@@ -7,7 +7,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from cloudalbum import login
 from cloudalbum.controlloer.errors import errorHandler
 from cloudalbum.controlloer.user import userView
@@ -48,30 +48,30 @@ def init_app(app):
     app.register_blueprint(photoView.blueprint, url_prefix='/photos')
 
     # Setup application configuration
-    app.secret_key = options['FLASK_SECRET']
-    app.config['SQLALCHEMY_DATABASE_URI'] = options['DB_URL']
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = options['SQLALCHEMY_TRACK_MODIFICATIONS']
-    app.config['SQLALCHEMY_ECHO'] = options['DB_ECHO_FLAG']
+    app.secret_key = conf['FLASK_SECRET']
+    app.config['SQLALCHEMY_DATABASE_URI'] = conf['DB_URL']
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = conf['SQLALCHEMY_TRACK_MODIFICATIONS']
+    app.config['SQLALCHEMY_ECHO'] = conf['DB_ECHO_FLAG']
 
     # SQLITE doesn't support DB connection pool
-    if 'sqlite' not in options['DB_URL'].lower():
-        app.config['SQLALCHEMY_POOL_SIZE'] = options['DB_POOL_SIZE']
-        app.config['SQLALCHEMY_MAX_OVERFLOW'] = options['DB_MAX_OVERFLOW']
-        app.config['SQLALCHEMY_POOL_TIMEOUT'] = options['DB_SQLALCHEMY_POOL_TIMEOUT']
-        app.config['SQLALCHEMY_POOL_RECYCLE'] = options['DB_SQLALCHEMY_POOL_RECYCLE']
+    if 'sqlite' not in conf['DB_URL'].lower():
+        app.config['SQLALCHEMY_POOL_SIZE'] = conf['DB_POOL_SIZE']
+        app.config['SQLALCHEMY_MAX_OVERFLOW'] = conf['DB_MAX_OVERFLOW']
+        app.config['SQLALCHEMY_POOL_TIMEOUT'] = conf['DB_SQLALCHEMY_POOL_TIMEOUT']
+        app.config['SQLALCHEMY_POOL_RECYCLE'] = conf['DB_SQLALCHEMY_POOL_RECYCLE']
 
 
     app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
     # Logger setup
     app.config['LOGGING_LEVEL'] = get_log_level()
-    app.config['LOGGING_FORMAT'] = options['LOGGING_FORMAT']
-    app.config['LOGGING_LOCATION'] = options['LOG_FILE_PATH']
-    app.config['LOGGING_FILENAME'] = os.path.join(options['LOG_FILE_PATH'], options['LOG_FILE_NAME'])
-    app.config['LOGGING_MAX_BYTES'] = options['LOGGING_MAX_BYTES']
-    app.config['LOGGING_BACKUP_COUNT'] = options['LOGGING_BACKUP_COUNT']
+    app.config['LOGGING_FORMAT'] = conf['LOGGING_FORMAT']
+    app.config['LOGGING_LOCATION'] = conf['LOG_FILE_PATH']
+    app.config['LOGGING_FILENAME'] = os.path.join(conf['LOG_FILE_PATH'], conf['LOG_FILE_NAME'])
+    app.config['LOGGING_MAX_BYTES'] = conf['LOGGING_MAX_BYTES']
+    app.config['LOGGING_BACKUP_COUNT'] = conf['LOGGING_BACKUP_COUNT']
 
-    util.log_path_check(options['LOG_FILE_PATH'])
+    util.log_path_check(conf['LOG_FILE_PATH'])
     file_handler = RotatingFileHandler(app.config['LOGGING_FILENAME'],
                                        maxBytes=app.config['LOGGING_MAX_BYTES'],
                                        backupCount=app.config['LOGGING_BACKUP_COUNT'])
@@ -102,7 +102,7 @@ def get_log_level():
     Determine logging level option from config file
     :return: logging level
     """
-    level = options['LOGGING_LEVEL']
+    level = conf['LOGGING_LEVEL']
     if level.lower() is 'info':
         return logging.INFO
     elif level.lower() is 'debug':

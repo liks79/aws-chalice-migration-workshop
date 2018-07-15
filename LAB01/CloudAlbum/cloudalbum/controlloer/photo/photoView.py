@@ -20,7 +20,7 @@ from werkzeug.utils import secure_filename
 from cloudalbum import util
 from math import ceil
 from flask import jsonify
-from cloudalbum.config import options
+from cloudalbum.config import conf
 import uuid
 import os
 
@@ -38,21 +38,21 @@ def photos(page=1):
     """
 
     photo_count = db.session.query(Photo).filter_by(user_id=current_user.id).count()
-    pagination = Pagination(page, options['PER_PAGE'], photo_count)
+    pagination = Pagination(page, conf['PER_PAGE'], photo_count)
 
     if page != 1:
-        offset = options['PER_PAGE'] * (page - 1)
+        offset = conf['PER_PAGE'] * (page - 1)
     else:
         offset = 0
 
     photo_pages = db.session.query(Photo). \
                         filter_by(user_id=current_user.id). \
                         order_by(Photo.upload_date.desc()). \
-                        limit(options['PER_PAGE']). \
+                        limit(conf['PER_PAGE']). \
                         offset(offset). \
                         all()
 
-    return render_template('home.html', pagination=pagination, photos=photo_pages, gmaps_key=options['GMAPS_KEY'],
+    return render_template('home.html', pagination=pagination, photos=photo_pages, gmaps_key=conf['GMAPS_KEY'],
                            sizeof_fmt=util.sizeof_fmt, current_user=current_user)
 
 
@@ -87,7 +87,7 @@ def upload():
             db.session.add(photo)
             db.session.commit()
             flash('Your file upload have been completed successfully!')
-            return redirect(url_for("photoView.photos", form=form, gmaps_key=options['GMAPS_KEY']))
+            return redirect(url_for("photoView.photos", form=form, gmaps_key=conf['GMAPS_KEY']))
 
         except Exception as e:
             app.logger.error(e)
@@ -95,7 +95,7 @@ def upload():
             db.session.rollback()
             return errorHandler.server_error(e)
 
-    return render_template('upload.html', form=form, gmaps_key=options['GMAPS_KEY'])
+    return render_template('upload.html', form=form, gmaps_key=conf['GMAPS_KEY'])
 
 
 @blueprint.route('/<photo_id>', methods=['DELETE'])
@@ -135,7 +135,7 @@ def photo_url(photo_id):
     mode = request.args.get('mode')
     try:
         photo = db.session.query(Photo).filter_by(id=photo_id).first()
-        path = os.path.join(options['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
+        path = os.path.join(conf['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
 
         if mode == "thumbnail":
             full_path = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
@@ -168,7 +168,7 @@ def edit(photo_id):
 
     if request.method == 'GET':
         photo = db.session.query(Photo).filter_by(id=photo_id).first()
-        return render_template('upload.html', photo=photo, gmaps_key=options['GMAPS_KEY'])
+        return render_template('upload.html', photo=photo, gmaps_key=conf['GMAPS_KEY'])
 
     elif request.method == 'PUT':
         data = request.get_json()
@@ -189,7 +189,7 @@ def edit(photo_id):
             app.logger.error(e)
             return jsonify(update='fail')
     else:
-        return redirect(url_for("/", gmaps_key=options['GMAPS_KEY']))
+        return redirect(url_for("/", gmaps_key=conf['GMAPS_KEY']))
 
 
 @blueprint.route('/search', methods=['POST'])
@@ -207,7 +207,7 @@ def search():
                 order_by(Photo.upload_date.desc()). \
                 all()
     flash("Search results for '{0}'.. ".format(keyword))
-    return render_template('home.html', photos=photo_pages, gmaps_key=options['GMAPS_KEY'])
+    return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'])
 
 
 @blueprint.route('/map', methods=['GET'])
@@ -231,7 +231,7 @@ def map_view(photo_id=None):
         # Use .all() instead of .first() to increase reusability of Jinja template.
         photo_list = db.session.query(Photo).filter_by(id=photo_id).all()
 
-    return render_template("map.html", photos=photo_list, gmaps_key=options['GMAPS_KEY'])
+    return render_template("map.html", photos=photo_list, gmaps_key=conf['GMAPS_KEY'])
 
 
 class PhotoForm(FlaskForm):

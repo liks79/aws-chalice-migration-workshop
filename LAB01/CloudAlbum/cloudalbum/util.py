@@ -9,7 +9,7 @@
 
 from datetime import datetime
 from tzlocal import get_localzone
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from PIL import Image
 import collections
 import time
@@ -24,7 +24,7 @@ def allowed_file_ext(filename):
     :return: True or False
     """
     return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in options['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in conf['ALLOWED_EXTENSIONS']
 
 
 def email_normalize(email):
@@ -46,7 +46,7 @@ def save(upload_file, filename, email, app):
     :param app: Flask.app
     :return: file size (byte)
     """
-    path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(email))
+    path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(email))
 
     try:
         if not os.path.exists(path):
@@ -74,7 +74,7 @@ def delete(app, filename, current_user):
     :return: None
     """
     try:
-        path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(current_user.email))
+        path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(current_user.email))
         thumbnail = os.path.join(os.path.join(path, "thumbnail"), filename)
         original = os.path.join(path, filename)
         if os.path.exists(thumbnail):
@@ -108,7 +108,7 @@ def make_thumbnails(path, filename, app):
 
         im = Image.open(os.path.join(path, filename))
         im = im.convert('RGB')
-        im.thumbnail((options['THUMBNAIL_WIDTH'], options['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
         im.save(thumb_full_path)
 
     except Exception as e:
@@ -134,7 +134,7 @@ def check_variables():
     Check the key variables for application running
     :return: if verification failed, exit with -1
     """
-    if (options['DB_URL'] is None) or (options['GMAPS_KEY'] is None):
+    if (conf['DB_URL'] is None) or (conf['GMAPS_KEY'] is None):
         print('DB_URL or GMAPS_KEY are not configured!', file=sys.stderr)
         print('Check your environment variables!', file=sys.stderr)
         exit(-1)
