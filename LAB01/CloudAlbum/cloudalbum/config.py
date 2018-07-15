@@ -27,11 +27,6 @@ options = {
     'PER_PAGE': os.getenv('PER_PAGE', 6),
     'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 350),
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 300),
-
-    # For Twitter federation.(Not mandatory)
-    'TWIT_APP_KEY':  os.getenv('TWIT_APP_KEY', ''),
-    'TWIT_APP_SECRET': os.getenv('TWIT_APP_SECRET', ''),
-    'TWIT_CALLBACK_SERVER': os.getenv('TWIT_CALLBACK_SERVER', '')
 }
 
 

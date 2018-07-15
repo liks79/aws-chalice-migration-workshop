@@ -12,7 +12,6 @@ from cloudalbum import login
 from cloudalbum.controlloer.errors import errorHandler
 from cloudalbum.controlloer.user import userView
 from cloudalbum.controlloer.site import siteView
-from cloudalbum.controlloer.sns import twitter
 from cloudalbum.controlloer.photo import photoView
 from cloudalbum.model import models
 from logging.handlers import RotatingFileHandler
@@ -47,7 +46,6 @@ def init_app(app):
     app.register_blueprint(siteView.blueprint, url_prefix='/')
     app.register_blueprint(userView.blueprint, url_prefix='/users')
     app.register_blueprint(photoView.blueprint, url_prefix='/photos')
-    app.register_blueprint(twitter.blueprint, url_prefix='/sns')
 
     # Setup application configuration
     app.secret_key = options['FLASK_SECRET']
