@@ -34,7 +34,7 @@ conf = {
     'DDB_WCU': os.getenv('DDB_WCU', 10),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop'),
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop')
 }
 
 
