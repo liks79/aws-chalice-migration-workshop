@@ -12,7 +12,7 @@ from flask_login import UserMixin
 from pynamodb.indexes import GlobalSecondaryIndex, IncludeProjection
 from cloudalbum import login
 from cloudalbum import util
-from cloudalbum.config import options
+from cloudalbum.config import conf
 
 
 class EmailIndex(GlobalSecondaryIndex):
@@ -39,7 +39,7 @@ class UserModel(Model, UserMixin):
 
     class Meta:
         table_name = 'User'
-        region = options['AWS_REGION']
+        region = conf['AWS_REGION']
 
     id = UnicodeAttribute(hash_key=True)
     email_index = EmailIndex()
@@ -55,7 +55,7 @@ class PhotoModel(Model):
 
     class Meta:
         table_name = 'Photo'
-        region = options['AWS_REGION']
+        region = conf['AWS_REGION']
 
     user_id = UnicodeAttribute(hash_key=True)
     id = NumberAttribute(range_key=True)

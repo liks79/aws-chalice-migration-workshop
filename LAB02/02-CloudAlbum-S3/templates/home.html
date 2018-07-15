@@ -44,9 +44,6 @@
                     <a id="map-view" href="{{ url_for('photoView.map_view', photo_id=photo.id) }}" data-toggle="tooltip" title="Map view">
                         <i class="fas fa-map-marker-alt"></i>
                     </a>
-                    <a id="twit" href="#" data-toggle="tooltip" title="Send it to Twitter" onClick="twit({{ photo.id }});">
-                        <i class="fab fa-twitter-square"></i>
-                    </a>
                     <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo({{ photo.id }});">
                         <i class="fas fa-trash-alt"></i>
                     </a> &nbsp;
@@ -192,43 +189,6 @@
             });
         }
 
-
-        // Send image and message to Twitter
-        function twit(id) {
-            bootbox.confirm({
-                message: "Would you like to send it to Twitter?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-secondary'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-dark'
-                    }
-                },
-                callback: function (result) {
-
-                    if (result == true) {
-                        console.log("Not implemented yet.");
-                        msgAlert("Not implemented yet.");
-                        //window.location.href='/sns/twitter/'+id;
-                    }
-                    else{
-                        console.log("Canceled.");
-                        msgAlert("Canceled.");
-                    }
-                }
-            }).find('.modal-content').css({
-            'margin-top': function (){
-                var w = $( window ).height();
-                var b = $(".modal-dialog").height();
-                // should not be (w-h)/2
-                var h = ((w-b)/2)-50;
-                return h+"px";
-                }
-            });
-        }
 
     </script>
 

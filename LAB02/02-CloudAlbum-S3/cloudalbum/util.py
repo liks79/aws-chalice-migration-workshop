@@ -9,7 +9,7 @@
 
 from datetime import datetime
 from tzlocal import get_localzone
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from PIL import Image
 from io import BytesIO
 from flask import flash
@@ -30,7 +30,7 @@ def allowed_file_ext(filename):
     :return: True or False
     """
     return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in options['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in conf['ALLOWED_EXTENSIONS']
 
 
 def email_normalize(email):
@@ -52,7 +52,7 @@ def save(upload_file, filename, email, app):
     :param app: Flask.app
     :return: file size (byte)
     """
-    path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(email))
+    path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(email))
 
     try:
         if not os.path.exists(path):
@@ -85,27 +85,27 @@ def save_s3(upload_file_stream, filename, email, app):
     try:
         # Save original file
         s3_client.put_object(
-                Bucket=options['S3_PHOTO_BUCKET'],
+                Bucket=conf['S3_PHOTO_BUCKET'],
                 Key=key,
                 Body=original_bytes,
                 ContentType='image/jpeg',
                 StorageClass='STANDARD'
         )
 
-        app.logger.debug('s3://{0}/{1} uploaded'.format(options['S3_PHOTO_BUCKET'], key))
+        app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key))
 
         # Save thumbnail file
         upload_file_stream.stream.seek(0)
         s3_client.put_object(
-                Bucket=options['S3_PHOTO_BUCKET'],
+                Bucket=conf['S3_PHOTO_BUCKET'],
                 Key=key_thumb,
-                # Body=resize_image(upload_file_stream, (options['THUMBNAIL_WIDTH'], options['THUMBNAIL_HEIGHT'])),
+                # Body=resize_image(upload_file_stream, (conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'])),
                 Body=make_thumbnails_s3(upload_file_stream, app),
                 ContentType='image/jpeg',
                 StorageClass='ONEZONE_IA'
         )
 
-        app.logger.debug('s3://{0}/{1} uploaded'.format(options['S3_PHOTO_BUCKET'], key_thumb))
+        app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key_thumb))
         upload_file_stream.stream.seek(0)
 
     except Exception as e:
@@ -124,7 +124,7 @@ def delete(app, filename, current_user):
     :return: None
     """
     try:
-        path = os.path.join(options['UPLOAD_FOLDER'], email_normalize(current_user.email))
+        path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(current_user.email))
         thumbnail = os.path.join(os.path.join(path, "thumbnail"), filename)
         original = os.path.join(path, filename)
         if os.path.exists(thumbnail):
@@ -146,8 +146,8 @@ def delete_s3(app, filename, current_user):
 
     s3_client = boto3.client('s3')
     try:
-        s3_client.delete_object(Bucket=options['S3_PHOTO_BUCKET'], Key=key)
-        s3_client.delete_object(Bucket=options['S3_PHOTO_BUCKET'], Key=key_thumb)
+        s3_client.delete_object(Bucket=conf['S3_PHOTO_BUCKET'], Key=key)
+        s3_client.delete_object(Bucket=conf['S3_PHOTO_BUCKET'], Key=key_thumb)
     except Exception as e:
         app.logger.error('Error occurred while deleting file:%s', e)
         raise e
@@ -174,7 +174,7 @@ def make_thumbnails(path, filename, app):
 
         im = Image.open(os.path.join(path, filename))
         im = im.convert('RGB')
-        im.thumbnail((options['THUMBNAIL_WIDTH'], options['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
         im.save(thumb_full_path)
 
     except Exception as e:
@@ -188,7 +188,7 @@ def make_thumbnails_s3(file_p, app):
     try:
         im = Image.open(file_p)
         im = im.convert('RGB')
-        im.thumbnail((options['THUMBNAIL_WIDTH'], options['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
         im.save(result_bytes_stream, 'JPEG')
     except Exception as e:
         app.logger.debug(e)
@@ -214,8 +214,19 @@ def check_variables():
     Check the key variables for application running
     :return: if verification failed, exit with -1
     """
-    if (options['DB_URL'] is None) or (options['GMAPS_KEY'] is None):
+    if (conf['DB_URL'] is None) or (conf['GMAPS_KEY'] is None):
         print('DB_URL or GMAPS_KEY are not configured!', file=sys.stderr)
+        print('Check your environment variables!', file=sys.stderr)
+        exit(-1)
+
+
+def check_variables_gmaps():
+    """
+    Check the key variables for application running
+    :return: if verification failed, exit with -1
+    """
+    if conf['GMAPS_KEY'] is None:
+        print('GMAPS_KEY are not configured!', file=sys.stderr)
         print('Check your environment variables!', file=sys.stderr)
         exit(-1)
 
@@ -283,13 +294,13 @@ def presigned_url(filename, email, Thumbnail=True):
             key_thumb = "{0}{1}".format(prefix_thumb, filename)
             url = s3_client.generate_presigned_url(
                 'get_object',
-                Params={'Bucket': options['S3_PHOTO_BUCKET'],
+                Params={'Bucket': conf['S3_PHOTO_BUCKET'],
                         'Key': key_thumb})
         else:
             key = "{0}{1}".format(prefix, filename)
             url = s3_client.generate_presigned_url(
                 'get_object',
-                Params={'Bucket': options['S3_PHOTO_BUCKET'],
+                Params={'Bucket': conf['S3_PHOTO_BUCKET'],
                         'Key': key})
 
     except Exception as e:

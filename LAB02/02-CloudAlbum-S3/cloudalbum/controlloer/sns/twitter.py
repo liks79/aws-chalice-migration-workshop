@@ -17,7 +17,7 @@ from twython import Twython, TwythonError
 
 from cloudalbum import util
 import os
-from cloudalbum.config import options
+from cloudalbum.config import conf
 
 blueprint = Blueprint('twitter', __name__)
 
@@ -49,7 +49,7 @@ def __send_twit__(twitter, photo_id):
 
     try:
         photo = db.session.query(Photo).filter_by(id=photo_id).first()
-        path = os.path.join(options['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
+        path = os.path.join(conf['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
         thumbnail = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
 
         with open(thumbnail, "rb") as file:
@@ -75,9 +75,9 @@ def __oauth__(photo_id):
     """
 
     try:
-        twitter = Twython(options['TWIT_APP_KEY'],
-                          options['TWIT_APP_SECRET'])
-        callback_svr = options['TWIT_CALLBACK_SERVER']
+        twitter = Twython(conf['TWIT_APP_KEY'],
+                          conf['TWIT_APP_SECRET'])
+        callback_svr = conf['TWIT_CALLBACK_SERVER']
         auth = twitter.get_authentication_tokens(
                           callback_url= callback_svr +
                           url_for('twitter.callback', photo_id=photo_id))
@@ -113,15 +113,15 @@ def callback(photo_id):
     
     try:
         # Verify authentication token and create twitter object.
-        twitter = Twython(options['TWIT_APP_KEY'],
-                          options['TWIT_APP_SECRET'],
+        twitter = Twython(conf['TWIT_APP_KEY'],
+                          conf['TWIT_APP_SECRET'],
                           OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
         final_step = twitter.get_authorized_tokens(oauth_verifier)    
         
         # recreate twitter object for final authentication.
-        twitter = Twython(options['TWIT_APP_KEY'],
-                          options['TWIT_APP_SECRET'],
-                          final_step['oauth_token'], 
+        twitter = Twython(conf['TWIT_APP_KEY'],
+                          conf['TWIT_APP_SECRET'],
+                          final_step['oauth_token'],
                           final_step['oauth_token_secret'])
         session['TWITTER'] = twitter
     
