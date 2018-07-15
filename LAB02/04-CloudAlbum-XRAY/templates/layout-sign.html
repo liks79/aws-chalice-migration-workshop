@@ -1,0 +1,87 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Cloud Album::{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static',filename='css/login.css')}}" rel="stylesheet">
+
+    <!-- jQuery JavaScript -->
+    <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{url_for('static',filename='js/bootstrap.bundle.min.js')}}"></script>
+    <!-- Fontawesome for vectorized icons -->
+    <script defer src="{{url_for('static',filename='js/all.js')}}"></script>
+
+
+    <script>
+      //customized bootbox.alert function
+      function msgbox(msg) {
+        bootbox.alert({
+            message: msg,
+            size: 'small'
+        }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+            }
+        });
+      }
+
+
+      //Set alert message timeout
+      window.setTimeout(function() {
+          $(".alert").fadeTo(500, 0).slideUp(500, function(){
+              $(this).remove();
+          });
+      }, 4000);
+
+    </script>
+
+    {% block head %}{% endblock %}
+
+  </head>
+
+  <body class="bg-dark">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center text-white mb-4">
+            {% if user %}
+                <a href="javascript:location.href='/';" style="color:white"> <i class="fas fa-step-backward"></i> BACK</a>
+            {% else %}
+              <i class="fas fa-images"></i> Cloud Album
+            {% endif %}
+          </h2>
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+
+
+             {% block content %}{% endblock %}
+
+
+            </div>
+          </div>
+          <!--/row-->
+        </div>
+        <!--/col-->
+      </div>
+      <!--/row-->
+    </div>
+    <!--/container-->
+
+
+  </body>
+</html>
+

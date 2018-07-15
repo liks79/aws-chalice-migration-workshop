@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cloud Album::{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static',filename='css/app.css')}}" rel="stylesheet" type="text/css">
+
+    <script src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{url_for('static',filename='js/bootstrap.bundle.min.js')}}"></script>
+    <!-- Google Map API -->
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ gmaps_key }}"></script>
+    <!-- Gmaps.js -->
+    <script src="{{url_for('static',filename='js/gmaps.js')}}"></script>
+
+    <!-- bootbox.js -->
+    <script src="{{url_for('static',filename='js/bootbox.min.js')}}"></script>
+    <!-- Fontawesome for vectorized icons -->
+    <script defer src="{{url_for('static',filename='js/all.js')}}"></script>
+
+
+    <script>
+      // AjaxSetup for CSRF working
+      var csrf_token = '{{ csrf_token() }}';
+
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader("X-CSRFToken", csrf_token);
+              }
+          }
+      });
+
+
+      //customized bootbox.alert function
+      function msgbox(msg) {
+        bootbox.alert({
+            message: msg,
+            size: 'small'
+        }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+            }
+        });
+      }
+
+      //Set alert message timeout
+      window.setTimeout(function() {
+          $(".alert").fadeTo(700, 0).slideUp(700, function(){
+              $(this).remove();
+          });
+      }, 4000);
+
+      //Message alerting function
+      function msgAlert(msg) {
+        $("#alert-container").html("<div class=\"alert alert-warning\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" + msg + "</div>" +
+            "<script>      " +
+            "window.setTimeout(function() {\n" +
+            "          $(\".alert\").fadeTo(500, 0).slideUp(500, function(){\n" +
+            "              $(this).remove();\n" +
+            "          });\n" +
+            "      }, 4000);" +
+            "<\/script>");
+      }
+
+
+      //Function for searching
+      function search(){
+
+            bootbox.prompt({
+                title: "&nbsp;&nbsp;Please enter a search keyword..",
+                buttons: {
+                    confirm: {
+                        label: "<i class='fas fa-search'></i> Search",
+                        className: 'btn-secondary'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-dark'
+                    }
+                },
+                callback: function (result) {
+
+                    if(result == null || result.length == 0){
+                        console.log('search keyword:'+result);
+                        msgAlert('Search keyword is empty!');
+                    }
+                    else{
+                        console.log('search keyword:'+result);
+                        $('[name=search]').val(result);
+                        $('#search-form')
+                        .attr('action','{{ url_for('photoView.search') }}')
+                        .submit();
+                    }
+                }
+            }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-100;
+                return h+"px";
+                }
+            });
+      }
+    </script>
+
+
+    {% block head %}{% endblock %}
+
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for("siteView.home") }}"><i class="fas fa-images"></i> Cloud Album</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('userView.edit', user_id=current_user.id)}}"><i class="fas fa-user"></i> <strong>Hello, {{ current_user.username }}</strong></a>
+            </li>
+
+            <li class="nav-item">
+              <a id="search-input" class="nav-link" href="javascript:search();"><i class="fas fa-search"></i> Search</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('photoView.map_view')}}"><i class="fas fa-map-marker-alt"></i> Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('photoView.upload') }}"><i class="fas fa-upload"></i> Upload</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('userView.signout') }}"><i class="fas fa-sign-out-alt"></i> Sign out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <p>
+        <form id="search-form" method="POST">
+            <input type="hidden" name="search" id="search" value="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+
+        {% block content %}{% endblock %}
+
+    </p>
+
+    <footer class="footer bg-dark">
+      <div class="container">
+        <span class="text-muted">Copyright &copy; CloudAlbum 2018</span>
+      </div>
+    </footer>
+
+
+  </body>
+</html>
