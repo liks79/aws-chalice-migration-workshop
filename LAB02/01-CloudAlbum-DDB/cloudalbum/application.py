@@ -12,7 +12,6 @@ from cloudalbum import login
 from cloudalbum.controlloer.errors import errorHandler
 from cloudalbum.controlloer.user import userView
 from cloudalbum.controlloer.site import siteView
-from cloudalbum.controlloer.sns import twitter
 from cloudalbum.controlloer.photo import photoView
 
 # from cloudalbum.model import models
