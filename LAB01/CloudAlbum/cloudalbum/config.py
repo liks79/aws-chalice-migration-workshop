@@ -25,7 +25,7 @@ conf = {
     'LOGGING_BACKUP_COUNT': os.getenv('LOGGING_BACKUP_COUNT', 1000),
     'LOGGING_LEVEL': os.getenv('LOGGING_LEVEL', 'debug'),
     'PER_PAGE': os.getenv('PER_PAGE', 6),
-    'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 350),
+    'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 300),
 }
 
