@@ -48,7 +48,6 @@ def init_app(app):
     app.register_blueprint(siteView.blueprint, url_prefix='/')
     app.register_blueprint(userView.blueprint, url_prefix='/users')
     app.register_blueprint(photoView.blueprint, url_prefix='/photos')
-    app.register_blueprint(twitter.blueprint, url_prefix='/sns')
 
     # # Setup application configuration
     app.secret_key = conf['FLASK_SECRET']
