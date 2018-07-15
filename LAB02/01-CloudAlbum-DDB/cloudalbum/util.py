@@ -65,28 +65,6 @@ def save(upload_file, filename, email, app):
     return file_size
 
 
-# def delete(app, photo, current_user):
-#     """
-#     Delete specific file (with thumbnail)
-#     :param app: Flask.app
-#     :param photo: specific photo ORM object
-#     :param current_user: Flask_login.current_user
-#     :return: None
-#     """
-#     try:
-#         path = os.path.join(conf['UPLOAD_FOLDER'], email_normalize(current_user.email))
-#         thumbnail = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
-#         original = os.path.join(path, photo.filename)
-#         if os.path.exists(thumbnail):
-#             os.remove(thumbnail)
-#         if os.path.exists(original):
-#             os.remove(original)
-#
-#     except Exception as e:
-#         app.logger.error('Error occurred while deleting file:%s', e)
-#         raise e
-
-
 def delete(app, filename, current_user):
     """
     Delete specific file (with thumbnail)

@@ -144,7 +144,7 @@ def photo_url(photo_id):
         path = os.path.join(conf['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
 
         if mode == "thumbnail":
-            full_path = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
+            full_path = os.path.join(os.path.join(path, "thumbnails"), photo.filename)
         else:
             full_path = os.path.join(path, photo.filename)
 
