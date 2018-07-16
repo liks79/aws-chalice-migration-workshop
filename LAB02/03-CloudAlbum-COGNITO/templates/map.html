@@ -1,0 +1,59 @@
+{% extends "layout-service.html" %}
+
+{% block title %}Map{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        var map;
+        var latest_lat;
+        var latest_lng;
+        $(document).ready(function(){
+
+            map = new GMaps({
+                div: '#map-large'
+            });
+
+        {% for photo in photos %}
+            map.addMarker({
+                lat: {{ photo.geotag_lat }},
+                lng: {{ photo.geotag_lng }},
+                title: '{{ photo.filename_orig }}',
+                infoWindow: {
+                    content: '<div><span class=\"badge badge-secondary\">{{ photo.taken_date }}</span> <span class=\"badge badge-info\"><i class=\"fas fa-tags\"></i> {{ photo.tags }}</span></div><div>{{ photo.desc }}</div><div><a href=\"{{url_for("photoView.photo_url", photo_id=photo.id)}}\" target=\"_blank\"><img class=\"map-image\" src=\"{{url_for("photoView.photo_url", photo_id=photo.id)}}?mode=thumbnail\"/></a></div>'
+                }
+            });
+
+            latest_lat = {{ photo.geotag_lat }};
+            latest_lng = {{ photo.geotag_lng }};
+
+        {% endfor %}
+
+            map.setCenter(latest_lat, latest_lng);
+
+        });
+
+        function popupImage(url) {
+            bootbox.alert('<img class=\"popup-image\" src=\"' + url + '\"/>');
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Page Content -->
+    <div class="container">
+        <p>
+            <div class="popin col-md-12">
+                <div id="map-large" class="col-md-12" style="height:70vh;"></div>
+            </div>
+        </p>
+
+    </div>
+
+
+
+{% endblock %}
