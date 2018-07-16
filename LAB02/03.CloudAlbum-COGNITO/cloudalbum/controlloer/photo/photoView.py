@@ -19,8 +19,8 @@ from werkzeug.utils import secure_filename
 from cloudalbum import util
 from math import ceil
 from flask import jsonify
-from cloudalbum.config import options
-from cloudalbum.model.models_ddb import PhotoModel
+from cloudalbum.config import conf
+from cloudalbum.model.models_ddb import Photo
 import uuid
 import os
 import boto3
@@ -39,16 +39,16 @@ def photos(page=1):
     :return: HTML template for photo list
     """
 
-    results = PhotoModel.query(current_user.id)
-    photo_count = options['PER_PAGE'] ## TODO : Paging 관련 DDB Fix 필요
-    pagination = Pagination(page, options['PER_PAGE'], photo_count)
+    results = Photo.query(current_user.id)
+    photo_count = conf['PER_PAGE'] ## TODO : Paging 관련 DDB Fix 필요
+    pagination = Pagination(page, conf['PER_PAGE'], photo_count)
 
     if page != 1:
-        offset = options['PER_PAGE'] * (page - 1)
+        offset = conf['PER_PAGE'] * (page - 1)
     else:
         offset = 0
 
-    return render_template('home.html', pagination=pagination, photos=results, gmaps_key=options['GMAPS_KEY'],
+    return render_template('home.html', pagination=pagination, photos=results, gmaps_key=conf['GMAPS_KEY'],
                            sizeof_fmt=util.sizeof_fmt, current_user=current_user, presigned_url=util.presigned_url)
 
 
@@ -75,7 +75,7 @@ def upload():
         try:
             size = util.save_s3(upload_photo, filename, current_user.email, app)
 
-            photo = PhotoModel(current_user.id, util.current_milli_time())
+            photo = Photo(current_user.id, util.current_milli_time())
             photo.tags = form.tags.data
             photo.desc = form.desc.data
             photo.filename_orig = upload_photo.filename
@@ -95,14 +95,14 @@ def upload():
             photo.save()
 
             flash('Your file upload have been completed successfully!')
-            return redirect(url_for("photoView.photos", form=form, gmaps_key=options['GMAPS_KEY']))
+            return redirect(url_for("photoView.photos", form=form, gmaps_key=conf['GMAPS_KEY']))
 
         except Exception as e:
             app.logger.error(e)
             util.delete(app, filename, current_user)
             return errorHandler.server_error(e)
 
-    return render_template('upload.html', form=form, gmaps_key=options['GMAPS_KEY'])
+    return render_template('upload.html', form=form, gmaps_key=conf['GMAPS_KEY'])
 
 
 @blueprint.route('/<int:photo_id>', methods=['DELETE'])
@@ -116,7 +116,7 @@ def photo_delete(photo_id):
 
     app.logger.debug("Photo delete request: %s", photo_id)
     try:
-        photo = PhotoModel.get(current_user.id, photo_id)
+        photo = Photo.get(current_user.id, photo_id)
         photo.delete()
 
         # util.delete(app, photo.filename, current_user)
@@ -143,8 +143,8 @@ def photo_url(photo_id):
     """
     mode = request.args.get('mode')
     try:
-        photo = PhotoModel.get(current_user.id, photo_id)
-        path = os.path.join(options['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
+        photo = Photo.get(current_user.id, photo_id)
+        path = os.path.join(conf['UPLOAD_FOLDER'], util.email_normalize(current_user.email))
 
         if mode == "thumbnail":
             full_path = os.path.join(os.path.join(path, "thumbnail"), photo.filename)
@@ -176,13 +176,13 @@ def edit(photo_id):
     """
 
     if request.method == 'GET':
-        photo = PhotoModel.get(current_user.id, photo_id)
-        return render_template('upload.html', photo=photo, gmaps_key=options['GMAPS_KEY'])
+        photo = Photo.get(current_user.id, photo_id)
+        return render_template('upload.html', photo=photo, gmaps_key=conf['GMAPS_KEY'])
 
     elif request.method == 'PUT':
         data = request.get_json()
         try:
-            photo = PhotoModel.get(current_user.id, photo_id)
+            photo = Photo.get(current_user.id, photo_id)
             photo.tags = data['tags']
             photo.desc = data['desc']
             photo.geotag_lat = data['lat']
@@ -197,7 +197,7 @@ def edit(photo_id):
             app.logger.error(e)
             return jsonify(update='fail')
     else:
-        return redirect(url_for("/", gmaps_key=options['GMAPS_KEY']))
+        return redirect(url_for("/", gmaps_key=conf['GMAPS_KEY']))
 
 
 @blueprint.route('/search', methods=['POST'])
@@ -209,10 +209,10 @@ def search():
     """
     keyword = request.form['search']
     app.logger.debug(keyword)
-    photo_pages = PhotoModel.query(current_user.id, PhotoModel.tags.contains(keyword)|PhotoModel.desc.contains(keyword))
+    photo_pages = Photo.query(current_user.id, Photo.tags.contains(keyword) | Photo.desc.contains(keyword))
 
     flash("Search results for '{0}'.. ".format(keyword))
-    return render_template('home.html', photos=photo_pages, gmaps_key=options['GMAPS_KEY'])
+    return render_template('home.html', photos=photo_pages, presigned_url=util.presigned_url, gmaps_key=conf['GMAPS_KEY'])
 
 
 @blueprint.route('/map', methods=['GET'])
@@ -226,12 +226,12 @@ def map_view(photo_id=None):
     """
 
     if not photo_id:
-        photo_list = PhotoModel.query(current_user.id)
+        photo_list = Photo.query(current_user.id)
         app.logger.debug("photo_id: {0}".format(photo_id))
     else:
-        photo_list = PhotoModel.get(current_user.id, photo_id)
+        photo_list = Photo.get(current_user.id, photo_id)
 
-    return render_template("map.html", photos=photo_list, gmaps_key=options['GMAPS_KEY'])
+    return render_template("map.html", photos=photo_list, gmaps_key=conf['GMAPS_KEY'])
 
 
 class PhotoForm(FlaskForm):

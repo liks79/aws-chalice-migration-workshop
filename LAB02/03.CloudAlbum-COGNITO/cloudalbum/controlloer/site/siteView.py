@@ -13,8 +13,8 @@ from flask_login import login_required, current_user, login_user
 from jose import jwt
 from requests.auth import HTTPBasicAuth
 from cloudalbum import login
-from cloudalbum.config import options
-from cloudalbum.model.models_ddb import UserModel
+from cloudalbum.config import conf
+from cloudalbum.model.models_ddb import User
 from datetime import datetime
 import requests
 import import_string
@@ -25,7 +25,7 @@ blueprint = Blueprint('siteView', __name__)
 ### load and cache cognito JSON Web Key (JWK)
 # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
 JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json".\
-    format(options['AWS_REGION'], options['COGNITO_POOL_ID'])
+    format(conf['AWS_REGION'], conf['COGNITO_POOL_ID'])
 
 JWKS = requests.get(JWKS_URL).json()["keys"]
 
@@ -49,7 +49,7 @@ def verify(token, access_token=None):
     # and verify the key
     header = jwt.get_unverified_header(token)
     key = [k for k in JWKS if k["kid"] == header['kid']][0]
-    id_token = jwt.decode(token, key, audience=options['COGNITO_CLIENT_ID'], access_token=access_token)
+    id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
     return id_token
 
 
@@ -60,13 +60,14 @@ def callback():
     csrf_state = request.args.get('state')
     code = request.args.get('code')
     request_parameters = {'grant_type': 'authorization_code',
-                          'client_id': options['COGNITO_CLIENT_ID'],
+                          'client_id': conf['COGNITO_CLIENT_ID'],
                           'code': code,
-                          "redirect_uri": options['BASE_URL'] + "/callback"}
-    response = requests.post("https://%s/oauth2/token" % options['COGNITO_DOMAIN'],
+                          "redirect_uri": conf['BASE_URL'] + "/callback"}
+
+    response = requests.post("https://%s/oauth2/token" % conf['COGNITO_DOMAIN'],
                              data=request_parameters,
-                             auth=HTTPBasicAuth(options['COGNITO_CLIENT_ID'],
-                                                options['COGNITO_CLIENT_SECRET']))
+                             auth=HTTPBasicAuth(conf['COGNITO_CLIENT_ID'],
+                                                conf['COGNITO_CLIENT_SECRET']))
 
     # the response:
     # http://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
@@ -78,7 +79,7 @@ def callback():
         app.logger.debug(id_token)
         app.logger.debug("=======")
 
-        user = UserModel()
+        user = User()
         user.id = id_token["cognito:username"]
         user.email = id_token["email"]
         session['id'] = id_token["cognito:username"]
@@ -136,7 +137,7 @@ def user_loader(session_token):
     if expires_seconds < 0:
         return None
 
-    user = UserModel()
+    user = User()
     user.id = session_token
     user.username = session['name']
     user.email = session['email']

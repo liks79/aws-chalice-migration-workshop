@@ -1,9 +1,8 @@
 import os
 
-options = {
+conf = {
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
-    'DB_URL': os.getenv('DB_URL', None),
 
     # Default config values
     'APP_HOST': os.getenv('APP_HOST', '0.0.0.0'),
@@ -41,16 +40,7 @@ options = {
     'COGNITO_CLIENT_ID': os.getenv('COGNITO_CLIENT_ID', ''),
     'COGNITO_CLIENT_SECRET': os.getenv('COGNITO_CLIENT_SECRET', ''),
     'COGNITO_DOMAIN': os.getenv('COGNITO_DOMAIN', ''),
-    'BASE_URL': os.getenv('BASE_URL', ''),
-
-
-    # For Twitter federation.(Not mandatory)
-    'TWIT_APP_KEY':  os.getenv('TWIT_APP_KEY', ''),
-    'TWIT_APP_SECRET': os.getenv('TWIT_APP_SECRET', ''),
-    'TWIT_CALLBACK_SERVER': os.getenv('TWIT_CALLBACK_SERVER', '')
-
-
-
+    'BASE_URL': os.getenv('BASE_URL', '')
 }
 
 

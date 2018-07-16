@@ -8,16 +8,16 @@
 """
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, ListAttribute
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
-from cloudalbum.model.models_ddb import UserModel
-from cloudalbum.model.models_ddb import PhotoModel
+from cloudalbum.model.models_ddb import User
+from cloudalbum.model.models_ddb import Photo
 
-if not UserModel.exists():
-    UserModel.create_table(read_capacity_units=options['DDB_RCU'], write_capacity_units=options['DDB_WCU'], wait=True)
+if not User.exists():
+    User.create_table(read_capacity_units=conf['DDB_RCU'], write_capacity_units=conf['DDB_WCU'], wait=True)
     print('DynamoDB User table created!')
 
-if not PhotoModel.exists():
-    PhotoModel.create_table(read_capacity_units=options['DDB_RCU'], write_capacity_units=options['DDB_WCU'], wait=True)
+if not Photo.exists():
+    Photo.create_table(read_capacity_units=conf['DDB_RCU'], write_capacity_units=conf['DDB_WCU'], wait=True)
     print('DynamoDB Photo table created!')

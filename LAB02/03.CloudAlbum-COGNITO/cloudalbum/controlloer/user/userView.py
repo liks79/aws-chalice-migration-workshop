@@ -16,8 +16,8 @@ from cloudalbum.controlloer.errors import errorHandler
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import jsonify
-from cloudalbum.model.models_ddb import UserModel
-from cloudalbum.config import options
+from cloudalbum.model.models_ddb import User
+from cloudalbum.config import conf
 import uuid
 import boto3
 
@@ -74,8 +74,8 @@ def signin():
                      "login?response_type=code&client_id=%s"
                      "&state=%s"
                      "&redirect_uri=%s/callback" %
-                     (options['COGNITO_DOMAIN'], options['COGNITO_CLIENT_ID'], session['csrf_state'],
-                      options['BASE_URL']))
+                     (conf['COGNITO_DOMAIN'], conf['COGNITO_CLIENT_ID'], session['csrf_state'],
+                      conf['BASE_URL']))
 
     app.logger.debug(cognito_login)
 
@@ -95,11 +95,11 @@ def signup():
 
         try:
             user_exist = None
-            for item in UserModel.email_index.query(form.email.data):
+            for item in User.email_index.query(form.email.data):
                 user_exist = item.email
 
             if not user_exist:
-                user = UserModel(uuid.uuid4().hex)
+                user = User(uuid.uuid4().hex)
                 user.email = form.email.data
                 user.password = generate_password_hash(form.password.data)
                 user.username = form.username.data
@@ -169,7 +169,7 @@ def edit(user_id):
 
     if request.method == 'GET':
         try:
-            user = UserModel()
+            user = User()
             user.id = current_user.id
             user.email = current_user.email
             user.username = current_user.username
@@ -182,13 +182,11 @@ def edit(user_id):
     if request.method == 'PUT':
         try:
             data = request.get_json()
-
             app.logger.debug(data)
-
             client = boto3.client('cognito-idp')
 
             response = client.admin_update_user_attributes(
-                UserPoolId=options['COGNITO_POOL_ID'],
+                UserPoolId=conf['COGNITO_POOL_ID'],
                 Username=current_user.id,
                 UserAttributes=[
                     {
@@ -230,7 +228,7 @@ def signout():
                       "logout?response_type=code&client_id=%s"
                       "&logout_uri=%s/" 
                       "&redirect_uri=%s/" %
-                      (options['COGNITO_DOMAIN'], options['COGNITO_CLIENT_ID'], options['BASE_URL'], options['BASE_URL']))
+                      (conf['COGNITO_DOMAIN'], conf['COGNITO_CLIENT_ID'], conf['BASE_URL'], conf['BASE_URL']))
     return redirect(cognito_logout)
 
 
