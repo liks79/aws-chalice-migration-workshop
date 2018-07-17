@@ -1,6 +1,6 @@
 import os
 
-options = {
+conf = {
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
     'DB_URL': os.getenv('DB_URL', None),

@@ -3,7 +3,7 @@
     jinja2.environment
     ~~~~~~~~~~~~~~~~~~
 
-    Provides a class that holds runtime and parsing time options.
+    Provides a class that holds runtime and parsing time conf.
 
     :copyright: (c) 2017 by the Jinja Team.
     :license: BSD, see LICENSE for more details.

@@ -638,7 +638,7 @@ class Lexer(object):
                               'linestatement_end'):
                     continue
 
-                # tuples support more options
+                # tuples support more conf
                 if isinstance(tokens, tuple):
                     for idx, token in enumerate(tokens):
                         # failure group

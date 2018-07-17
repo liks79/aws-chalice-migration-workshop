@@ -44,9 +44,6 @@
                     <a id="map-view" href="{{ url_for('photoView.map_view', photo_id=photo.id) }}" data-toggle="tooltip" title="Map view">
                         <i class="fas fa-map-marker-alt"></i>
                     </a>
-                    <a id="twit" href="#" data-toggle="tooltip" title="Send it to Twitter" onClick="twit({{ photo.id }});">
-                        <i class="fab fa-twitter-square"></i>
-                    </a>
                     <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo({{ photo.id }});">
                         <i class="fas fa-trash-alt"></i>
                     </a> &nbsp;

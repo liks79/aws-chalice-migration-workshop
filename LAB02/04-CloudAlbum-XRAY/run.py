@@ -1,6 +1,6 @@
 from flask import Flask
 from cloudalbum import application as CloudAlbum
-from cloudalbum.config import options
+from cloudalbum.config import conf
 from cloudalbum import util
 
 from aws_xray_sdk.core import xray_recorder, patch_all
@@ -20,9 +20,9 @@ if __name__ == '__main__':
     XRayMiddleware(app, xray_recorder)
     patch_all()
 
-    app.logger.debug('DB_URL: {0}'.format(options['DB_URL']))
-    app.logger.debug('GMAPS_KEY: {0}'.format(options['GMAPS_KEY']))
+    app.logger.debug('DB_URL: {0}'.format(conf['DB_URL']))
+    app.logger.debug('GMAPS_KEY: {0}'.format(conf['GMAPS_KEY']))
 
-    app.run(host=options['APP_HOST'], port=options['APP_PORT'], debug=True)
+    app.run(host=conf['APP_HOST'], port=conf['APP_PORT'], debug=True)
 
 

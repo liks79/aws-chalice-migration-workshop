@@ -563,7 +563,7 @@ def babel_extract(fileobj, keywords, comment_tags, options):
                      recognized as translation functions
     :param comment_tags: a list of translator tags to search for and include
                          in the results.
-    :param options: a dictionary of additional options (optional)
+    :param options: a dictionary of additional conf (optional)
     :return: an iterator over ``(lineno, funcname, message, comments)`` tuples.
              (comments will be empty currently)
     """

@@ -976,13 +976,13 @@ class OverlayScope(Stmt):
 
 class EvalContextModifier(Stmt):
     """Modifies the eval context.  For each option that should be modified,
-    a :class:`Keyword` has to be added to the :attr:`options` list.
+    a :class:`Keyword` has to be added to the :attr:`conf` list.
 
     Example to change the `autoescape` setting::
 
-        EvalContextModifier(options=[Keyword('autoescape', Const(True))])
+        EvalContextModifier(conf=[Keyword('autoescape', Const(True))])
     """
-    fields = ('options',)
+    fields = ('conf',)
 
 
 class ScopedEvalContextModifier(EvalContextModifier):
