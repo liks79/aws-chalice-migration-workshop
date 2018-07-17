@@ -127,10 +127,7 @@ def signup():
     return render_template('signup.html')
 
 
-
-
-@blueprint.route('/<user_id>/edit', methods=['GET'])
-@blueprint.route('/<user_id>', methods=['PUT'])
+@blueprint.route('/<user_id>/edit', methods=['GET', 'PUT'])
 @login_required
 def edit(user_id):
     """

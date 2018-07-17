@@ -24,46 +24,6 @@ import boto3
 blueprint = Blueprint('userView', __name__)
 
 
-# @blueprint.route('/')
-# @blueprint.route('/signin', methods=['GET', 'POST'])
-# def signin():
-#     """
-#     Sign-in processing module
-#     :return: if success render site home HTML page, or render sign-in HTML page again.
-#     """
-#
-#     form = LoginForm(request.form)
-#
-#     if request.method == 'POST' and form.validate():
-#         app.logger.debug(form.data)
-#         try:
-#             user = None
-#             for item in UserModel.email_index.query(form.email.data):
-#                 user = item
-#
-#             password_matched = check_password_hash(user.password, form.password.data)
-#             app.logger.debug(user)
-#
-#             if user and password_matched:
-#                 app.logger.info('Login success')
-#                 login_user(user)
-#                 return redirect(url_for('siteView.home'))
-#             else:
-#                 flash('Invalid email or password. Please try again!')
-#                 app.logger.debug('Is hashed password matched?: %s - %s : %s ',
-#                                  password_matched,
-#                                  user.password,
-#                                  generate_password_hash(form.password.data))
-#                 return redirect(url_for('userView.signin'))
-#
-#         except Exception as e:
-#             app.logger.error(e)
-#             flash('Invalid email or password. Please try again!')
-#             return redirect(url_for('userView.signin'))
-#
-#     return render_template('signin.html')
-
-
 @blueprint.route('/')
 @blueprint.route('/signin')
 def signin():
@@ -120,45 +80,7 @@ def signup():
     return render_template('signup.html')
 
 
-# @blueprint.route('/<user_id>/edit', methods=['GET'])
-# @blueprint.route('/<user_id>', methods=['PUT'])
-# @login_required
-# def edit(user_id):
-#     """
-#     Edit user profile and save.
-#     :param user_id: target user id
-#     :return: Render signup template or return Json data
-#     """
-#
-#     if request.method == 'GET':
-#         try:
-#             user = UserModel.get(user_id)
-#             app.logger.debug(user)
-#         except Exception as e:
-#             app.logger.error(e)
-#             flash("DB operation failed! Try again.")
-#
-#     if request.method == 'PUT':
-#         try:
-#             user = UserModel.get(user_id)
-#             data = request.get_json()
-#             app.logger.debug(data)
-#             user.update(actions=[
-#                 UserModel.username.set(data['username']),
-#                 UserModel.password.set(generate_password_hash(data['password']))
-#             ])
-#             return jsonify(update='success')
-#
-#         except Exception as e:
-#             app.logger.error(e)
-#             return jsonify(update='failed')
-#
-#     return render_template('signup.html', user=user)
-
-
-
-@blueprint.route('/<user_id>/edit', methods=['GET'])
-@blueprint.route('/<user_id>', methods=['PUT'])
+@blueprint.route('/<user_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(user_id):
     """

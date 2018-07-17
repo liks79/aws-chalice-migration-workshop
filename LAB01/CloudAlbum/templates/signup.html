@@ -132,7 +132,7 @@
 
                       $.ajax({
                           type: 'PUT',
-                          url: '/users/' + '{{ user.id }}',
+                          url: '/users/' + '{{ user.id }}/edit',
                           dataType: 'json',
                           contentType: 'application/json;charset=utf-8',
                           data: JSON.stringify(
