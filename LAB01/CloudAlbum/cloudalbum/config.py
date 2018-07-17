@@ -16,7 +16,7 @@ conf = {
     'DB_MAX_OVERFLOW': os.getenv('DB_MAX_OVERFLOW', 20),
     'DB_SQLALCHEMY_POOL_TIMEOUT': os.getenv('DB_SQLALCHEMY_POOL_TIMEOUT', 15),
     'DB_SQLALCHEMY_POOL_RECYCLE': os.getenv('DB_SQLALCHEMY_POOL_RECYCLE', 7200),
-    'LOG_FILE_PATH': os.getenv('LOG_FILE_PATH', os.path.join(os.path.dirname(__file__), 'logs')),
+    'LOG_FILE_PATH': os.getenv('LOG_FILE_PATH', os.path.join(os.getcwd(), 'logs')),
     'LOG_FILE_NAME': os.getenv('LOG_FILE_NAME', 'cloudalbum.log'),
     'ALLOWED_EXTENSIONS': ['jpg', 'jpeg'],
     'UPLOAD_FOLDER': os.getenv('UPLOAD_FOLDER', os.path.join(os.getcwd(), 'upload')),
