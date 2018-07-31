@@ -16,7 +16,7 @@ The application has following software stack.
 
 ![Legacy application](images/lab01-01.png)
 
-Legacy application is not Restful and application backend is tightly coupled with Jinja2 Template Engine.
+Legacy application is **not Restful** and application backend is **tightly coupled with Jinja2** Template Engine.
 ![Legacy application](images/lab01-legacy-template-enging.png)
 
 It has following several features.
@@ -131,6 +131,7 @@ conf = {
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 300),
 }
 ```
+* The second parameter of **os.getenv** function is the default value to use when the first parameter does not exist.
 
 16. Check the following variables
     * **GMAPS_KEY** and **DB_URL**  variables are mandatory for this application.
