@@ -212,7 +212,7 @@ def search():
     photo_pages = Photo.query(current_user.id, Photo.tags.contains(keyword) | Photo.desc.contains(keyword))
 
     flash("Search results for '{0}'.. ".format(keyword))
-    return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'])
+    return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'], presigned_url=util.presigned_url)
 
 
 @blueprint.route('/map', methods=['GET'])

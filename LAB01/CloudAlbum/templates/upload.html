@@ -129,6 +129,7 @@
             <input id="city" name="city" type="hidden" value="">
             <input id="nation" name="nation" type="hidden" value="">
             <input id="formatted_address" name="formatted_address" type="hidden" value="">
+            <input id="filename_origin" name="filename_origin" type="hidden" value="">
       </form>
 
 
@@ -321,7 +322,9 @@
 		    //clear();
 
 		    var file = this.files[0];
-		    fr   = new FileReader;
+            fr   = new FileReader;
+            
+            $('[name=filename_origin]').val(this.files[0].name);
 
 		    fr.onloadend = function() {
 

@@ -1,0 +1,28 @@
+{
+  "resources": [
+    {
+      "name": "default-role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::389833669077:role/cloudalbum-dev",
+      "role_name": "cloudalbum-dev"
+    },
+    {
+      "name": "api_handler",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:ap-southeast-1:389833669077:function:cloudalbum-dev"
+    },
+    {
+      "name": "jwt_auth",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:ap-southeast-1:389833669077:function:cloudalbum-dev-jwt_auth"
+    },
+    {
+      "name": "rest_api",
+      "resource_type": "rest_api",
+      "rest_api_id": "0ty10bfjr0",
+      "rest_api_url": "https://0ty10bfjr0.execute-api.ap-southeast-1.amazonaws.com/api/"
+    }
+  ],
+  "schema_version": "2.0",
+  "backend": "api"
+}

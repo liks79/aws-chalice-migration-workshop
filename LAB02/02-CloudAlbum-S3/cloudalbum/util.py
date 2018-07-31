@@ -100,7 +100,7 @@ def save_s3(upload_file_stream, filename, email, app):
                 Key=key_thumb,
                 Body=make_thumbnails_s3(upload_file_stream, app),
                 ContentType='image/jpeg',
-                StorageClass='ONEZONE_IA'
+                StorageClass='STANDARD'
         )
 
         app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key_thumb))

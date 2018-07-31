@@ -1,0 +1,286 @@
+{% extends "layout-service.html" %}
+
+{% block title %}Upload{% endblock %}
+
+{% block head %}
+
+  {{ super() }}
+
+  <!-- Fileinput plugin -->
+  <link rel="stylesheet" href="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/jasny-fileinput.css" type="text/css" media="screen" title="CloudAlbum" charset="UTF-8" />
+  <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/binaryajax.js"></script>
+  <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/exif.js"></script>
+  <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/jasny-fileinput.js"></script>
+  <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/moment.min.js"></script>
+
+  <script>
+    var csrf_token = '';
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        }
+    });
+  </script>
+
+{% endblock %}
+
+{% block content %}
+
+
+    <!-- Page Content -->
+    <div class="container-fluid">
+
+      <form id="upload" name="upload" class="form-group" action="#" method="POST" enctype="multipart/form-data">
+
+       <!-- for CSRF -->
+        <input type="hidden" name="csrf_token" value=""/>
+
+        <div id="alert-container">
+        </div>
+
+        <div class="row col-md-12">
+          <div class="col-md-5 card bg-light p-3">
+
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+
+                {% if not photo %}
+                    <!-- upload mode -->
+                    <div class="fileinput-preview thumbnail rounded" data-trigger="fileinput" style="background-color:lightgray;width: 200px; height: 150px;"></div>
+                    <div>
+                        <span class="btn btn-outline-secondary btn-file">
+                            <span class="fileinput-new"><strong><i class="fas fa-folder-open"></i> Select image</strong></span>
+                            <span class="fileinput-exists"><strong><i class="fas fa-exchange-alt"></i> Change</strong></span>
+                            <input id="photo" name="photo" type="file">
+                              <!--  <input id="photo" name="photo" type="file" /> -->
+                        </span>
+                        <a href="#" onClick="$('#exif-info').html('');" class="btn btn-default fileinput-exists" data-dismiss="fileinput">
+                            <strong><i class="fas fa-trash-alt"></i> Remove</strong>
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- edit mode -->
+                    <div class="fileinput-preview thumbnail rounded">
+                        <img src="{{presigned_url(photo.filename, current_user.email, Thumbnail=True)}}">
+                    </div>
+                {% endif %}
+
+                <div id="exif-info">
+                </div>
+              </div>
+
+              <div>
+                <p>
+                    <div class="form-label-group">
+                      <label for="Tags"><i class="fas fa-tags"></i> Tags</label>
+                      <input type="tags" id="tags" name="tags" class="form-control" placeholder="Tags separated by comma"
+                             {% if photo %}
+                                value="{{ photo.tags }}"
+                             {% endif %}
+                             required autofocus>
+                    </div>
+                </p>
+                <p>
+                  <div class="form-group">
+                    <label for="Description"><i class="fas fa-comments"></i> Description</label>
+                    <textarea id="desc" name="desc" class="form-control" placeholder="Description" required>{% if photo %}{{ photo.desc }}{% endif %}</textarea>
+                    </div>
+                </p>
+                    <div class="form-group">
+                        {% if photo %}
+                            <button class="btn btn-lg btn-dark btn-block" type="button" onClick="update();">
+                                   <i class="fas fa-edit"></i> Update
+                            </button>
+                        {% else %}
+                            <button class="btn btn-lg btn-dark btn-block" type="submit">
+                                   <i class="fas fa-upload"></i> Upload
+                            </button>
+                        {% endif %}
+                    </div>
+                </p>
+              </div>
+            </div>
+              <div class="col-md-7 card bg-light p-3">
+                <div class="form-group col-md-12">
+                    <div class="input-group">
+                      <input id="address" name="address" type="text" class="form-control" placeholder="Where I took the photo" aria-label="Enter address">
+                      <div class="input-group-append">
+                        <button id="address-search" class="btn btn-outline-secondary" type="button" onClick="gmapSearch();"><i class="fas fa-search"></i> Search</button>
+                        <button id="currentLocation-btn" class="btn btn-outline-secondary" type="button" onClick="currentLocation();"><i class="fas fa-location-arrow"></i> Current Location</button>
+                      </div>
+                    </div>
+                    <p>
+                      <div id="map" class="popin"></div>
+                      <div id="address-info"></div>
+                    </p>
+                </div>
+          </div>
+
+        </div>
+            <input id="lat" name="lat" type="hidden" value="">
+            <input id="lng" name="lng" type="hidden" value="">
+            <input id="taken_date" name="taken_date" type="hidden" value="">
+            <input id="make" name="make" type="hidden" value="">
+            <input id="model" name="model" type="hidden" value="">
+            <input id="width" name="width" type="hidden" value="">
+            <input id="height" name="height" type="hidden" value="">
+            <input id="city" name="city" type="hidden" value="">
+            <input id="nation" name="nation" type="hidden" value="">
+            <input id="formatted_address" name="formatted_address" type="hidden" value="">
+            <input id="filename_origin" name="filename_origin" type="hidden" value="">
+      </form>
+
+
+    </div>
+    <!-- /.container -->
+
+    <script>
+        function getReverseGeocodingData(lat, lng, exif_flag) {
+            var latlng = new google.maps.LatLng(lat, lng);
+            // This is making the Geocode request
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                if (status !== google.maps.GeocoderStatus.OK) {
+                    msgbox(status);
+                }
+                // This is checking to see if the Geoeode Status is OK before proceeding
+                if (status == google.maps.GeocoderStatus.OK) {
+
+                    console.log(results);
+                    addr_comp_length=results[0].address_components.length;
+
+                    if(addr_comp_length == 8) {
+                        var city = results[0].address_components[2].long_name;
+                        var nation = results[0].address_components[6].long_name;
+                        var address = results[0].formatted_address;
+                    }
+
+                    if(addr_comp_length == 7) {
+                        var city = results[0].address_components[2].long_name;
+                        var nation = results[0].address_components[5].long_name;
+                        var address = results[0].formatted_address;
+                    }
+
+                    if(addr_comp_length == 6) {
+                        var city = results[0].address_components[3].long_name;
+                        var nation = results[0].address_components[4].long_name;
+                        var address = results[0].formatted_address;
+                    }
+                    $('[name=lat]').val(lat);
+                    $('[name=lng]').val(lng);
+                    $('[name=city]').val(city);
+                    $('[name=nation]').val(nation);
+                    $('[name=formatted_address]').val(address);
+                    $('[name=address]').val(address);
+
+                    if(exif_flag == true) {
+                        $("#exif-info").append("<span class=\"badge badge-secondary\">"+city+" <\/span> "+
+                                "<span class=\"badge badge-secondary\">"+nation+" <\/span> " +
+                                "<span class=\"badge badge-secondary\">"+address+" <\/span> "
+                        );
+                    }
+
+                    $("#address-info").html("<span class=\"badge badge-info\">"+address+" <\/span> ");
+
+                }
+            });
+        }
+
+
+      var initial_lat = {% if photo %}{{ photo.geotag_lat }}{% else %}37.565467{% endif %};
+      var initial_lng = {% if photo %}{{ photo.geotag_lng }}{% else %}126.975431{% endif %};
+
+      var map = new GMaps({
+          zoom : 17,
+          div: '#map',
+          lat: initial_lat,
+          lng: initial_lng
+        });
+
+      map.addMarker({
+          lat: initial_lat,
+          lng: initial_lng
+      });
+
+
+      {% if photo %}
+          $('[name=taken_date]').val('{{ photo.taken_date }}');
+          $('[name=make]').val('{{ photo.make }}');
+          $('[name=model]').val('{{ photo.model }}');
+          $('[name=lat]').val('{{ photo.geotag_lat }}');
+          $('[name=lng]').val('{{ photo.geotag_lng }}');
+          $('[name=width]').val('{{ photo.width }}');
+          $('[name=height]').val('{{ photo.height }}');
+          $('[name=city]').val('{{ photo.city }}');
+          $('[name=nation]').val('{{ photo.nation }}');
+          $('[name=formatted_address]').val('{{ photo.formatted_address }}');
+
+          //EXIF
+          if ($('[name=make]').val() != ''){
+              $("#exif-info").html("<span class=\"badge badge-info\"><i class=\"fas fa-camera\"></i> EXIF<\/span> "+
+                                   "<span class=\"badge badge-secondary\">"+$('[name=taken_date]').val()+" <\/span> "+
+                                   "<span class=\"badge badge-secondary\">"+$('[name=make]').val()+" <\/span> "+
+                                   "<span class=\"badge badge-secondary\">"+$('[name=model]').val()+" <\/span> "+
+                                   "<span class=\"badge badge-secondary\">"+$('[name=width]').val()+" x "+$('[name=height]').val()+" <\/span> "
+              );
+              getReverseGeocodingData($('[name=lat]').val(), $('[name=lng]').val(), true);
+
+          //No EXIF
+          }else {
+              $("#exif-info").html("<span class=\"badge badge-warning\"><i class=\"fas fa-exclamation-triangle\"></i> No EXIF"+" <\/span> "+
+                      "<span class=\"badge badge-secondary\">"+$('[name=taken_date]').val()+" <\/span> "+
+                      "<span class=\"badge badge-secondary\">"+$('[name=width]').val()+" x "+$('[name=height]').val()+"<\/span> "
+              );
+              getReverseGeocodingData($('[name=lat]').val(), $('[name=lng]').val(), true);
+          }
+
+      {% else %}
+          //currentLocation();
+          msgAlert('Initial geolocation is \<strong\>Deoksugung, Seoul\<\/strong\>. Please set up location information.');
+          getReverseGeocodingData(initial_lat, initial_lng, false);
+      {% endif %}
+
+
+
+      {% if photo %}
+         function update(){
+
+           $.ajax({
+                type: 'PUT',
+                url: '/photos/' + {{ photo.id }},
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify(
+                    {
+                        _method: 'put', _token: csrf_token,
+                        tags: $('[name=tags]').val(),
+                        desc: $('[name=desc]').val(),
+                        lat: $('[name=lat]').val(),
+                        lng: $('[name=lng]').val(),
+                        city: $('[name=city]').val(),
+                        nation: $('[name=nation]').val(),
+                        address: $('[name=address]').val()
+                    }),
+
+                success: function (data) {
+                    console.log(data);
+                    msgAlert('Successfully updated!');
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                    msgAlert('Error occurred! Please try again.');
+                }
+            });
+         }
+      {% endif %}
+
+
+    </script>
+
+    <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/app.js"></script>
+
+
+
+{% endblock %}
