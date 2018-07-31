@@ -2,9 +2,22 @@
 
 In this hands-on lab, you'll configure the AWS [Cloud9](https://aws.amazon.com/cloud9/) service to look around legacy application. You can run application 'CloudAlbum' in the AWS Cloud9 EC2 instance.
 
-Legacy application has following software stack.
+**GoGreen** company provides a hosted photo image album services (CloudAlbum) to it's end user. Customer access the web application to :
+
+* To watch their personal photos with internet access.
+* Upload photos to the AlbumGo service for photo management.
+* Track geolocation of uploaded photos
+
+
+*CloudAlbum* has a general three-tier architecture.
+![Legacy architecture](images/lab01-legacy-arc.png)
+
+The application has following software stack.
 
 ![Legacy application](images/lab01-01.png)
+
+Legacy application is not Restful and application backend is tightly coupled with Jinja2 Template Engine.
+![Legacy application](images/lab01-legacy-template-enging.png)
 
 It has following several features.
 
@@ -20,7 +33,7 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 
 3. Click **Create environment** at the top-right corner.
 
-4. For **Name**, type **TechSummit-workshop**
+4. For **Name**, type **TechSummit-workshop** (or anything you want)
 
 5. Click Next step.
 
@@ -230,6 +243,9 @@ ssh -i YOUR_KEY.pem -L 8000:localhost:8000 ec2-user@<public-ip of your Cloud9 EC
 Check the application.
 
 37. Connect to http://localhost:8000 in your browser.
+![Legacy application](images/lab01-08.png)
+
+38. Take a look around and perform test.
 ![Legacy application](images/lab01-02.png)
 
 * Sign in / up
