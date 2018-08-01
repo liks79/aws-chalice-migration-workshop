@@ -514,7 +514,12 @@ options = {
 * Check the values under '# COGNITO'.
 * The second parameter of os.getenv is the default value to use when the first parameter does not exist.
 
-
+| COGNITO_POOL_ID | Copy and paste the pool ID you noted earlier. |
+----|---- 
+| COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
+| COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
+|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://.YOUR_DOMAIN_NAME.auth.us-west-2.amazoncognito.com |
+|BASE_URL | http://localhost:8000Do not include a trailing / for the BASE_URL. |
 
 
 58. Write your code to retrieve JSON Web Key (JWK) from cognito.
@@ -661,5 +666,6 @@ def print_abc():
 ![Cognito Console](images/lab02-task4-x-ray.png)
 
 ## Congratulation! You completed LAB02.
+
 
 
