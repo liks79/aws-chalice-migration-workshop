@@ -22,12 +22,25 @@ import import_string
 
 blueprint = Blueprint('siteView', __name__)
 
-### load and cache cognito JSON Web Key (JWK)
+
+## TODO #7: Write your code to retrieve JSON Web Key (JWK) from cognito
 # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
 JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json".\
     format(conf['AWS_REGION'], conf['COGNITO_POOL_ID'])
 
 JWKS = requests.get(JWKS_URL).json()["keys"]
+
+
+
+def verify(token, access_token=None):
+    """Verify a cognito JWT"""
+    # get the key id from the header, locate it in the cognito keys
+    # and verify the key
+    header = jwt.get_unverified_header(token)
+    key = [k for k in JWKS if k["kid"] == header['kid']][0]
+    id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
+    return id_token
+
 
 
 @blueprint.route('home')
@@ -43,14 +56,6 @@ def home():
     return redirect(url_for('photoView.photos'))
 
 
-def verify(token, access_token=None):
-    """Verify a cognito JWT"""
-    # get the key id from the header, locate it in the cognito keys
-    # and verify the key
-    header = jwt.get_unverified_header(token)
-    key = [k for k in JWKS if k["kid"] == header['kid']][0]
-    id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
-    return id_token
 
 
 @blueprint.route('/callback')
@@ -75,18 +80,12 @@ def callback():
         verify(response.json()["access_token"])
         id_token = verify(response.json()["id_token"], response.json()["access_token"])
 
-        app.logger.debug("=======")
-        app.logger.debug(id_token)
-        app.logger.debug("=======")
-
+        ## TODO #8: Write yoir code to set up User objedct using id_token from Cognito
         user = User()
-        user.id = id_token["cognito:username"]
-        user.email = id_token["email"]
-        session['id'] = id_token["cognito:username"]
-        session['email'] = id_token["email"]
-        session['name'] = id_token["name"]
-        session['expires'] = id_token["exp"]
-        session['refresh_token'] = response.json()["refresh_token"]
+
+
+
+
         login_user(user, remember=True)
         return redirect(url_for("siteView.home"))
 
@@ -131,11 +130,6 @@ def user_loader(session_token):
 
     app.logger.debug(session_token)
     app.logger.debug(session)
-
-    expires = datetime.utcfromtimestamp(session['expires'])
-    expires_seconds = (expires - datetime.utcnow()).total_seconds()
-    if expires_seconds < 0:
-        return None
 
     user = User()
     user.id = session_token

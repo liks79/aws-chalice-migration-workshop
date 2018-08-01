@@ -79,12 +79,10 @@ def signup():
                 user_exist = item.email
 
             if not user_exist:
-                user = User(uuid.uuid4().hex)
-                user.email = form.email.data
-                user.password = generate_password_hash(form.password.data)
-                user.username = form.username.data
-                user.save()
-                app.logger.debug(user)
+                ## TODO #1 : Write your code to save user information
+
+
+                # app.logger.debug(user)
                 flash('You have been signed up successfully!')
                 return redirect(url_for('userView.signin', form=form))
 
@@ -119,13 +117,11 @@ def edit(user_id):
 
     if request.method == 'PUT':
         try:
-            user = User.get(user_id)
             data = request.get_json()
             app.logger.debug(data)
-            user.update(actions=[
-                User.username.set(data['username']),
-                User.password.set(generate_password_hash(data['password']))
-            ])
+
+            ## TODO #3 : Write your code to update user profile to DynamoDB.
+
             return jsonify(update='success')
 
         except Exception as e:

@@ -116,8 +116,8 @@ def photo_delete(photo_id):
 
     app.logger.debug("Photo delete request: %s", photo_id)
     try:
-        photo = Photo.get(current_user.id, photo_id)
-        photo.delete()
+        ## TODO #4 : Write your code to delete uploaded photo information in DynamoDB.
+
         util.delete(app, photo.filename, current_user)
         flash('Successfully removed!')
         app.logger.debug('Successfully removed!')
@@ -204,9 +204,9 @@ def search():
     Search function for description and tags in Photo table.
     :return: List of photo object which retrieved DB.
     """
-    keyword = request.form['search']
-    app.logger.debug(keyword)
-    photo_pages = Photo.query(current_user.id, Photo.tags.contains(keyword) | Photo.desc.contains(keyword))
+
+    ## TODO #2 : Write your code to search result via keyword in the DynamoDB.
+
 
     flash("Search results for '{0}'.. ".format(keyword))
     return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'])

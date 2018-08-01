@@ -99,14 +99,4 @@ def load_user(id):
     :param id: user id
     :return: user record from User table
     """
-    # user = User.query.get(int(id))
-    #
-    # minutes = conf['SESSION_TIMEOUT']
-    #
-    # if user.last_seen < (datetime.utcnow() - datetime.timedelta(minutes=minutes)):
-    #     # Session has timed out
-    #     return None
-    #
-    # return User.query.get(user)
-
     return User.query.get(int(id))

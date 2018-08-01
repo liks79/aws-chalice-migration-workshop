@@ -94,17 +94,12 @@ def save_s3(upload_file_stream, filename, email, app):
         app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key))
 
         # Save thumbnail file
-        upload_file_stream.stream.seek(0)
-        s3_client.put_object(
-                Bucket=conf['S3_PHOTO_BUCKET'],
-                Key=key_thumb,
-                Body=make_thumbnails_s3(upload_file_stream, app),
-                ContentType='image/jpeg',
-                StorageClass='STANDARD'
-        )
+        ## TODO #5 : Write your code to save thumbnail image object to S3
+
+
 
         app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key_thumb))
-        upload_file_stream.stream.seek(0)
+
 
     except Exception as e:
         app.logger.error('Error occurred while saving file:%s', e)
@@ -288,18 +283,10 @@ def presigned_url(filename, email, Thumbnail=True):
     try:
         s3_client = boto3.client('s3')
 
-        if Thumbnail:
-            key_thumb = "{0}{1}".format(prefix_thumb, filename)
-            url = s3_client.generate_presigned_url(
-                'get_object',
-                Params={'Bucket': conf['S3_PHOTO_BUCKET'],
-                        'Key': key_thumb})
-        else:
-            key = "{0}{1}".format(prefix, filename)
-            url = s3_client.generate_presigned_url(
-                'get_object',
-                Params={'Bucket': conf['S3_PHOTO_BUCKET'],
-                        'Key': key})
+        ## TODO #6 : Write your code to retrieve pre-signed URL from S3.
+
+
+
 
     except Exception as e:
         flash('Error occurred! Please try again : {0}'.format(e))
