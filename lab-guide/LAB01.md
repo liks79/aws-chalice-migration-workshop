@@ -261,6 +261,7 @@ Check the application.
 ## TASK 5. Challenges (Optional)
 * Deploy legacy application:
    * Configure EC2, RDS, and ELB.
+      * DB_URL of MySQL for SQLAlchemy : 'mysql+pymysql://<user>:<password>@<host>:<port>/cloudalbum?charset=utf8'
 ![Deploy application](images/lab01-06.png)
 
 
