@@ -547,6 +547,7 @@ JWKS = requests.get(JWKS_URL).json()["keys"]
 ```python
 user.id = id_token["cognito:username"]
 user.email = id_token["email"]
+user.save()
 session['id'] = id_token["cognito:username"]
 session['email'] = id_token["email"]
 session['name'] = id_token["name"]

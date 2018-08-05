@@ -301,3 +301,55 @@ Finally, all servers are gone!
 
 ![Serverless application](images/lab03-task2-serverless-full.png)
 
+
+13. Let's take a look around `LAB03/02-CloudAlbum-Chalice/` directory.
+
+```
+$ cd ~/environment/aws-chalice-migration-workshop/LAB03/02-CloudAlbum-Chalice/cloudalbum/
+
+$ tree -L 2 -a .
+├── app.py
+├── .chalice
+│   └── config.json
+├── chalicelib
+│   ├── config.py
+│   ├── __init__.py
+│   ├── models_ddb.py
+│   ├── templates
+│   └── util.py
+├── .gitignore
+├── requirements.txt
+└── vendor
+    ├── bin
+    ├── jinja2
+    ├── Jinja2-2.10.dist-info
+    ├── markupsafe
+    ├── pyasn1
+    ├── pyasn1-0.4.3.dist-info
+    ├── python_jose-3.0.0.dist-info
+    ├── rsa
+    └── rsa-3.4.2.dist-info
+
+```
+
+* All of route functions are in the `app.py` and `template` and modules are in the `chalicelib` directory.
+
+**3rd Party Packages:** 
+There are two options for handling python package dependencies:
+
+* `requirements.txt` - During the packaging process, Chalice will install any packages it finds or can build compatible wheels for. Specifically all pure python packages as well as all packages that upload wheel files for the `manylinux1_x86_64` platform will be automatically installable.
+
+* `vendor/` - The contents of this directory are automatically added to the top level of the deployment package. Chalice will also check for an optional `vendor/` directory in the project root directory. The contents of this directory are automatically included in the top level of the deployment.
+
+* Chalice will also check for an optional `vendor/` directory in the project root directory. The contents of this directory are automatically included in the top level of the deployment package (see Examples for specific examples). The `vendor/` directory is helpful in these scenarios:
+
+* You need to include custom packages or binary content that is not accessible via pip. These may be internal packages that aren’t public.
+
+* `Wheel files` are not available for a package you need from pip.
+
+* A package is installable with requirements.txt but has optional c extensions. Chalice can build the dependency without the c extensions, but if you want better performance you can vendor a version that is compiled.
+
+* As a general rule of thumb, code that you write goes in either `app.py` or `chalicelib/`, and dependencies are
+either specified in `requirements.txt` or placed in the `vendor/` directory.
+
+14. 
