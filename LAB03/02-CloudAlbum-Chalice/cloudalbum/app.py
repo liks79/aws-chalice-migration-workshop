@@ -6,7 +6,7 @@ from jose import jwt
 from requests.auth import HTTPBasicAuth
 from urllib.parse import parse_qs
 from chalicelib.models_ddb import User, Photo
-from chalice import Chalice, AuthResponse
+from chalice import Chalice, AuthResponse, CustomAuthorizer
 from chalice import CORSConfig, CognitoUserPoolAuthorizer
 from datetime import datetime, timedelta
 from http import cookies
@@ -46,14 +46,24 @@ user.password = 'asdf'
 app.log.debug(conf)
 
 
-cog_authorizer = CognitoUserPoolAuthorizer(
-    name='cloudalbum',
-    provider_arns=['arn:aws:cognito-idp:ap-southeast-1:389833669077:userpool/ap-southeast-1_HAm68sUvj'],
-    header='Authorization')
+# cog_authorizer = CognitoUserPoolAuthorizer(
+#     name='cloudalbum',
+#     provider_arns=['arn:aws:cognito-idp:ap-southeast-1:389833669077:userpool/ap-southeast-1_HAm68sUvj'],
+#     header='Authorization')
+
+
+# cookie_auth = CustomAuthorizer(
+#     'cookie-auth', header='Cookie',
+#     authorizer_uri=('arn:aws:apigateway:region:lambda:path/2015-03-01'
+#     '/functions/arn:aws:lambda:region:account-id:'
+#     'function:FunctionName/invocations'))
+
 
 
 @app.authorizer()
 def jwt_auth(auth_request):
+
+    app.log.debug(auth_request)
 
     token = auth_request.token
     app.log.debug("===auth_request========")
@@ -97,7 +107,8 @@ def verify(token, access_token=None):
     return id_token
 
 
-@app.route('/auth', methods=['GET'], authorizer=cog_authorizer)
+# @app.route('/auth', methods=['GET'], authorizer=cog_authorizer)
+@app.route('/auth', methods=['GET'])
 def auth():
 
     return app.current_request.to_dict()
@@ -253,6 +264,8 @@ def search():
 
 
 
+
+
 @app.route('/callback')
 def callback():
     """Exchange the 'code' for Cognito tokens"""
@@ -313,7 +326,8 @@ def callback():
             status_code=200,
             headers= {
                 'Authorization': access_token,
-                'Set-Cookie': 'token={0}; expires={1}'.format(access_token, expires),
+                # 'Set-Cookie': 'token={0}; expires={1}'.format(access_token, expires),
+                'Set-Cookie': 'token={0}'.format(access_token),
                 'Content-Type': 'text/html'
             },
             body=body
