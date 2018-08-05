@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cloud Album::Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/app.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/bootstrap.bundle.min.js"></script>
+    <!-- Google Map API -->
+    <script type="text/javascript" type="text/javascript" src="https://maps.google.com/maps/api/js?key="></script>
+    <!-- Gmaps.js -->
+    <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/gmaps.js"></script>
+
+    <!-- bootbox.js -->
+    <script type="text/javascript" src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/bootbox.min.js"></script>
+    <!-- Fontawesome for vectorized icons -->
+    <script type="text/javascript" defer src="http://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/all.js"></script>
+
+
+    <script>
+      // AjaxSetup for CSRF working
+      var csrf_token = '';
+
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader("X-CSRFToken", csrf_token);
+              }
+          }
+      });
+
+
+      //customized bootbox.alert function
+      function msgbox(msg) {
+        bootbox.alert({
+            message: msg,
+            size: 'small'
+        }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+            }
+        });
+      }
+
+      //Set alert message timeout
+      window.setTimeout(function() {
+          $(".alert").fadeTo(700, 0).slideUp(700, function(){
+              $(this).remove();
+          });
+      }, 4000);
+
+      //Message alerting function
+      function msgAlert(msg) {
+        $("#alert-container").html("<div class=\"alert alert-warning\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" + msg + "</div>" +
+            "<script>      " +
+            "window.setTimeout(function() {\n" +
+            "          $(\".alert\").fadeTo(500, 0).slideUp(500, function(){\n" +
+            "              $(this).remove();\n" +
+            "          });\n" +
+            "      }, 4000);" +
+            "<\/script>");
+      }
+
+
+      //Function for searching
+      function search(){
+
+            bootbox.prompt({
+                title: "&nbsp;&nbsp;Please enter a search keyword..",
+                buttons: {
+                    confirm: {
+                        label: "<i class='fas fa-search'></i> Search",
+                        className: 'btn-secondary'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-dark'
+                    }
+                },
+                callback: function (result) {
+
+                    if(result == null || result.length == 0){
+                        console.log('search keyword:'+result);
+                        msgAlert('Search keyword is empty!');
+                    }
+                    else{
+
+                        //$('#search-form').submit(function(e) {
+                        //    e.preventDefault(); // prevents the default submission
+                        //    $.ajax({
+                        //        type: "POST",
+                        //        url: "/photos/search",
+                        //        dataType: "json",
+                        //        contentType: "application/json",
+                        //        data: {'keyword': result},
+                        //        success: function (data) {
+                        //            console.log(data);
+                        //        },
+                        //        error: function (data) {
+                        //            console.log('Error:', data);
+                        //            msgAlert('Error occurred! Please try again.');
+                        //        }
+                        //});
+
+                        //});
+
+
+                        console.log('search keyword:'+result);
+                        $('[name=search]').val(result);
+                        $('#search-form')
+                        .attr('action','/photos/search')
+                        .submit();
+                    }
+                }
+            }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-100;
+                return h+"px";
+                }
+            });
+      }
+    </script>
+
+
+    
+    
+    <script>
+        var metadata = {};
+    </script>
+
+
+
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-images"></i> Cloud Album</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+              <a class="nav-link" href="/users/716b79d4-908d-4817-8d5c-5ad0e40dcb6b/edit"><i class="fas fa-user"></i> <strong>Hello, sungshik</strong></a>
+            </li>
+
+            <li class="nav-item">
+              <a id="search-input" class="nav-link" href="javascript:search();"><i class="fas fa-search"></i> Search</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/photos/map"><i class="fas fa-map-marker-alt"></i> Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/photos/new"><i class="fas fa-upload"></i> Upload</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/users/signout"><i class="fas fa-sign-out-alt"></i> Sign out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <p>
+        <form id="search-form" method="POST">
+            <input type="hidden" name="search" id="search" value="">
+
+        </form>
+
+        
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div id="alert-container">
+      
+         
+      
+      </div>
+
+      <div class="row">
+
+      <!-- photo list iterator: begin -->
+      
+        <div class="col-lg-4 portfolio-item">
+          <div class="card h-100">
+            <a href="#" onClick="show('https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/ee4cce9d-2f33-4631-82c5-6556422db3f5.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=8Rrp1xMvIBRYxUcyHNWSoQikgpg%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001', 1531720117792);">
+                <img class="card-img-top" src="https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/thumbnails/ee4cce9d-2f33-4631-82c5-6556422db3f5.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=VG%2FDaE%2Bacu%2FmAhIM7DquKzcXhR4%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001" alt="">
+            </a>
+                <div align="right">
+                    <a id="edit" href="/photos/1531720117792/edit" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a id="map-view" href="/photos/1531720117792/map" data-toggle="tooltip" title="Map view">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                    <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo(1531720117792);">
+                        <i class="fas fa-trash-alt"></i>
+                    </a> &nbsp;
+                </div>
+
+            <div class="card-body" style="margin-top: -15px">
+                http://localhost:8000
+              <p class="card-text">
+                  <span class="badge badge-info"><i class="fas fa-tags"></i> Tags</span>
+                  
+                      <span class="badge badge-secondary">이탈리아 </span>
+                  
+                      <span class="badge badge-secondary"> 하하하하 </span>
+                  
+                      <span class="badge badge-secondary"> 고고고 </span>
+                  
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <script>
+            var items_1531720117792 = [];
+            items_1531720117792.push("2012-07-15 11:48:19+00:00");
+            items_1531720117792.push("SONY ");
+            items_1531720117792.push("DSLR-A300");
+            items_1531720117792.push("3872");
+            items_1531720117792.push("2592");
+            items_1531720117792.push("Venezia");
+            items_1531720117792.push("Italy");
+            items_1531720117792.push("Calle Lanza, 179, 30123 Venezia VE, Italy");
+            metadata['1531720117792'] = items_1531720117792;
+        </script>
+      
+        <div class="col-lg-4 portfolio-item">
+          <div class="card h-100">
+            <a href="#" onClick="show('https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/92e5225c-4cc6-45be-873a-091ed96bd617.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=hWsOUH2f6A9gU4VgTssXwPNzXfs%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001', 1531978968125);">
+                <img class="card-img-top" src="https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/thumbnails/92e5225c-4cc6-45be-873a-091ed96bd617.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=2F%2FOQIrbUciR8HNtZveothyHxEU%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001" alt="">
+            </a>
+                <div align="right">
+                    <a id="edit" href="/photos/1531978968125/edit" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a id="map-view" href="/photos/1531978968125/map" data-toggle="tooltip" title="Map view">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                    <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo(1531978968125);">
+                        <i class="fas fa-trash-alt"></i>
+                    </a> &nbsp;
+                </div>
+
+            <div class="card-body" style="margin-top: -15px">
+                ax 
+              <p class="card-text">
+                  <span class="badge badge-info"><i class="fas fa-tags"></i> Tags</span>
+                  
+                      <span class="badge badge-secondary">Sydney </span>
+                  
+                      <span class="badge badge-secondary"> Rodeny </span>
+                  
+                      <span class="badge badge-secondary"> Emily </span>
+                  
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <script>
+            var items_1531978968125 = [];
+            items_1531978968125.push("2012-07-15 12:11:44+00:00");
+            items_1531978968125.push("SONY ");
+            items_1531978968125.push("DSLR-A300");
+            items_1531978968125.push("3872");
+            items_1531978968125.push("2592");
+            items_1531978968125.push("Venezia");
+            items_1531978968125.push("Italy");
+            items_1531978968125.push("Salita San Baseggio, 1651, 30123 Venezia VE, Italy");
+            metadata['1531978968125'] = items_1531978968125;
+        </script>
+      
+        <div class="col-lg-4 portfolio-item">
+          <div class="card h-100">
+            <a href="#" onClick="show('https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/c4842ee2-525d-4fc3-b48b-54db20a0a69b.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=Rb5bGTx63kvxp9BogV6zdv49tPI%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001', 1532061050645);">
+                <img class="card-img-top" src="https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/thumbnails/c4842ee2-525d-4fc3-b48b-54db20a0a69b.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=AjYTYeBy%2BldUP6iCe4WS7KJYKdc%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001" alt="">
+            </a>
+                <div align="right">
+                    <a id="edit" href="/photos/1532061050645/edit" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a id="map-view" href="/photos/1532061050645/map" data-toggle="tooltip" title="Map view">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                    <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo(1532061050645);">
+                        <i class="fas fa-trash-alt"></i>
+                    </a> &nbsp;
+                </div>
+
+            <div class="card-body" style="margin-top: -15px">
+                asdasd
+              <p class="card-text">
+                  <span class="badge badge-info"><i class="fas fa-tags"></i> Tags</span>
+                  
+                      <span class="badge badge-secondary">AAA </span>
+                  
+                      <span class="badge badge-secondary">ggg </span>
+                  
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <script>
+            var items_1532061050645 = [];
+            items_1532061050645.push("2012-07-15 11:45:14+00:00");
+            items_1532061050645.push("SONY ");
+            items_1532061050645.push("DSLR-A300");
+            items_1532061050645.push("3872");
+            items_1532061050645.push("2592");
+            items_1532061050645.push("Venezia");
+            items_1532061050645.push("Italy");
+            items_1532061050645.push("Riva degli Schiavoni, 30124 Venezia VE, Italy");
+            metadata['1532061050645'] = items_1532061050645;
+        </script>
+      
+        <div class="col-lg-4 portfolio-item">
+          <div class="card h-100">
+            <a href="#" onClick="show('https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/_l_zszfcc62df5df785745f787862101696119f6.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=pP9BQrlMp7bp0RqEbpLfGlck1z0%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001', 1532912592941);">
+                <img class="card-img-top" src="https://aws-chalice-workshop.s3.amazonaws.com/photos/liks79_at_gmail_dot_com/thumbnails/_l_zszfcc62df5df785745f787862101696119f6.jpg?AWSAccessKeyId=ASIAVVQ7FXHKWBCOTWJP&amp;Signature=LmO%2BCT2YGMuxedu%2B5LaG8mNJduE%3D&amp;x-amz-security-token=FQoGZXIvYXdzEIP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDK4ct0YMJLorr4ujYCLnARBiIardpxqNbh5WIVK9RcNEQtWRrbinR2unkCjpNkHTwtzbn4PHil6m4xlNZKvmZZD8pj%2FT4T7Fy%2BObSyDJoaD6eYNXaH8xHD0TQtING92UvmNmUpteSXYWsM0mONU6ul54PD%2FGavkVlO8iNJSOaOTwUUtK7b05mQYm1jr9i4PUbQB%2Fgtk%2B97O0iKElJo7W5Gj1UUww%2BrdCWCBBCCMP0psIdoC0zTwEMwVNTPEeQ9DcST8Gn7gp%2Bv1rXUwickjh0dC0B%2F16aDsRDh1gpyhcbEhqRsdDgi3df%2BmOfdb%2F2aK9Ee419bF6%2FCj24ZzbBQ%3D%3D&amp;Expires=1533494001" alt="">
+            </a>
+                <div align="right">
+                    <a id="edit" href="/photos/1532912592941/edit" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a id="map-view" href="/photos/1532912592941/map" data-toggle="tooltip" title="Map view">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                    <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo(1532912592941);">
+                        <i class="fas fa-trash-alt"></i>
+                    </a> &nbsp;
+                </div>
+
+            <div class="card-body" style="margin-top: -15px">
+                qqqqqqqqqqq
+              <p class="card-text">
+                  <span class="badge badge-info"><i class="fas fa-tags"></i> Tags</span>
+                  
+                      <span class="badge badge-secondary">Sydney </span>
+                  
+                      <span class="badge badge-secondary"> Rodeny </span>
+                  
+                      <span class="badge badge-secondary"> Emily </span>
+                  
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <script>
+            var items_1532912592941 = [];
+            items_1532912592941.push("2012-07-15 10:03:17+00:00");
+            items_1532912592941.push("SONY ");
+            items_1532912592941.push("DSLR-A300");
+            items_1532912592941.push("2048");
+            items_1532912592941.push("1371");
+            items_1532912592941.push("Venezia");
+            items_1532912592941.push("Italy");
+            items_1532912592941.push("Piazza San Marco, 16, 30124 Venezia VE, Italy");
+            metadata['1532912592941'] = items_1532912592941;
+        </script>
+      
+      <!-- photo list iterator: end -->
+
+      </div>
+      <!-- /.row -->
+
+
+    
+    <!-- do nothing! -->
+    
+
+    </div>
+    <!-- /.container -->
+
+
+    <script>
+        // Enable tooltip plugin
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        // Show specific photo information which user clicked.
+        function show(url, id){
+            console.log(metadata[id]);
+            taken_date = metadata[id][0];
+            make = metadata[id][1];
+            model = metadata[id][2];
+            width = metadata[id][3];
+            height = metadata[id][4];
+            city = metadata[id][5];
+            nation = metadata[id][6];
+            address = metadata[id][7];
+
+            var result;
+
+            // With EXIF metadata
+            if (make.length > 0) {
+                result =  "<span class=\"badge badge-info\"><i class=\"fas fa-camera\"></i> EXIF</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+taken_date+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+make+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+model+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+width+" x "+height+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+city+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+nation+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+address+"</span>";
+            }
+            // Without EXIF metadata
+            else {
+                result =  "<span class=\"badge badge-warning\"><i class=\"fas fa-exclamation-triangle\"></i> No EXIF</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+taken_date+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+width+" x "+height+"</span>&nbsp;";
+
+            }
+
+            // Show selected photo
+            bootbox.alert({
+              size: "large",
+              message: "<a href='"+url+"' target='_blank' title='Original image'><img src='"+url+"' style='width:100%;' alt='Click to download'></a>" + result,
+              callback: function(){ }
+            })
+        }
+
+
+        //Delete selected photo information (including image files)
+        function delete_photo(id){
+            bootbox.confirm({
+                message: "Do you want to delete this photo?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-secondary'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-dark'
+                    }
+                },
+                callback: function (result) {
+
+                    if (result == true) {
+                        $.ajax({
+                            type: "delete",
+                            contentType: "application/json",
+                            url: '/photos/' + id,
+                            data: {_method: 'delete'},
+                            success: function (data) {
+                                console.log(data);
+                                //msgAlert('Deleted!');
+                                location.reload();
+                            },
+                            error: function (data) {
+                                console.log('Error:', data);
+                                msgAlert('Error occurred! Please try again.');
+                            }
+                        });
+                    }
+                }
+            }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+                }
+            });
+        }
+
+
+
+    </script>
+
+
+
+
+    </p>
+
+    <footer class="footer bg-dark">
+      <div class="container">
+        <span class="text-muted">Copyright &copy; CloudAlbum 2018</span>
+      </div>
+    </footer>
+
+
+  </body>
+</html>

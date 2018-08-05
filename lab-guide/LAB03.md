@@ -1,14 +1,23 @@
 # LAB 03 - Serverless with AWS Chalice
+This exercise is divided into two parts. The first part is about the AWS serverless framework Chalice, and the second part is using the Chalice to run the CloudAlbum application.
 
 ## Serverless framework
+There are various serverless frameworks. Here is a brief introduction to each of the serverless frameworks.
 
+### AWS Chalice
+`Chalice` is a microframework(https://github.com/aws/chalice) for writing serverless apps in python. It makes it simple for you to use AWS Lambda and Amazon API Gateway to build serverless apps. It allows you to quickly create and deploy applications that use AWS Lambda. It provides:
 
-## AWS Chalice
+* A command line tool for creating, deploying, and managing your app
+* A decorator based API for integrating with Amazon API Gateway, Amazon S3, Amazon SNS, Amazon SQS, and other AWS services.
+* Automatic IAM policy generation
 
-## Serverless 
+### Serverless 
+The `Serverless` Framework (https://serverless.com) is an MIT open source framework that’s actively developed and maintained by a full-time team. At its essence, it allows users to define a serverless application—including Lambda functions and API Gateway APIs—and then deploy it using a command-line interface (CLI). It helps you organize and structure serverless applications, which is of great benefit as you begin to build larger systems, and it’s fully extensible via its plugin system.
 
-## Zappa
+### Zappa
+`Zappa` (https://github.com/Miserlou/Zappa) makes it super easy to build and deploy server-less, event-driven Python applications (including, but not limited to, WSGI web apps) on AWS Lambda + API Gateway. Think of it as "serverless" web hosting for your Python apps. That means infinite scaling, zero downtime, zero maintenance - and at a fraction of the cost of your current deployments!
 
+**NOTE:** These `serverless frameworks` have many similarities. You can choose one framework from the above. In this hands-on lab, **you will use AWS Chalice**.
 
 ## TASK 1 : Build a simple AWS Chalice serverless app.
 This TASK will provide an introduction on how to use AWS Chalice and provide instructions on how to go about building your very first Chalice application. 
@@ -147,7 +156,7 @@ chalice local --port 8080
 
 * Test #1: `@app.route('/users/{name}', methods=['GET'])`
 ```
-lachesis:~/environment $ http localhost:8080/users/David
+$ http localhost:8080/users/David
 HTTP/1.1 200 OK
 Content-Length: 29
 Content-Type: text/html; charset=utf-8
@@ -168,18 +177,19 @@ myapp - DEBUG - {'query_params': None, 'headers': {'host': 'localhost:8080', 'us
 
 * Test #2: `@app.route('/users', methods=['POST'])`
 ```
-http localhost:8080/users name=David age=22 job=Student
+$ echo '{"name": "David", "age": 22, "job": "student"}' | http localhost:8080/users
 HTTP/1.1 200 OK
-Content-Length: 48
+Content-Length: 46
 Content-Type: application/json; charset=utf-8
 Date: Sun, 05 Aug 2018 08:26:13 GMT
 Server: BaseHTTP/0.6 Python/3.6.5
 
 {
-    "age": "22",
-    "job": "Student",
+    "age": 22,
+    "job": "student",
     "name": "David"
 }
+
 
 ```
 * Debug log for this request:
@@ -224,7 +234,6 @@ chalice.deploy.deployer.ChaliceDeploymentError: ERROR - While deploying your cha
 ```
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
-export AWS_DEFAULT_REGION=
 ```
 
 * Run `chalice deploy` again.
@@ -244,7 +253,7 @@ chalice url
 https://aavvueq9we.execute-api.ap-southeast-1.amazonaws.com/api/
 ```
 
-* Test your first Chalice application. You can refer to step 8.
+* Test your first Chalice application. You can refer to `step 8`.
 
 * You can check the files of `deplyed` and `deployments` directories.
 ```
@@ -265,11 +274,11 @@ https://aavvueq9we.execute-api.ap-southeast-1.amazonaws.com/api/
 5 directories, 7 files
 ```
 
-11. Examine your API Gateway and Lambda Console. You can see the new API and Lambda functions.
-* API Gateway console
+11. Examine your **API Gateway** and **Lambda** Console. You can see the new API and Lambda functions.
+* API Gateway console (myapp)
 ![API gateway console](images/lab03-task1-api-gw-console.png)
 
-* Lambda console
+* Lambda console (myapp-dev)
 ![Lambda console](images/lab03-task1-lambda-console.png)
 
 
@@ -284,3 +293,11 @@ Deleting IAM role: myapp-dev
 * If it works well, let's go to next TASK!
 
 ## TASK 2 : CloudAlbum with AWS Chalice
+We have removed server based components via LAB02. We are now going serverless by removing Web Server Tier and App Server Tier.
+
+![Serverless application](images/lab03-task2-serverless.png)
+
+Finally, all servers are gone!
+
+![Serverless application](images/lab03-task2-serverless-full.png)
+
