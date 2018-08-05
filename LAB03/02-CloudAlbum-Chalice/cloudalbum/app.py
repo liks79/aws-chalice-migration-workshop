@@ -1,128 +1,31 @@
-from chalice import Chalice, Response
-from chalicelib.config import conf
+from chalice import Response
+from chalice import Chalice, AuthResponse
 from chalicelib import util
-from jinja2 import Environment, PackageLoader, select_autoescape, Template
-from jose import jwt
+from chalicelib.config import conf, S3_STATIC_URL, env, cors_config
+from chalicelib.util import get_uid, verify
+from chalicelib.models_ddb import User, Photo
 from requests.auth import HTTPBasicAuth
 from urllib.parse import parse_qs
-from chalicelib.models_ddb import User, Photo
-from chalice import Chalice, AuthResponse, CustomAuthorizer
-from chalice import CORSConfig, CognitoUserPoolAuthorizer
 from datetime import datetime, timedelta
-from http import cookies
 import requests
 import uuid
 import logging
 import tempfile
 import io
 
-
-
-cors_config = CORSConfig(
-    allow_origin='*',
-    allow_headers=['X-Special-Header'],
-    max_age=600,
-    expose_headers=['X-Special-Header'],
-    allow_credentials=True
-)
-
-
 app = Chalice(app_name='cloudalbum')
 app.debug = True
 app.log.setLevel(logging.DEBUG)
 
 
-env = Environment(
-    loader=PackageLoader(__name__, 'chalicelib/templates'),
-    autoescape=select_autoescape(['html', 'xml']))
-
-user = User()
-user.id = '716b79d4-908d-4817-8d5c-5ad0e40dcb6b'
-user.username = 'sungshik'
-user.email = 'liks79@gmail.com'
-user.password = 'asdf'
-
-
-app.log.debug(conf)
-
-
-# cog_authorizer = CognitoUserPoolAuthorizer(
-#     name='cloudalbum',
-#     provider_arns=['arn:aws:cognito-idp:ap-southeast-1:389833669077:userpool/ap-southeast-1_HAm68sUvj'],
-#     header='Authorization')
-
-
-# cookie_auth = CustomAuthorizer(
-#     'cookie-auth', header='Cookie',
-#     authorizer_uri=('arn:aws:apigateway:region:lambda:path/2015-03-01'
-#     '/functions/arn:aws:lambda:region:account-id:'
-#     'function:FunctionName/invocations'))
-
-
-
-@app.authorizer()
-def jwt_auth(auth_request):
-
-    app.log.debug(auth_request)
-
-    token = auth_request.token
-    app.log.debug("===auth_request========")
-    app.log.debug(auth_request)
-    app.log.debug(type(auth_request))
-    app.log.debug(dir(auth_request))
-    app.log.debug("===========")
-
-    app.log.debug("token:{0}".format(token))
-
-    id_token = verify(token)
-
-    # app.log.debug("===========")
-    # # app.log.debug(id_token)
-    # app.log.debug("===========")
-
-    return AuthResponse(routes=['*'], principal_id=id_token['sub'])
-
-
-
-
-
-
-
-def verify(token, access_token=None):
-    """Verify a cognito JWT"""
-
-    ### load and cache cognito JSON Web Key (JWK)
-    # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
-    JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json". \
-        format(conf['AWS_REGION'], conf['COGNITO_POOL_ID'])
-
-    JWKS = requests.get(JWKS_URL).json()["keys"]
-
-    # get the key id from the header, locate it in the cognito keys
-    # and verify the key
-    header = jwt.get_unverified_header(token)
-    key = [k for k in JWKS if k["kid"] == header['kid']][0]
-    id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
-
-    return id_token
-
-
-# @app.route('/auth', methods=['GET'], authorizer=cog_authorizer)
-@app.route('/auth', methods=['GET'])
-def auth():
-
-    return app.current_request.to_dict()
-
-
-
-
-
-# @app.route('/info', methods=['GET'], authorizer=jwt_auth)
 @app.route('/home', methods=['GET'], cors=cors_config)
 def home():
     t = env.get_template('home.html')
+    user = User.get(get_uid(app))
+
     result = Photo.query(user.id)
-    body = t.render(current_user=user, photos=result, presigned_url=util.presigned_url)
+    body = t.render(current_user=user, photos=result, presigned_url=util.presigned_url,
+                    s3_static_url=S3_STATIC_URL)
 
     return Response(body=body, status_code=200, headers={
         "Content-Type": "text/html"})
@@ -130,20 +33,22 @@ def home():
 
 @app.route('/photos/map', methods=['GET'], cors=cors_config)
 def map_view():
+    t = env.get_template('map.html')
+    user = User.get(get_uid(app))
 
     photo_list = Photo.query(user.id)
-    t = env.get_template('map.html')
     body = t.render(current_user=user, photos=photo_list, gmaps_key=conf['GMAPS_KEY'],
-                    presigned_url=util.presigned_url)
+                    presigned_url=util.presigned_url, s3_static_url=S3_STATIC_URL)
 
     return Response(body=body, status_code=200, headers={
         "Content-Type": "text/html"})
 
 
 @app.route('/photos/new', methods=['GET'], cors=cors_config)
-def upload_from():
+def upload_form():
+    user = User.get(get_uid(app))
     t = env.get_template('upload.html')
-    body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'])
+    body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'], s3_static_url=S3_STATIC_URL)
     response = Response(body=body, status_code=200,
                         headers={"Content-Type": "text/html"})
     return response
@@ -153,8 +58,8 @@ def upload_from():
 def upload():
     # flash('Your file upload have been completed successfully!')
 
+    user = User.get(get_uid(app))
     form = util.get_parts(app)
-    # app.log.debug(form)
 
     filename_orig = form['filename_origin'][0].decode('utf-8')
     ext = (filename_orig.rsplit('.', 1)[1]).lower()
@@ -198,6 +103,7 @@ def photo_delete(photo_id):
     :param photo_id: target photo id
     :return: Json data remove:fail or success
     """
+    user = User.get(get_uid(app))
 
     app.log.debug("Photo delete request: %s", photo_id)
     try:
@@ -222,11 +128,6 @@ def signin():
     """Login route"""
     # http://docs.aws.amazon.com/cognito/latest/developerguide/login-endpoint.html
 
-    # session = requests.Session()
-
-    # session['csrf_state'] = uuid.uuid4().hex
-    # (conf['COGNITO_DOMAIN'], conf['COGNITO_CLIENT_ID'], session['csrf_state'],
-
     cognito_login = "https://{0}/"\
                     "login?response_type=code&client_id={1}"\
                     "&state={2}"\
@@ -234,7 +135,6 @@ def signin():
                          conf['COGNITO_DOMAIN'], conf['COGNITO_CLIENT_ID'],
                          uuid.uuid4().hex, conf['BASE_URL'])
 
-    print(cognito_login)
     app.log.debug(cognito_login)
 
     return Response(
@@ -250,20 +150,19 @@ def search():
     Search function for description and tags in Photo table.
     :return: List of photo object which retrieved DB.
     """
+    t = env.get_template('home.html')
+    user = User(get_uid(app))
+
     parsed = parse_qs(app.current_request.raw_body.decode())
     keyword = parsed.get('search')[0]
 
     photo_pages = Photo.query(user.id, Photo.tags.contains(keyword) | Photo.desc.contains(keyword))
 
-    t = env.get_template('home.html')
     body = t.render(current_user=user, photos=photo_pages, presigned_url=util.presigned_url,
-                    msg="Search results for '{0}'.. ".format(keyword))
+                    msg="Search results for '{0}'.. ".format(keyword), s3_static_url=S3_STATIC_URL)
 
     return Response(body=body, status_code=200, headers={
         "Content-Type": "text/html"})
-
-
-
 
 
 @app.route('/callback')
@@ -282,9 +181,6 @@ def callback():
                              auth=HTTPBasicAuth(conf['COGNITO_CLIENT_ID'],
                                                 conf['COGNITO_CLIENT_SECRET']))
 
-    # session = requests.Session()
-
-
     # the response:
     # http://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
     # if response.status_code == requests.codes.ok and csrf_state == session['csrf_state']:
@@ -292,51 +188,33 @@ def callback():
         verify(response.json()["access_token"])
         id_token = verify(response.json()["id_token"], response.json()["access_token"])
 
-        app.log.debug("============")
         app.log.debug(response.json()["access_token"])
-        app.log.debug("============")
         app.log.debug(id_token)
-        app.log.debug("============")
 
         access_token=response.json()["access_token"]
 
-        # user = User()
-        # user.id = id_token["cognito:username"]
-        # user.email = id_token["email"]
-        # session['id'] = id_token["cognito:username"]
-        # session['email'] = id_token["email"]
-        # session['name'] = id_token["name"]
-        # session['expires'] = id_token["exp"]
-        # session['refresh_token'] = response.json()["refresh_token"]
-        # login_user(user, remember=True)
+        user = User()
+        user.id = id_token["cognito:username"]
+        user.email = id_token["email"]
+        user.username = id_token["name"]
+        user.password = 'NA'
+        user.save()
 
-        # return Response(
-        #     status_code=301,
-        #     headers={'Location': '/home',
-        #              'Authorization': access_token,
-        #              'Set-Cookie': "token={0}".format(access_token)},
-        #     body=''
-
-        t = env.get_template('callback.html')
-        body = t.render(current_user=user)
-
-        expires = datetime.utcnow() + timedelta(hours=1)
+        # expires = datetime.utcnow() + timedelta(hours=1)
 
         return Response(
-            status_code=200,
+            status_code=301,
             headers= {
                 'Authorization': access_token,
                 # 'Set-Cookie': 'token={0}; expires={1}'.format(access_token, expires),
-                'Set-Cookie': 'token={0}'.format(access_token),
-                'Content-Type': 'text/html'
+                'Set-Cookie': 'sid={0}; token={1}'.format(id_token["cognito:username"], access_token),
+                'location': '/home'
             },
-            body=body
+            body=''
         )
 
     else:
         return Response(body="<h1>ERROR!</h1>")
-
-
 
 
 # https://chalice.readthedocs.io/en/latest/api.html
@@ -348,3 +226,5 @@ def callback():
 #         s3.download_file(event.bucket, event.key, f.name)
 #         resize_image(f.name)
 #         s3.upload_file(event.bucket, 'resized/%s' % event.key, f.name)
+
+

@@ -1,4 +1,3 @@
-
 """
     cloudalbum.util.py
     ~~~~~~~~~~~~~~~~~~~~~~~
@@ -13,31 +12,22 @@ from tzlocal import get_localzone
 from chalicelib.config import conf
 from PIL import Image
 from io import BytesIO
+from jinja2 import Environment, PackageLoader, select_autoescape
+from http.cookies import SimpleCookie
+from jose import jwt
 import time
 import os
 import sys
 import boto3
 import cgi
-from chalice import Response
-from jinja2 import Environment, PackageLoader, select_autoescape
+
 
 env = Environment(
     loader=PackageLoader(__name__, 'chalicelib/templates'),
     autoescape=select_autoescape(['html', 'xml']))
 
 
-def render_template(template_name, context, status_code=200, content_type='text/html', headers=None):
-    template = env.get_template(template_name)
-    body = template.render(**context)
-
-    if headers is None:
-        headers = {}
-
-    headers.update({
-        'Content-Type': content_type,
-    })
-
-    return Response(body=body, status_code=status_code, headers=headers)
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 
 def get_parts(app):
@@ -49,9 +39,23 @@ def get_parts(app):
     return parsed
 
 
+def verify(token, access_token=None):
+    """Verify a cognito JWT"""
 
+    ### load and cache cognito JSON Web Key (JWK)
+    # https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
+    JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json". \
+        format(conf['AWS_REGION'], conf['COGNITO_POOL_ID'])
 
-current_milli_time = lambda: int(round(time.time() * 1000))
+    JWKS = requests.get(JWKS_URL).json()["keys"]
+
+    # get the key id from the header, locate it in the cognito keys
+    # and verify the key
+    header = jwt.get_unverified_header(token)
+    key = [k for k in JWKS if k["kid"] == header['kid']][0]
+    id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
+
+    return id_token
 
 
 def allowed_file_ext(filename):
@@ -272,21 +276,6 @@ def make_thumbnails_s3(file_p, app):
     return result_bytes_stream.getvalue()
 
 
-# def make_thumbnails_s3_chalice(file_p, app):
-#
-#     result_bytes_stream = BytesIO()
-#
-#     try:
-#         im = Image.open(file_p)
-#         im = im.convert('RGB')
-#         im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
-#         im.save(result_bytes_stream, 'JPEG')
-#     except Exception as e:
-#         app.log.debug(e)
-#
-#     return result_bytes_stream.getvalue()
-
-
 def sizeof_fmt(num):
     """
     Return human readable file size
@@ -324,7 +313,6 @@ def check_variables_gmaps():
 
 def log_path_check(log_path):
     """
-
     :param log_path:
     :return: None
     """
@@ -395,7 +383,15 @@ def presigned_url(filename, email, Thumbnail=True):
                         'Key': key})
 
     except Exception as e:
-        flash('Error occurred! Please try again : {0}'.format(e))
+        # flash('Error occurred! Please try again : {0}'.format(e))
+        raise e
 
     return url
+
+
+def get_uid(app):
+    cookie = SimpleCookie()
+    cookie.load(app.current_request.headers.get('cookie'))
+    return cookie.get('sid').value
+
 

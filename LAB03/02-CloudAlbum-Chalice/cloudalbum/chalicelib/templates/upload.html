@@ -7,11 +7,11 @@
   {{ super() }}
 
   <!-- Fileinput plugin -->
-  <link rel="stylesheet" href="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/jasny-fileinput.css" type="text/css" media="screen" title="CloudAlbum" charset="UTF-8" />
-  <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/binaryajax.js"></script>
-  <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/exif.js"></script>
-  <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/jasny-fileinput.js"></script>
-  <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/moment.min.js"></script>
+  <link rel="stylesheet" href="{{ s3_static_url }}/css/jasny-fileinput.css" type="text/css" media="screen" title="CloudAlbum" charset="UTF-8" />
+  <script type="text/javascript" src="{{ s3_static_url }}/js/binaryajax.js"></script>
+  <script type="text/javascript" src="{{ s3_static_url }}/js/exif.js"></script>
+  <script type="text/javascript" src="{{ s3_static_url }}/js/jasny-fileinput.js"></script>
+  <script type="text/javascript" src="{{ s3_static_url }}/js/moment.min.js"></script>
 
   <script>
     var csrf_token = '';
@@ -279,7 +279,7 @@
 
     </script>
 
-    <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/app.js"></script>
+    <script type="text/javascript" src="{{ s3_static_url }}/js/app.js"></script>
 
 
 

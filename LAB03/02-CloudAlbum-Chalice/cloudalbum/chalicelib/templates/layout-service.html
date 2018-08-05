@@ -11,22 +11,22 @@
     <title>Cloud Album::{% block title %}{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ s3_static_url }}/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    <link href="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/css/app.css" rel="stylesheet" type="text/css">
+    <link href="{{ s3_static_url }}/css/app.css" rel="stylesheet" type="text/css">
 
-    <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{{ s3_static_url }}/js/jquery-3.3.1.min.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ s3_static_url }}/js/bootstrap.bundle.min.js"></script>
     <!-- Google Map API -->
     <script type="text/javascript" type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ gmaps_key }}"></script>
     <!-- Gmaps.js -->
-    <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/gmaps.js"></script>
+    <script type="text/javascript" src="{{ s3_static_url }}/js/gmaps.js"></script>
 
     <!-- bootbox.js -->
-    <script type="text/javascript" src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="{{ s3_static_url }}/js/bootbox.min.js"></script>
     <!-- Fontawesome for vectorized icons -->
-    <script type="text/javascript" defer src="https://s3-ap-southeast-1.amazonaws.com/aws-chalice-workshop/static/js/all.js"></script>
+    <script type="text/javascript" defer src="{{ s3_static_url }}/js/all.js"></script>
 
 
     <script>
@@ -100,26 +100,6 @@
                         msgAlert('Search keyword is empty!');
                     }
                     else{
-
-                        //$('#search-form').submit(function(e) {
-                        //    e.preventDefault(); // prevents the default submission
-                        //    $.ajax({
-                        //        type: "POST",
-                        //        url: "/photos/search",
-                        //        dataType: "json",
-                        //        contentType: "application/json",
-                        //        data: {'keyword': result},
-                        //        success: function (data) {
-                        //            console.log(data);
-                        //        },
-                        //        error: function (data) {
-                        //            console.log('Error:', data);
-                        //            msgAlert('Error occurred! Please try again.');
-                        //        }
-                        //});
-
-                        //});
-
 
                         console.log('search keyword:'+result);
                         $('[name=search]').val(result);
