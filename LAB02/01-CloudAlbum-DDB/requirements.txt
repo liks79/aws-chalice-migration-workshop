@@ -15,7 +15,6 @@ PyMySQL==0.8.1
 requests==2.19.1
 requests-oauthlib==1.0.0
 SQLAlchemy==1.2.8
-twython==3.7.0
 urllib3==1.23
 uWSGI==2.0.17
 Werkzeug==0.14.1
@@ -23,4 +22,3 @@ WTForms==2.2.1
 boto3
 import_string
 pynamodb
-chalice

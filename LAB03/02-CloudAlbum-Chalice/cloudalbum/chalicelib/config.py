@@ -7,7 +7,6 @@ conf = {
     'GMAPS_KEY': os.getenv('GMAPS_KEY', ''),
 
     # Default config values
-    'PER_PAGE': os.getenv('PER_PAGE', 6),
     'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 200),
 
@@ -24,7 +23,7 @@ conf = {
     'COGNITO_CLIENT_ID': os.getenv('COGNITO_CLIENT_ID', '2g6s86v4d44ltem6bu9m3rqola'),
     'COGNITO_CLIENT_SECRET': os.getenv('COGNITO_CLIENT_SECRET', 'h8ltda09tdvu7njuba3d2l971d3irj5t9stelllv7tnj36cstn5'),
     'COGNITO_DOMAIN': os.getenv('COGNITO_DOMAIN', 'cloudalbum.auth.ap-southeast-1.amazoncognito.com'),
-    'BASE_URL': os.getenv('BASE_URL', 'https://0ty10bfjr0.execute-api.ap-southeast-1.amazonaws.com/api')
+    'BASE_URL': os.getenv('BASE_URL', 'https://v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api')
 
 }
 

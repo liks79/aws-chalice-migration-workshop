@@ -240,39 +240,6 @@ def the_time_now():
     return datetime.now(local_tz)
 
 
-def resize_image(file_p, size):
-    """Resize an image to fit within the size, and save to the path directory"""
-    dest_ratio = size[0] / float(size[1])
-    try:
-        image = Image.open(file_p)
-    except IOError:
-        print("Error: Unable to open image")
-        return None
-
-    source_ratio = image.size[0] / float(image.size[1])
-
-    # the image is smaller than the destination on both axis
-    # don't scale it
-    if image.size < size:
-        new_width, new_height = image.size
-    elif dest_ratio > source_ratio:
-        new_width = int(image.size[0] * size[1]/float(image.size[1]))
-        new_height = size[1]
-    else:
-        new_width = size[0]
-        new_height = int(image.size[1] * size[0]/float(image.size[0]))
-    image = image.resize((new_width, new_height), resample=Image.LANCZOS)
-
-    final_image = Image.new("RGB", size)
-    topleft = (int((size[0]-new_width) / float(2)),
-               int((size[1]-new_height) / float(2)))
-    final_image.paste(image, topleft)
-    bytes_stream = BytesIO()
-    # final_image = final_image.convert('RGB')
-    final_image.save(bytes_stream, 'JPEG')
-    return bytes_stream.getvalue()
-
-
 def presigned_url(filename, email, Thumbnail=True):
     prefix = "photos/{0}/".format(email_normalize(email))
     prefix_thumb = "photos/{0}/thumbnails/".format(email_normalize(email))
@@ -297,4 +264,3 @@ def presigned_url(filename, email, Thumbnail=True):
         flash('Error occurred! Please try again : {0}'.format(e))
 
     return url
-

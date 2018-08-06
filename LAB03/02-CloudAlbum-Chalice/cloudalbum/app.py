@@ -1,22 +1,27 @@
 from chalice import Response
 from chalice import Chalice, AuthResponse
 from chalicelib import util
-from chalicelib.config import conf, S3_STATIC_URL, env, cors_config
+from chalicelib.config import conf, S3_STATIC_URL, cors_config
 from chalicelib.util import get_uid, verify
 from chalicelib.models_ddb import User, Photo
 from requests.auth import HTTPBasicAuth
 from urllib.parse import parse_qs
 from datetime import datetime, timedelta
+from jinja2 import Environment, PackageLoader, select_autoescape
 import requests
 import uuid
 import logging
 import tempfile
 import io
 
+
 app = Chalice(app_name='cloudalbum')
 app.debug = True
 app.log.setLevel(logging.DEBUG)
 
+env = Environment(
+    loader=PackageLoader(__name__, 'chalicelib/templates'),
+    autoescape=select_autoescape(['html', 'xml']))
 
 @app.route('/home', methods=['GET'], cors=cors_config)
 def home():
@@ -90,7 +95,7 @@ def upload():
 
     return Response(
         status_code=301,
-        headers={'Location': '/home'},
+        headers={'Location': '/api/home'},
         body=''
     )
 
@@ -132,8 +137,10 @@ def signin():
                     "login?response_type=code&client_id={1}"\
                     "&state={2}"\
                     "&redirect_uri={3}/callback".format(
-                         conf['COGNITO_DOMAIN'], conf['COGNITO_CLIENT_ID'],
-                         uuid.uuid4().hex, conf['BASE_URL'])
+                        conf['COGNITO_DOMAIN'],
+                        conf['COGNITO_CLIENT_ID'],
+                        uuid.uuid4().hex,
+                        conf['BASE_URL'])
 
     app.log.debug(cognito_login)
 
@@ -208,14 +215,17 @@ def callback():
                 'Authorization': access_token,
                 # 'Set-Cookie': 'token={0}; expires={1}'.format(access_token, expires),
                 'Set-Cookie': 'sid={0}; token={1}'.format(id_token["cognito:username"], access_token),
-                'location': '/home'
+                'location': '/api/home'
             },
             body=''
         )
 
     else:
-        return Response(body="<h1>ERROR!</h1>")
-
+        return Response(
+            status_code=301,
+            headers={'Location': '/api'},
+            body=''
+        )
 
 # https://chalice.readthedocs.io/en/latest/api.html
 #

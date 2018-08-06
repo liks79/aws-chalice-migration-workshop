@@ -282,7 +282,7 @@ photo.delete()
 ![Run Console](images/lab02-task1-run-console.png)
 
 
-12. Connect to http://localhost:8000 in your browser. (After SSH tunnel established.)
+12. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
 ![Legacy application](images/lab01-08.png)
 * You need to **Sign-up** first.
 
@@ -391,7 +391,7 @@ else:
 * Ensure **Runner: Python 3**
 ![Run Console](images/lab02-task1-run-console.png)
 
-20. Connect to http://localhost:8000 in your browser. (After SSH tunnel established.)
+20. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
 
 21. Perform application test.
 ![Legacy application](images/lab01-02.png)
@@ -421,7 +421,7 @@ To begin, follow the steps below.
 **Set up an Amazon Cognito user pool.**
 23. In the AWS Console, go to the **Amazon Cognito**
 
-24. Make sure you are still in the **Singapore (ap-southeast-1)**region.
+24. Make sure you are still in the **Singapore(ap-southeast-1)**region.
 
 25. Click **Manage your User Pools**.
 
@@ -467,9 +467,9 @@ To begin, follow the steps below.
 
 46. For **Enabled Identity Providers**, check **Cognito User Pool**.
 
-47. For **Callback URL(s)**, type **http://localhost:8000/callback**
+47. For **Callback URL(s)**, type **http://localhost:8080/callback**
 
-48. For **Sign out URL(s)**, type **http://localhost:8000/**
+48. For **Sign out URL(s)**, type **http://localhost:8080/**
 
 49. Under **OAuth 2.0**, for **Allowed OAuth Flows**, select **Authorization code grant** and for **Allowed OAuth Scopes**, select **openid**.
 
@@ -519,7 +519,7 @@ options = {
 | COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
 | COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
 |COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://.YOUR_DOMAIN_NAME.auth.us-west-2.amazoncognito.com |
-|BASE_URL | http://localhost:8000Do not include a trailing / for the BASE_URL. |
+|BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
 
 
 58. Write your code to retrieve JSON Web Key (JWK) from cognito.
@@ -556,10 +556,10 @@ session['refresh_token'] = response.json()["refresh_token"]
 ```
 
 
-60. Connect to http://localhost:8000 in your browser. (After SSH tunnel established.)
+60. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
 * You can find default Cognito Login Screen.
 ![Cognito Console](images/lab02-task3-cognito-login.png)
-* You can change default login screen in the Cognito console dashboard.
+* You can **change default login screen** in the Cognito console dashboard.
 
 61. Perform application test.
 ![Legacy application](images/lab01-02.png)
@@ -646,7 +646,7 @@ def print_abc():
 
 ```
 
-70. Connect to http://localhost:8000 in your browser. (After SSH tunnel established.)
+70. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
 * You can find default Cognito Login Screen.
 ![Cognito Console](images/lab02-task3-cognito-login.png)
 * You can change default login screen in the Cognito console dashboard.

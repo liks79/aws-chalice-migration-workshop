@@ -12,19 +12,14 @@ from tzlocal import get_localzone
 from chalicelib.config import conf
 from PIL import Image
 from io import BytesIO
-from jinja2 import Environment, PackageLoader, select_autoescape
 from http.cookies import SimpleCookie
 from jose import jwt
+import requests
 import time
 import os
 import sys
 import boto3
 import cgi
-
-
-env = Environment(
-    loader=PackageLoader(__name__, 'chalicelib/templates'),
-    autoescape=select_autoescape(['html', 'xml']))
 
 
 current_milli_time = lambda: int(round(time.time() * 1000))

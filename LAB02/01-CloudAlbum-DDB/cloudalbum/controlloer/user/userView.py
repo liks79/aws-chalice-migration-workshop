@@ -80,6 +80,15 @@ def signup():
 
             if not user_exist:
                 ## TODO #1 : Write your code to save user information
+                ## -- begin --
+                user = User(uuid.uuid4().hex)
+                user.email = form.email.data
+                user.password = generate_password_hash(form.password.data)
+                user.username = form.username.data
+                user.save()
+                ## -- end --
+
+
 
 
                 # app.logger.debug(user)
@@ -121,6 +130,13 @@ def edit(user_id):
             app.logger.debug(data)
 
             ## TODO #3 : Write your code to update user profile to DynamoDB.
+            ## -- begin --
+            user = User.get(user_id)
+            user.update(actions=[
+                User.username.set(data['username']),
+                User.password.set(generate_password_hash(data['password']))
+            ])
+            ## --end --
 
             return jsonify(update='success')
 

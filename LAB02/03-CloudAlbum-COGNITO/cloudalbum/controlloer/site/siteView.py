@@ -24,12 +24,12 @@ blueprint = Blueprint('siteView', __name__)
 
 
 ## TODO #7: Write your code to retrieve JSON Web Key (JWK) from cognito
-# https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
+## https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
+## -- begin --
 JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json".\
     format(conf['AWS_REGION'], conf['COGNITO_POOL_ID'])
-
 JWKS = requests.get(JWKS_URL).json()["keys"]
-
+## -- end --
 
 
 def verify(token, access_token=None):
@@ -40,7 +40,6 @@ def verify(token, access_token=None):
     key = [k for k in JWKS if k["kid"] == header['kid']][0]
     id_token = jwt.decode(token, key, audience=conf['COGNITO_CLIENT_ID'], access_token=access_token)
     return id_token
-
 
 
 @blueprint.route('home')
@@ -54,8 +53,6 @@ def home():
     app.logger.debug(JWKS)
     app.logger.debug(current_user)
     return redirect(url_for('photoView.photos'))
-
-
 
 
 @blueprint.route('/callback')
@@ -82,6 +79,16 @@ def callback():
 
         ## TODO #8: Write yoir code to set up User objedct using id_token from Cognito
         user = User()
+        ## -- begin --
+        user.id = id_token["cognito:username"]
+        user.email = id_token["email"]
+        user.save()
+        session['id'] = id_token["cognito:username"]
+        session['email'] = id_token["email"]
+        session['name'] = id_token["name"]
+        session['expires'] = id_token["exp"]
+        session['refresh_token'] = response.json()["refresh_token"]
+        ## -- end --
 
 
 

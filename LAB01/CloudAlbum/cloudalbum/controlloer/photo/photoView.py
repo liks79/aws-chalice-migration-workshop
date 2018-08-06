@@ -27,32 +27,20 @@ import os
 blueprint = Blueprint('photoView', __name__)
 
 
-@blueprint.route('/', defaults={'page': 1}, methods=['GET'])
-@blueprint.route('/page/<int:page>', methods=['GET'])
+@blueprint.route('/', methods=['GET'])
 @login_required
-def photos(page=1):
+def photos():
     """
     Retrieve uploaded photo information
     :param page: page number for the pagination.
     :return: HTML template for photo list
     """
-
-    photo_count = db.session.query(Photo).filter_by(user_id=current_user.id).count()
-    pagination = Pagination(page, conf['PER_PAGE'], photo_count)
-
-    if page != 1:
-        offset = conf['PER_PAGE'] * (page - 1)
-    else:
-        offset = 0
-
     photo_pages = db.session.query(Photo). \
                         filter_by(user_id=current_user.id). \
                         order_by(Photo.upload_date.desc()). \
-                        limit(conf['PER_PAGE']). \
-                        offset(offset). \
                         all()
 
-    return render_template('home.html', pagination=pagination, photos=photo_pages, gmaps_key=conf['GMAPS_KEY'],
+    return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'],
                            sizeof_fmt=util.sizeof_fmt, current_user=current_user)
 
 
@@ -201,13 +189,13 @@ def search():
     """
     keyword = request.form['search']
     app.logger.debug(keyword)
-    photo_pages = db.session.query(Photo). \
+    photo_list = db.session.query(Photo). \
                 filter_by(user_id=current_user.id). \
                 filter(Photo.desc.like("%{0}%".format(keyword)) | Photo.tags.like("%{0}%".format(keyword))). \
                 order_by(Photo.upload_date.desc()). \
                 all()
     flash("Search results for '{0}'.. ".format(keyword))
-    return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'])
+    return render_template('home.html', photos=photo_list, gmaps_key=conf['GMAPS_KEY'])
 
 
 @blueprint.route('/map', methods=['GET'])
@@ -253,40 +241,3 @@ class PhotoForm(FlaskForm):
     nation = HiddenField('nation')
     address = HiddenField('address')
     formatted_address = HiddenField('formatted_address')
-
-
-class Pagination(object):
-    """
-    Code snippets from : http://flask.pocoo.org/snippets/44/
-    """
-
-    def __init__(self, page, per_page, total_count):
-        self.page = page
-        self.per_page = per_page
-        self.total_count = total_count
-
-    @property
-    def pages(self):
-        return int(ceil(self.total_count / float(self.per_page)))
-
-    @property
-    def has_prev(self):
-        return self.page > 1
-
-    @property
-    def has_next(self):
-        return self.page < self.pages
-
-    def iter_pages(self, left_edge=2, left_current=2,
-                   right_current=5, right_edge=2):
-        last = 0
-        for num in range(1, self.pages + 1):
-            if num <= left_edge or \
-                    (num > self.page - left_current - 1 and \
-                     num < self.page + right_current) or \
-                    num > self.pages - right_edge:
-                if last + 1 != num:
-                    yield None
-                yield num
-                last = num
-

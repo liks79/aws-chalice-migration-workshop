@@ -109,7 +109,7 @@ conf = {
 
     # Default config values
     'APP_HOST': os.getenv('APP_HOST', '0.0.0.0'),
-    'APP_PORT': os.getenv('APP_PORT', 8000),
+    'APP_PORT': os.getenv('APP_PORT', 8080),
     'FLASK_SECRET': os.getenv('FLASK_SECRET', os.urandom(24)),
     'SESSION_TIMEOUT': os.getenv('SESSION_TIMEOUT', 30),
     'SQLALCHEMY_TRACK_MODIFICATIONS': os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', False),
@@ -235,7 +235,7 @@ curl http://169.254.169.254/latest/meta-data/public-ipv4
 
 35. Try to SSH tunneling like this
 ```
-ssh -i YOUR_KEY.pem -L 8000:localhost:8000 ec2-user@<public-ip of your Cloud9 EC2 instance>
+ssh -i YOUR_KEY.pem -L 8080:localhost:8080 ec2-user@<public-ip of your Cloud9 EC2 instance>
 ```
 
 36. Connect your legacy application
@@ -243,7 +243,7 @@ ssh -i YOUR_KEY.pem -L 8000:localhost:8000 ec2-user@<public-ip of your Cloud9 EC
 ## TASK 4. Take a look around
 Check the application.
 
-37. Connect to http://localhost:8000 in your browser.
+37. Connect to http://localhost:8080 in your browser.
 ![Legacy application](images/lab01-08.png)
 
 38. Take a look around and perform test.

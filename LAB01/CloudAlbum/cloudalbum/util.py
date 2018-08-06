@@ -153,31 +153,6 @@ def log_path_check(log_path):
         raise e
 
 
-def count(iterable):
-    """
-    Count the number of items that `iterable` yields.
-    Equivalent to the expression
-    ::
-      len(iterable)
-    … but it also works for iterables that do not support ``len()``.
-      >>> import cardinality
-      >>> cardinality.count([1, 2, 3])
-      3
-      >>> cardinality.count(i for i in range(500))
-      500
-      >>> def gen():
-      ...     yield 'hello'
-      ...     yield 'world'
-      >>> cardinality.count(gen())
-      2
-    """
-    if hasattr(iterable, '__len__'):
-        return len(iterable)
-
-    d = collections.deque(enumerate(iterable, 1), maxlen=1)
-    return d[0][0] if d else 0
-
-
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 

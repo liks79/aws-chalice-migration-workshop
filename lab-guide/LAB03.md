@@ -366,7 +366,6 @@ conf = {
     'GMAPS_KEY': os.getenv('GMAPS_KEY', ''),
 
     # Default config values
-    'PER_PAGE': os.getenv('PER_PAGE', 6),
     'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 200),
 
@@ -405,6 +404,8 @@ env = Environment(
 
 **NOTE:** `static` contents will be moved S3, so we need to copy static files in your S3 bucket. Jinja2 Template engine will load template in the `chalicelib/templates` directory.
 
+**NOTE:** Please set `GMAPS_KEY` variable before you run.
+
 
 16. Copy static files to your S3 Bucket.
 ```
@@ -416,9 +417,48 @@ $ unzip static_files.zip
 $ aws s3 cp static/* s3://<Your bucket S3_PHOTO_BUCKET>/static --acl public-read
 ```
 
-17. Template files which stored `chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
+17. Enable S3 bucket CORS configuration in your S3 Console. (https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html)
+
+![Legacy application](images/lab03-task2-s3-cors.png)
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <MaxAgeSeconds>3000</MaxAgeSeconds>
+    <AllowedHeader>Authorization</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+
+```
+
+18. Review template files. Template files which stored `chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
 ```python
 S3_STATIC_URL = "https://s3-{0}.amazonaws.com/{1}/static".format(conf['AWS_REGION'], conf['S3_PHOTO_BUCKET'])
 ```
+
+
+19. Review the `app.py` in the 'LAB03/02-CloudAlbum-Chalice/cloudalbum/app.py' 
+* Flask dependencies removed
+  * Flask, url_for, flash, flask_login and so on.
+* Chalice has similar features like flask route decorator structure.
+* CloudAlbum is not restful, it is still **tightly coupled with Jinja2 template engine**. So, we use Jinja2 template engine in this time.
+* Chalice permmited to load python modules **from the `chalicelib` directory**. We will use this directory which contains `templates` directory. You can refer to following code in `LAB03/02-CloudAlbum-Chalice/cloudalbum/app.py`. 
+```python
+env = Environment(
+    loader=PackageLoader(__name__, 'chalicelib/templates'),
+    autoescape=select_autoescape(['html', 'xml']))
+```
+
+* We can use Jinja2 template engine like below:
+
+```python
+t = env.get_template('upload.html')
+body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'], s3_static_url=S3_STATIC_URL)
+```
+
+20. 
+
 
 

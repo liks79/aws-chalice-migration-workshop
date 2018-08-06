@@ -38,10 +38,10 @@
                 <img class="card-img-top" src="{{presigned_url(photo.filename, current_user.email, Thumbnail=True)}}" alt="">
             </a>
                 <div align="right">
-                    <a id="edit" href="/photos/{{photo.id}}/edit" data-toggle="tooltip" title="Edit">
+                    <a id="edit" href="/api/photos/{{photo.id}}/edit" data-toggle="tooltip" title="Edit">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <a id="map-view" href="/photos/{{photo.id}}/map" data-toggle="tooltip" title="Map view">
+                    <a id="map-view" href="/api/photos/{{photo.id}}/map" data-toggle="tooltip" title="Map view">
                         <i class="fas fa-map-marker-alt"></i>
                     </a>
                     <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo({{ photo.id }});">
@@ -151,7 +151,7 @@
                         $.ajax({
                             type: "delete",
                             contentType: "application/json",
-                            url: '/photos/' + id,
+                            url: '/api/photos/' + id,
                             data: {_method: 'delete'},
                             success: function (data) {
                                 console.log(data);

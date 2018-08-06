@@ -28,10 +28,9 @@ import os
 blueprint = Blueprint('photoView', __name__)
 
 
-@blueprint.route('/', defaults={'page': 1}, methods=['GET'])
-@blueprint.route('/page/<int:page>', methods=['GET'])
+@blueprint.route('/', methods=['GET'])
 @login_required
-def photos(page=1):
+def photos():
     """
     Retrieve uploaded photo information
     :param page: page number for the pagination.
@@ -39,15 +38,8 @@ def photos(page=1):
     """
 
     results = Photo.query(current_user.id)
-    photo_count = conf['PER_PAGE'] ## TODO : Paging 관련 DDB Fix 필요
-    pagination = Pagination(page, conf['PER_PAGE'], photo_count)
 
-    if page != 1:
-        offset = conf['PER_PAGE'] * (page - 1)
-    else:
-        offset = 0
-
-    return render_template('home.html', pagination=pagination, photos=results, gmaps_key=conf['GMAPS_KEY'],
+    return render_template('home.html', photos=results, gmaps_key=conf['GMAPS_KEY'],
                            sizeof_fmt=util.sizeof_fmt, current_user=current_user)
 
 
@@ -117,6 +109,11 @@ def photo_delete(photo_id):
     app.logger.debug("Photo delete request: %s", photo_id)
     try:
         ## TODO #4 : Write your code to delete uploaded photo information in DynamoDB.
+        ## -- begin --
+        photo = Photo.get(current_user.id, photo_id)
+        photo.delete()
+        ## -- end --
+
 
         util.delete(app, photo.filename, current_user)
         flash('Successfully removed!')
@@ -206,7 +203,12 @@ def search():
     """
 
     ## TODO #2 : Write your code to search result via keyword in the DynamoDB.
-
+    ## -- begin --
+    keyword = request.form['search']
+    photo_pages = Photo.query(current_user.id,
+                              Photo.tags.contains(keyword) |
+                              Photo.desc.contains(keyword))
+    ## -- end --
 
     flash("Search results for '{0}'.. ".format(keyword))
     return render_template('home.html', photos=photo_pages, gmaps_key=conf['GMAPS_KEY'])
@@ -252,40 +254,4 @@ class PhotoForm(FlaskForm):
     nation = HiddenField('nation')
     address = HiddenField('address')
     formatted_address = HiddenField('formatted_address')
-
-
-class Pagination(object):
-    """
-    Code snippets from : http://flask.pocoo.org/snippets/44/
-    """
-
-    def __init__(self, page, per_page, total_count):
-        self.page = page
-        self.per_page = per_page
-        self.total_count = total_count
-
-    @property
-    def pages(self):
-        return int(ceil(self.total_count / float(self.per_page)))
-
-    @property
-    def has_prev(self):
-        return self.page > 1
-
-    @property
-    def has_next(self):
-        return self.page < self.pages
-
-    def iter_pages(self, left_edge=2, left_current=2,
-                   right_current=5, right_edge=2):
-        last = 0
-        for num in range(1, self.pages + 1):
-            if num <= left_edge or \
-                    (num > self.page - left_current - 1 and \
-                     num < self.page + right_current) or \
-                    num > self.pages - right_edge:
-                if last + 1 != num:
-                    yield None
-                yield num
-                last = num
 

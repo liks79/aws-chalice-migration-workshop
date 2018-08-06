@@ -13,7 +13,6 @@ from cloudalbum.config import conf
 from PIL import Image
 from io import BytesIO
 from flask import flash
-import collections
 import time
 import os
 import sys
@@ -103,7 +102,7 @@ def save_s3(upload_file_stream, filename, email, app):
                 # Body=resize_image(upload_file_stream, (conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'])),
                 Body=make_thumbnails_s3(upload_file_stream, app),
                 ContentType='image/jpeg',
-                StorageClass='ONEZONE_IA'
+                StorageClass='STANDARD'
         )
 
         app.logger.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key_thumb))
@@ -226,6 +225,9 @@ def check_variables_gmaps():
     Check the key variables for application running
     :return: if verification failed, exit with -1
     """
+
+    print(conf.values())
+
     if conf['GMAPS_KEY'] is None:
         print('GMAPS_KEY are not configured!', file=sys.stderr)
         print('Check your environment variables!', file=sys.stderr)
