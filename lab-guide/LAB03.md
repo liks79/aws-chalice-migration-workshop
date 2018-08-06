@@ -441,7 +441,29 @@ aws ssm get-parameters --names "/cloudalbum/DDB_RCU" --with-decryption
 
 ```python
 from chalice import CORSConfig
-from chalicelib.util import get_param
+import boto3
+
+
+def get_param(param_name):
+    """
+    This function reads a secure parameter from AWS' SSM service.
+    The request must be passed a valid parameter name, as well as
+    temporary credentials which can be used to access the parameter.
+    The parameter's value is returned.
+    """
+    # Create the SSM Client
+    ssm = boto3.client('ssm')
+
+    # Get the requested parameter
+    response = ssm.get_parameters(
+        Names=[param_name, ], WithDecryption=True
+    )
+
+    # Store the credentials in a variable
+    result = response['Parameters'][0]['Value']
+
+    return result
+
 
 conf = {
     # Mandatory variable
@@ -480,7 +502,8 @@ cors_config = CORSConfig(
 
 ```
 
-17. Review the `get_param` function. It is defined in `LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/util.py` file.
+
+17. Review the `get_param` function in the `config.py` file.
 
 ```python
 def get_param(param_name):
@@ -561,7 +584,87 @@ body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'], s3_static_url=S3
 **NOTE:** Please set `GMAPS_KEY` variable before you run.
 
 
-22. 
+22. Generate application execution policy before run. Review following policy.
+```JSON
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "logs:*",
+                "ssm:*",
+                "dynamodb:*",
+                "xray:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+* **NOTE:** As you know, this policy is just example for the convinience not for practical environment. 
+
+* This policy is provided for the workshop as `policy-dev.json` in the `LAB03/02-CloudAlbum-Chalice/cloudalbum/.chalice/policy-dev.json`. 
 
 
+* Whenever your application is deployed using chalice, the **auto generated policy** is written to disk at <projectdir>/.chalice/policy.json. When you run the chalice deploy command, you can also specify the --no-autogen-policy option. Doing so will result in the chalice CLI loading the <projectdir>/.chalice/policy.json file and using that file as the policy for the IAM role. You can manually edit this file and **specify --no-autogen-policy** if you'd like to have full control over what IAM policy to associate with the IAM role.
 
+
+23. Now, you can deploy CloudAlbum application with chalice. 
+```console
+chalice deploy --no-autogen-policy
+Creating deployment package.
+Updating policy for IAM role: cloudalbum-dev-api_handler
+Updating lambda function: cloudalbum-dev
+Updating rest API
+Resources deployed:
+  - Lambda ARN: arn:aws:lambda:ap-southeast-1:389833669077:function:cloudalbum-dev
+  - Rest API URL: https://v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api/
+```
+
+* Keep the `Rest API URL` value and update Parameter Store using this value. You should remove `https://` and `/` (last character) like following strins.
+
+   * v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api
+
+```console
+aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api" --type "SecureString"
+```
+
+
+24. Configure `App client cloudalbum-WebsiteClient` in the **Cognito console.**
+![Cognito console](images/lab03-task2-cog-console.png)
+
+* Update `Callback URL(s)`.
+* Update `Sign out URL(s)`.
+
+25. Look into your **Lambda Console.**
+![API Gateway console](images/lab03-task2-lambda-console.png)
+
+
+26. Look into your **API Gateway Console.**
+![API Gateway console](images/lab03-task2-apigw-console.png)
+
+
+27. Connect to your application through API Gateway. open `https://v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api` in your browser. 
+* If you missed API Gateway **URL**, you can use `chalice url` command.
+![Cognito Console](images/lab02-task3-cognito-login.png)
+
+
+28. Perform application test.
+![Legacy application](images/lab01-02.png)
+
+* Sign in / up
+* Upload Sample Photos
+* Sample images download here 
+  *  https://d2r3btx883i63b.cloudfront.net/temp/sample-photo.zip
+* Look your Album
+* Change Profile
+* Find photos with Search tool
+* Check the Photo Map
+
+## Go further
+
+## Congratulation! You completed LAB03.
