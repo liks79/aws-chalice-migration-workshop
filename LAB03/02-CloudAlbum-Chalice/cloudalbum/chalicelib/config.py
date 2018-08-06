@@ -1,30 +1,28 @@
-import os
 from chalice import CORSConfig
-from jinja2 import Environment, PackageLoader, select_autoescape
+from chalicelib.util import get_param
 
 conf = {
     # Mandatory variable
-    'GMAPS_KEY': os.getenv('GMAPS_KEY', ''),
+    'GMAPS_KEY': get_param('/cloudalbum/GMAPS_KEY'),
 
     # Default config values
-    'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
-    'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 200),
+    'THUMBNAIL_WIDTH': get_param('/cloudalbum/THUMBNAIL_WIDTH'),
+    'THUMBNAIL_HEIGHT': get_param('/cloudalbum/THUMBNAIL_HEIGHT'),
 
     # DynamoDB
-    'AWS_REGION': os.getenv('AWS_REGION', 'ap-southeast-1'),
-    'DDB_RCU': os.getenv('DDB_RCU', 10),
-    'DDB_WCU': os.getenv('DDB_WCU', 10),
+    'AWS_REGION': get_param('/cloudalbum/AWS_REGION'),
+    'DDB_RCU': get_param('/cloudalbum/DDB_RCU'),
+    'DDB_WCU': get_param('/cloudalbum/DDB_WCU'),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop'),
+    'S3_PHOTO_BUCKET': get_param('/cloudalbum/S3_PHOTO_BUCKET'),
 
     # COGNITO
-    'COGNITO_POOL_ID': os.getenv('COGNITO_POOL_ID', 'ap-southeast-1_HAm68sUvj'),
-    'COGNITO_CLIENT_ID': os.getenv('COGNITO_CLIENT_ID', '2g6s86v4d44ltem6bu9m3rqola'),
-    'COGNITO_CLIENT_SECRET': os.getenv('COGNITO_CLIENT_SECRET', 'h8ltda09tdvu7njuba3d2l971d3irj5t9stelllv7tnj36cstn5'),
-    'COGNITO_DOMAIN': os.getenv('COGNITO_DOMAIN', 'cloudalbum.auth.ap-southeast-1.amazoncognito.com'),
-    'BASE_URL': os.getenv('BASE_URL', 'https://v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api')
-
+    'COGNITO_POOL_ID': get_param('/cloudalbum/COGNITO_POOL_ID'),
+    'COGNITO_CLIENT_ID': get_param('/cloudalbum/COGNITO_CLIENT_ID'),
+    'COGNITO_CLIENT_SECRET': get_param('/cloudalbum/COGNITO_CLIENT_SECRET'),
+    'COGNITO_DOMAIN': get_param('/cloudalbum/COGNITO_DOMAIN'),
+    'BASE_URL': "https://{0}".format(get_param('/cloudalbum/BASE_URL'))
 }
 
 
@@ -38,7 +36,5 @@ cors_config = CORSConfig(
     allow_credentials=True
 )
 
-env = Environment(
-    loader=PackageLoader(__name__, 'chalicelib/templates'),
-    autoescape=select_autoescape(['html', 'xml']))
+
 

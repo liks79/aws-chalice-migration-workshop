@@ -109,7 +109,8 @@ venv.bak/
 logs/
 .log 
 upload/
-
+deployed/
+deployments/
 
 
 

@@ -354,36 +354,117 @@ either specified in `requirements.txt` or placed in the `vendor/` directory.
 
 14. Examine `.py` files. Flask dependecies are removed. Only Jinja2 package is alived in the `vendor` directory. 
 
-15. Review `config.py` file located in 'LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/config.py'.
+
+15. Set up application parameters. We will user `Parameter Store` (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) for the application configuration.
+
+* **NOTE:** Please make sure replace `<...>` values your **OWN VALUE**.
+
+```console
+# https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-cli.html 
+
+aws ssm put-parameter --name "/cloudalbum/GMAPS_KEY" --value "<GMAPS_KEY>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/THUMBNAIL_WIDTH" --value "300" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/THUMBNAIL_HEIGHT" --value "200" --type "SecureString"
+
+aws ssm put-parameter --name "/cloudalbum/AWS_REGION" --value "<AWS_REGION>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/DDB_RCU" --value "10" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/DDB_WCU" --value "10" --type "SecureString"
+
+aws ssm put-parameter --name "/cloudalbum/S3_PHOTO_BUCKET" --value "<S3_PHOTO_BUCKET>" --type "SecureString"
+
+aws ssm put-parameter --name "/cloudalbum/COGNITO_POOL_ID" --value "<COGNITO_POOL_ID>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/COGNITO_CLIENT_ID" --value "<COGNITO_CLIENT_ID>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/COGNITO_CLIENT_SECRET" --value "<COGNITO_CLIENT_SECRET>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/COGNITO_DOMAIN" --value "<COGNITO_DOMAIN>" --type "SecureString"
+
+## <BASE_URL> value will be replaced real thing.(after deploy)
+aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<BASE_URL>" --type "SecureString"
+```
+
+* Verify your parameters. 
+
+```console
+aws ssm describe-parameters
+{
+    "Parameters": [
+        {
+            "Name": "/cloudalbum/AWS_REGION",
+            "Type": "SecureString",
+            "KeyId": "alias/aws/ssm",
+            "LastModifiedDate": 1533589218.29,
+            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "Version": 1
+        },
+        {
+            "Name": "/cloudalbum/BASE_URL",
+            "Type": "SecureString",
+            "KeyId": "alias/aws/ssm",
+            "LastModifiedDate": 1533589322.314,
+            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "Version": 1
+        },
+        {
+            "Name": "/cloudalbum/COGNITO_CLIENT_ID",
+            "Type": "SecureString",
+            "KeyId": "alias/aws/ssm",
+            "LastModifiedDate": 1533589258.2,
+            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "Version": 1
+        },
+        {
+
+            (...........)
+
+        }
+}
+```
+
+```console
+aws ssm get-parameters --names "/cloudalbum/DDB_RCU" --with-decryption
+{
+    "Parameters": [
+        {
+            "Name": "/cloudalbum/DDB_RCU",
+            "Type": "SecureString",
+            "Value": "10",
+            "Version": 1,
+            "LastModifiedDate": 1533589224.013,
+            "ARN": "arn:aws:ssm:ap-southeast-1:1234567890:parameter/cloudalbum/DDB_RCU"
+        }
+    ],
+    "InvalidParameters": []
+}
+```
+
+
+16. Review `config.py` file located in 'LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/config.py'.
 
 ```python
-import os
 from chalice import CORSConfig
-from jinja2 import Environment, PackageLoader, select_autoescape
+from chalicelib.util import get_param
 
 conf = {
     # Mandatory variable
-    'GMAPS_KEY': os.getenv('GMAPS_KEY', ''),
+    'GMAPS_KEY': get_param('/cloudalbum/GMAPS_KEY'),
 
     # Default config values
-    'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
-    'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 200),
+    'THUMBNAIL_WIDTH': get_param('/cloudalbum/THUMBNAIL_WIDTH'),
+    'THUMBNAIL_HEIGHT': get_param('/cloudalbum/THUMBNAIL_HEIGHT'),
 
     # DynamoDB
-    'AWS_REGION': os.getenv('AWS_REGION', 'ap-southeast-1'),
-    'DDB_RCU': os.getenv('DDB_RCU', 10),
-    'DDB_WCU': os.getenv('DDB_WCU', 10),
+    'AWS_REGION': get_param('/cloudalbum/AWS_REGION'),
+    'DDB_RCU': get_param('/cloudalbum/DDB_RCU'),
+    'DDB_WCU': get_param('/cloudalbum/DDB_WCU'),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop'),
+    'S3_PHOTO_BUCKET': get_param('/cloudalbum/S3_PHOTO_BUCKET'),
 
     # COGNITO
-    'COGNITO_POOL_ID': os.getenv('COGNITO_POOL_ID', 'ap-southeast-1_HAm68sUvj'),
-    'COGNITO_CLIENT_ID': os.getenv('COGNITO_CLIENT_ID', '2g6s86v4d44ltem6bu9m3rqola'),
-    'COGNITO_CLIENT_SECRET': os.getenv('COGNITO_CLIENT_SECRET', 'h8ltda09tdvu7njuba3d2l971d3irj5t9stelllv7tnj36cstn5'),
-    'COGNITO_DOMAIN': os.getenv('COGNITO_DOMAIN', 'cloudalbum.auth.ap-southeast-1.amazoncognito.com'),
-    'BASE_URL': os.getenv('BASE_URL', 'https://0ty10bfjr0.execute-api.ap-southeast-1.amazonaws.com/api')
-
+    'COGNITO_POOL_ID': get_param('/cloudalbum/COGNITO_POOL_ID'),
+    'COGNITO_CLIENT_ID': get_param('/cloudalbum/COGNITO_CLIENT_ID'),
+    'COGNITO_CLIENT_SECRET': get_param('/cloudalbum/COGNITO_CLIENT_SECRET'),
+    'COGNITO_DOMAIN': get_param('/cloudalbum/COGNITO_DOMAIN'),
+    'BASE_URL': "https://{0}".format(get_param('/cloudalbum/BASE_URL'))
 }
 
 
@@ -397,17 +478,34 @@ cors_config = CORSConfig(
     allow_credentials=True
 )
 
-env = Environment(
-    loader=PackageLoader(__name__, 'chalicelib/templates'),
-    autoescape=select_autoescape(['html', 'xml']))
 ```
 
-**NOTE:** `static` contents will be moved S3, so we need to copy static files in your S3 bucket. Jinja2 Template engine will load template in the `chalicelib/templates` directory.
+17. Review the `get_param` function. It is defined in `LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/util.py` file.
 
-**NOTE:** Please set `GMAPS_KEY` variable before you run.
+```python
+def get_param(param_name):
+    """
+    This function reads a secure parameter from AWS' SSM service.
+    The request must be passed a valid parameter name, as well as
+    temporary credentials which can be used to access the parameter.
+    The parameter's value is returned.
+    """
+    # Create the SSM Client
+    ssm = boto3.client('ssm')
+
+    # Get the requested parameter
+    response = ssm.get_parameters(
+        Names=[param_name, ], WithDecryption=True
+    )
+
+    # Store the credentials in a variable
+    result = response['Parameters'][0]['Value']
+
+    return result
+```
 
 
-16. Copy static files to your S3 Bucket.
+18. Copy static files to your S3 Bucket.
 ```
 $ cd ~/environment/aws-chalice-migration-workshop/LAB03/
 $ mkdir -p temp
@@ -417,7 +515,7 @@ $ unzip static_files.zip
 $ aws s3 cp static/* s3://<Your bucket S3_PHOTO_BUCKET>/static --acl public-read
 ```
 
-17. Enable S3 bucket CORS configuration in your S3 Console. (https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html)
+19. Enable S3 bucket CORS configuration in your S3 Console. (https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html)
 
 ![Legacy application](images/lab03-task2-s3-cors.png)
 ```xml
@@ -433,13 +531,13 @@ $ aws s3 cp static/* s3://<Your bucket S3_PHOTO_BUCKET>/static --acl public-read
 
 ```
 
-18. Review template files. Template files which stored `chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
+20. Review template files. Template files which stored `chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
 ```python
 S3_STATIC_URL = "https://s3-{0}.amazonaws.com/{1}/static".format(conf['AWS_REGION'], conf['S3_PHOTO_BUCKET'])
 ```
 
 
-19. Review the `app.py` in the 'LAB03/02-CloudAlbum-Chalice/cloudalbum/app.py' 
+21. Review the `app.py` in the 'LAB03/02-CloudAlbum-Chalice/cloudalbum/app.py' 
 * Flask dependencies removed
   * Flask, url_for, flash, flask_login and so on.
 * Chalice has similar features like flask route decorator structure.
@@ -458,7 +556,12 @@ t = env.get_template('upload.html')
 body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'], s3_static_url=S3_STATIC_URL)
 ```
 
-20. 
+**NOTE:** `static` contents will be moved S3, so we need to copy static files in your S3 bucket. Jinja2 Template engine will load template in the `chalicelib/templates` directory.
+
+**NOTE:** Please set `GMAPS_KEY` variable before you run.
+
+
+22. 
 
 
 
