@@ -73,7 +73,7 @@ def callback():
 
     # the response:
     # http://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
-    if response.status_code == requests.codes.ok and csrf_state == session['csrf_state']:
+    if response.status_code == requests.codes.ok:
         verify(response.json()["access_token"])
         id_token = verify(response.json()["id_token"], response.json()["access_token"])
 
