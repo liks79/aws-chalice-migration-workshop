@@ -172,7 +172,7 @@ Server: BaseHTTP/0.6 Python/3.6.5
 <h1> Your name is David.</h1>
 
 ```
-* Debug log for this request:
+* Debug log for this request (You can find it :
 
 ```
 myapp - DEBUG - GET
@@ -364,9 +364,9 @@ either specified in `requirements.txt` or placed in the `vendor/` directory.
 15. Set up application parameters. We will user `Parameter Store` (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) for the application configuration.
 
 * **NOTE:** Please make sure replace `<...>` values your **OWN VALUE**.
+  * https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-cli.html 
 
 ```console
-# https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-cli.html 
 
 aws ssm put-parameter --name "/cloudalbum/GMAPS_KEY" --value "<GMAPS_KEY>" --type "SecureString"
 aws ssm put-parameter --name "/cloudalbum/THUMBNAIL_WIDTH" --value "300" --type "SecureString"
