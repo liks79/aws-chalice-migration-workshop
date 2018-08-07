@@ -454,6 +454,7 @@ To begin, follow the steps below.
 28. Click **Step through settings**.
 
 29. For **How do you want your end users to sign in?**, select **Email address or phone number**.
+![Cognito setup](images/lab02-task3-cognito-setup.png)
 
 30. For **Which standard attributes do you want to require?**, select **name**.
 
