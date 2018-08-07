@@ -182,61 +182,63 @@ sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite
 * https://www.i-programmer.info/news/145-mapping-a-gis/11978-google-maps-api-changes-billing-rules.html
 
 26. Run application again. You may succeed.
+![Run console](images/lab01-task2-run-console.png)
 
  
-## TASK 3: Connect to your application.
+## TASK 3: Connect to your application (Cloud9)
 
 To test the application, you can configure your envirionment. There are two way to configure your environment. Choose your option.
 
- * 1) You can use **Cloud9 preview** feature.
+ * You can use **Cloud9 preview** feature.
     *  Previewing Running Applications in the AWS Cloud9 Integrated Development Environment (IDE) 
        * For this, we should run application with **8080, 8081, 8082** port for **127.0.0.1**.
        * https://docs.aws.amazon.com/cloud9/latest/user-guide/app-preview.html 
-
- * Alternative way, you can use to establish an **SSH tunnel** to your AWS Cloud9 instance.
-
 
 
 27. **For Cloud9 preview**
 * Cloud9 preview feature is easy to use.
 * Click the `Preview` menu and choose `Preview Runnig Application`.
 * That's all
-![Cloud9 preview](images/lab01-task3-preview.png)
+![Cloud9 preview](images/lab01-task2-cloud9-preview-1.png)
 * For the convenience, you can run pop-up browser window.
-![Cloud9 preview](images/lab01-task3-preview-2.png)
+![Cloud9 preview](images/lab01-task2-cloud9-preview-2.png)
 
+## TASK 3 [OPTIONAL-TASK]: Connect to your application (SSH Tunneling)
 
-28. **SSH tunnelFor MAC/Linux users:**
+ Alternative way, you can use to establish an **SSH tunnel** to your AWS Cloud9 instance.
+
+28. **[OPTIONAL-TASK]** : **SSH tunnelFor MAC/Linux users:**
+
 ![SSH Tunnel](images/lab01-task3-ssh-tunnel.png)
 
-29. In your MAC/Linux terminal, type the command below to get the public portion from your existing key pair .pem file. Make sure to replace YOUR_KEY with the name of the key pair .pem file
+* In your MAC/Linux terminal, type the command below to get the public portion from **your existing any key pair .pem** file. Make sure to replace YOUR_KEY with the name of the key pair .pem file
 
 ```
 ssh-keygen -f <YOUR_KEY.pem> -y
 ```
 
-30. The output looks like the example below. Copy the output of your command.
+* The output looks like the example below. Copy the output of your command.
 ```
 ssh-rsa
 CXCAAB3NzaC1yc2EAAAADAQABAAABAQDWGRZsPraV6v4UqfZTFKAXK9bhjWVkONEKyAA1CeOkxSN+9WdY7gKgjbPOeUx3LFqRudBvSrP+eKTtthPrl Nx9UBvXniVK252i4h0xnIcrRO1PUpq0EzyqX+n3u2YwytT+on6x98PRjtD4oCKyfFviWBqnRHtWvRre8CWhULuJrmUeo2aPrVTPXo/TwJpZupXv63YyUMPC 2wyDMDsKNZhsqUedkJ8575PGXCg9gEkPg2ulR8NUrzDSfbXIrZLgCcIziwDQ0dA9B28OAQ9saPyXYzrZF1ZmCxKgzSHHiKdBAJ0E/X/s53N5Hg04SIWy4D4lMT 9g+AZG38YPNq68mo4b
 ```
 
-31. In your AWS Cloud9 instance, on the left pane, click the **Settings** icon. Click **Show Home in Favorites** and **Show Hidden Files** as shown in the screenshot below.
+* In your AWS Cloud9 instance, on the left pane, click the **Settings** icon. Click **Show Home in Favorites** and **Show Hidden Files** as shown in the screenshot below.
 ![Cloud9 screen](images/lab01-05.png)
 
 
-32. This should display the .ssh folder in the tree view.
+* This should display the .ssh folder in the tree view.
 
-33. Expand the .ssh folder and open the **authorized_keys** file.
+* Expand the .ssh folder and open the **authorized_keys** file.
 
-34. Paste the public key you copied earlier in the authorized_keys file. **Important:** Make sure to paste the public key below the message in the authorized_keys file as shown below. **Do not delete or overwrite** the public key already present in the file. Deleting or overwriting the existing public key will make your Cloud9 instance unusable.
+* Paste the public key you copied earlier in the authorized_keys file. **Important:** Make sure to paste the public key below the message in the authorized_keys file as shown below. **Do not delete or overwrite** the public key already present in the file. Deleting or overwriting the existing public key will make your Cloud9 instance unusable.
 
 ```
  #
  # Add any additional keys below this line
  #
 ```
-35. Save the **authorized_keys** file. By updating this file, you are telling your AWS Cloud9 instance to allow connections that authenticate with the matching private key.
+* Save the **authorized_keys** file. By updating this file, you are telling your AWS Cloud9 instance to allow connections that authenticate with the matching private key.
 
 **NOTE:** You also can paste it using cli command like below. (Paste public key then press CTRL+D for EOF)
 
@@ -246,29 +248,29 @@ ssh-rsa CXCAAB3Nzaxxyc2EAAAADAQABAAABAQDThHERqJJMcZqitA5DZ35j41UFE0zIO5XxVqElCHN
 
 ```
 
-36. Check public-ip of your Cloud9 EC2 instance.
+* Check public-ip of your Cloud9 EC2 instance.
 ```
 curl http://169.254.169.254/latest/meta-data/public-ipv4 
 ```
 
-37. Try to SSH tunneling like this
+* Try to SSH tunneling like this
 
-* **NOTE:** Make sure port 22 is opened for SSH tunneling.
+* **NOTE:** Make sure **port 22** is opened for SSH tunneling.
 
 ```
 ssh -i YOUR_KEY.pem -L 8080:localhost:8080 ec2-user@<public-ip of your Cloud9 EC2 instance>
 ```
 
 
-38. Connect your legacy application
+29. Connect your legacy application
 
 ## TASK 4. Take a look around
 Check the application.
 
-39. Connect to http://localhost:8080 in your browser.
+30. Connect to your application using **Cloud9 preview** or to http://localhost:8080 in your browser.
 ![Legacy application](images/lab01-08.png)
 
-40. Take a look around and perform test.
+31. Take a look around and perform test.
 ![Legacy application](images/lab01-02.png)
 
 * Sign in / up
@@ -279,6 +281,7 @@ Check the application.
 * Change Profile
 * Find photos with Search tool
 * Check the Photo Map
+
 
 ## TASK 5. Challenges (Optional)
 * Deploy legacy application:
