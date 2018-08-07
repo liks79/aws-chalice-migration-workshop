@@ -563,7 +563,7 @@ aws s3 sync static/ s3://cloudalbum-chungho/static/ —acl public-read
 
 ```
 
-20. Review template files. Template files which stored `chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
+20. Review template files. Template files which stored `aws-chalice-migration-workshop/LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/templates` are already changed to load static resources in your S3 bucket. You can refer above variable in the config.py file.
 ```python
 S3_STATIC_URL = "https://s3-{0}.amazonaws.com/{1}/static".format(conf['AWS_REGION'], conf['S3_PHOTO_BUCKET'])
 ```
