@@ -624,7 +624,11 @@ body = t.render(current_user=user, gmaps_key=conf['GMAPS_KEY'], s3_static_url=S3
 
 23. Now, you can deploy CloudAlbum application with chalice. 
 ```console
-chalice deploy --no-autogen-policy
+$ chalice deploy --no-autogen-policy
+```
+
+* output
+```console
 Creating deployment package.
 Updating policy for IAM role: cloudalbum-dev-api_handler
 Updating lambda function: cloudalbum-dev
