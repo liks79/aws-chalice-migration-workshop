@@ -80,9 +80,14 @@ def callback():
         ## TODO #8: Write yoir code to set up User objedct using id_token from Cognito
         user = User()
         ## -- begin --
+        user = User()
         user.id = id_token["cognito:username"]
         user.email = id_token["email"]
+        user.username = id_token["name"]
+        ## Now, password is managed by Cognito.
+        user.password = 'NA'
         user.save()
+
         session['id'] = id_token["cognito:username"]
         session['email'] = id_token["email"]
         session['name'] = id_token["name"]

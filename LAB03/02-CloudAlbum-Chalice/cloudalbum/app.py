@@ -204,6 +204,7 @@ def callback():
         user.id = id_token["cognito:username"]
         user.email = id_token["email"]
         user.username = id_token["name"]
+        ## Now, password is managed by Cognito.
         user.password = 'NA'
         user.save()
 
