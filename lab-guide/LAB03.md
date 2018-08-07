@@ -163,6 +163,9 @@ chalice local --port 8080
 * Test #1: `@app.route('/users/{name}', methods=['GET'])`
 ```
 $ http localhost:8080/users/David
+```
+* output:
+```
 HTTP/1.1 200 OK
 Content-Length: 29
 Content-Type: text/html; charset=utf-8
@@ -172,9 +175,10 @@ Server: BaseHTTP/0.6 Python/3.6.5
 <h1> Your name is David.</h1>
 
 ```
-* Debug log for this request (You can find it :
+* Debug log for this request (You can find it on your terminal which running application):
 
 ```
+(.....)
 myapp - DEBUG - GET
 myapp - DEBUG - {'query_params': None, 'headers': {'host': 'localhost:8080', 'user-agent': 'HTTPie/0.9.9', 'accept-encoding': 'gzip, deflate', 'accept': '*/*', 'connection': 'keep-alive'}, 'uri_params': {'name': 'David'}, 'method': 'GET', 'context': {'httpMethod': 'GET', 'resourcePath': '/users/{name}', 'identity': {'sourceIp': '127.0.0.1'}, 'path': '/users/David'}, 'stage_vars': {}}
 127.0.0.1 - - [05/Aug/2018 08:19:38] "GET /users/David HTTP/1.1" 200 -
