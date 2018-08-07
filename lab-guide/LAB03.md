@@ -634,7 +634,7 @@ aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "v1mehmiqsj.execute-
 ```
 
 
-24. Configure `App client cloudalbum-WebsiteClient` in the **Cognito console.**
+24. Configure `App client cloudalbum` in the **Cognito console.**
 ![Cognito console](images/lab03-task2-cog-console.png)
 
 * Update `Callback URL(s)`.

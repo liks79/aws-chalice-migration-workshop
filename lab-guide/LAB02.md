@@ -278,11 +278,13 @@ photo.delete()
 
 
 11. Run CloudAlbum application with DynamoDB.
+* **NOTE:** **GMAPS_KEY** variable is must defined before you run.
+
 * Ensure **Runner: Python 3**
 ![Run Console](images/lab02-task1-run-console.png)
 
 
-12. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
+12. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 ![Legacy application](images/lab01-08.png)
 * You need to **Sign-up** first.
 
@@ -321,7 +323,7 @@ CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). Ho
 15. Make a bucket to save photo image objects and retriev it from Amazon S3. 
 
 ```
-aws s3 mb cloudalbum-<your name initial>
+aws s3 mb s3://cloudalbum-<your name initial>
 ```
 
 16. Review the config.py file which located in 'LAB02/02-CloudAlbum-S3/cloudalbum/config.py'
@@ -391,7 +393,7 @@ else:
 * Ensure **Runner: Python 3**
 ![Run Console](images/lab02-task1-run-console.png)
 
-20. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
+20. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 
 21. Perform application test.
 ![Legacy application](images/lab01-02.png)
@@ -427,7 +429,7 @@ To begin, follow the steps below.
 
 26. At the top right corner, click **Create a user pool**.
 
-27. For **Pool name**, type **cloudalbum-pool-<your name initial>**. 
+27. For **Pool name**, type **cloudalbum-pool-<your name initial>**.
 
 28. Click **Step through settings**.
 
@@ -451,7 +453,7 @@ To begin, follow the steps below.
 
 38. On the App Clients page, click **Add an app client**.
 
-39. For **App client name,** type a client name, for example, **WebsiteClient**.
+39. For **App client name,** type a client name, for example, **CloudAlbum**.
 
 40. Leave the other default settings and click **Create app client**.
 
@@ -477,7 +479,7 @@ To begin, follow the steps below.
 
 51. In the left navigation menu, under **App integration**, click **Domain name**.
 
-52. Type a domain name, check its availability, and click **Save changes**. Write down the domain name for later use.
+52. Type a domain name(for example: `cloudalbum-<initial>`, check its availability, and click **Save changes**. Write down the domain name for later use.
 
 53. In the left navigation menu, under **General settings**, click **App clients**.
 
@@ -487,7 +489,13 @@ To begin, follow the steps below.
 
 56. Click **Return to pool details** at the bottom to return to the Pool details page.
 
-57. Review 'LAB02/03.CloudAlbum-COGNITO/cloudalbum/config.py'
+
+57. Install required Python packages:
+```console
+sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
+```
+
+58. Review 'LAB02/03.CloudAlbum-COGNITO/cloudalbum/config.py'
 ```python
 import os
 
@@ -501,7 +509,7 @@ options = {
     'DDB_WCU': os.getenv('DDB_WCU', 10),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop'),
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<your name initial>'),
 
     # COGNITO
     'COGNITO_POOL_ID': os.getenv('COGNITO_POOL_ID', ''),
@@ -518,11 +526,11 @@ options = {
 ----|---- 
 | COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
 | COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
-|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://.YOUR_DOMAIN_NAME.auth.us-west-2.amazoncognito.com |
+|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://.YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com |
 |BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
 
 
-58. Write your code to retrieve JSON Web Key (JWK) from cognito.
+59. Write your code to retrieve JSON Web Key (JWK) from cognito.
 * find **TODO #7** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
 ```python
 ## TODO #7 : Write your code to retrieve JSON Web Key (JWK) from cognito.
@@ -537,7 +545,7 @@ JWKS_URL = "https://cognito-idp.{0}.amazonaws.com/{1}/.well-known/jwks.json".\
 JWKS = requests.get(JWKS_URL).json()["keys"]
 ```
 
-59. Write yoir code to set up User objedct using id_token from Cognito.
+60. Write yoir code to set up User objedct using id_token from Cognito.
 * find **TODO #8** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
 ```python
 ## TODO #8: Write yoir code to set up User objedct using id_token from Cognito
@@ -556,12 +564,12 @@ session['refresh_token'] = response.json()["refresh_token"]
 ```
 
 
-60. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
+61. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 * You can find default Cognito Login Screen.
 ![Cognito Console](images/lab02-task3-cognito-login.png)
 * You can **change default login screen** in the Cognito console dashboard.
 
-61. Perform application test.
+62. Perform application test.
 ![Legacy application](images/lab01-02.png)
 
 * Sign in / up
@@ -573,7 +581,7 @@ session['refresh_token'] = response.json()["refresh_token"]
 * Find photos with Search tool
 * Check the Photo Map
 
-62. Examine Cognito Console dashboard **after user sign-up.**
+63. Examine Cognito Console dashboard **after user sign-up.**
 ![Cognito Console](images/lab02-task3-cognito-userpool.png)
 * You can find your profile information.
 
@@ -585,27 +593,27 @@ AWS [X-Ray](https://aws.amazon.com/xray/) helps developers analyze and debug pro
 
 **Download and run the AWS X-Ray daemon on your AWS Cloud9 instance.**
 
-63. Go to the AWS X-Ray daemon documentation link below: 
+64. Go to the AWS X-Ray daemon documentation link below: 
 https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html
 
-64. On the documentation page, scroll down until you see a link to **Linux (executable)-aws-xray-daemon-linux-2.x.zip (sig).** Right-click the link and copy the link address.
+65. On the documentation page, scroll down until you see a link to **Linux (executable)-aws-xray-daemon-linux-2.x.zip (sig).** Right-click the link and copy the link address.
 
-65. In your AWS Cloud9 instance terminal, type the command below to go to your home directory.
+66. In your AWS Cloud9 instance terminal, type the command below to go to your home directory.
 ```
 cd ~
 ```
 
-66. Type wget and paste the AWS X-Ray daemon hyperlink address that you copied. The command should look like the example below.
+67. Type wget and paste the AWS X-Ray daemon hyperlink address that you copied. The command should look like the example below.
 ```
 wget https://s3.dualstack.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-linux-2.x.zip
 ```
 
-67. Unzip the AWS X-Ray daemon by typing the command below. Make sure that the name of the .zip file matches the one in the command below.
+68. Unzip the AWS X-Ray daemon by typing the command below. Make sure that the name of the .zip file matches the one in the command below.
 ```
 unzip aws-xray-daemon-linux-2.x.zip
 ```
 
-68. Run the AWS X-Ray daemon by typing the command below.
+69. Run the AWS X-Ray daemon by typing the command below.
 
 ```
 ./xray
@@ -613,7 +621,7 @@ unzip aws-xray-daemon-linux-2.x.zip
 
 * Now, X-Ray daemon works.
 
-69. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
+70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
 
 ```python
 (...)
@@ -646,12 +654,12 @@ def print_abc():
 
 ```
 
-70. Connect to http://localhost:8080 in your browser. (After SSH tunnel established.)
+71. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 * You can find default Cognito Login Screen.
 ![Cognito Console](images/lab02-task3-cognito-login.png)
 * You can change default login screen in the Cognito console dashboard.
 
-71. Perform application test.
+72. Perform application test.
 ![Legacy application](images/lab01-02.png)
 
 * Sign in / up
@@ -663,7 +671,7 @@ def print_abc():
 * Find photos with Search tool
 * Check the Photo Map
 
-72. Examine X-Ray Console dashboard
+73. Examine X-Ray Console dashboard
 ![Cognito Console](images/lab02-task4-x-ray.png)
 
 ## Congratulation! You completed LAB02.
