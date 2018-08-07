@@ -440,6 +440,7 @@ In this TASK, you will add a sign-up/sign-in component to CloudAlbum application
 To begin, follow the steps below.
 
 **Set up an Amazon Cognito user pool.**
+
 23. In the AWS Console, go to the **Amazon Cognito**
 
 24. Make sure you are still in the **Singapore(ap-southeast-1)**region.
