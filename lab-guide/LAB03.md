@@ -92,7 +92,10 @@ sudo yum install httpie
 
 * After `httpie` is installed, you can run following command for the application test.
 ```
-http localhost:8080/
+$ http localhost:8080/
+```
+* output:
+```
 HTTP/1.1 200 OK
 Content-Length: 18
 Content-Type: application/json
