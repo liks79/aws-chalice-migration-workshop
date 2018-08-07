@@ -86,8 +86,8 @@ For the convenience of test, we will use `httpie` in the shell.
 
 * You can open new terminal with bash shell and then type following command.
 
-```
-sudo yum install httpie
+```console
+$ sudo pip install httpie
 ```
 
 * After `httpie` is installed, you can run following command for the application test.
@@ -150,6 +150,7 @@ def user_add():
 * Review above code for new `app.py`. `Response` and `logging` are importted from top of the `app.py` file. Debug option is enabled for the application logging. `user_info` and `user_add` functions are added.
 
 * Replace `app.py` file with the contents of above source code.
+  * `app.py` file is located in `~/environment/aws-chalice-migration-workshop/LAB03/01-Chalice/myapp/app.py`
 
 7. Run the new version of `myapp`.
 ```
