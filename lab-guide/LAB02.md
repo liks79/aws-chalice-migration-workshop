@@ -538,7 +538,8 @@ options = {
 ----|---- 
 | COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
 | COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
-|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://.YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com |
+|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com (for example(without `https://`): YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com)
+|
 |BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
 
 
@@ -576,7 +577,7 @@ session['refresh_token'] = response.json()["refresh_token"]
 ```
 
 
-61. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
+61. Open the run.py and run the application. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 * You can find default Cognito Login Screen.
 ![Cognito Console](images/lab02-task3-cognito-login.png)
 * You can **change default login screen** in the Cognito console dashboard.

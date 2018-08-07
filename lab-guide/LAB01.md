@@ -300,3 +300,5 @@ Check the application.
     * How about photo file storage?
     * How about scalability?
 
+
+## TASK 6. Terminate your application 
