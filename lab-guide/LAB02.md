@@ -441,7 +441,7 @@ To begin, follow the steps below.
 
 26. At the top right corner, click **Create a user pool**.
 
-27. For **Pool name**, type **cloudalbum-pool-<your name initial>**.
+27. For **Pool name**, type **cloudalbum-pool-\<your name initial\>**.
 
 28. Click **Step through settings**.
 
