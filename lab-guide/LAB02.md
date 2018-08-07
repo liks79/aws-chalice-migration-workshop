@@ -277,7 +277,7 @@ photo.delete()
 ```
 
 
-11. Run CloudAlbum application with DynamoDB.
+11. Open the `run.py` and run CloudAlbum application with DynamoDB.
 * **NOTE:** **GMAPS_KEY** variable is must defined before you run.
 
 * Ensure **Runner: Python 3**
