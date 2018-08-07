@@ -541,8 +541,11 @@ $ mkdir -p temp
 $ cd temp
 $ wget https://d2r3btx883i63b.cloudfront.net/workshop/static_files.zip
 $ unzip static_files.zip
-$ aws s3 cp static/* s3://<Your bucket S3_PHOTO_BUCKET>/static --acl public-read
+$ aws s3 sync static/ s3://<Your bucket S3_PHOTO_BUCKET>/static/ --acl public-read
 ```
+
+
+aws s3 sync static/ s3://cloudalbum-chungho/static/ —acl public-read
 
 19. Enable S3 bucket CORS configuration in your S3 Console. (https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html)
 
