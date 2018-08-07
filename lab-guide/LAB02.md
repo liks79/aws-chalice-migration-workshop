@@ -314,6 +314,10 @@ sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-Cl
 
 Is it OK? Let's move to the next TASK.
 
+**NOTE:** Click the `stop icon` to stop your application.
+![Stop application](images/stop-app.png)
+
+
 ## TASK 2. Go to S3
 CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). However these storage is not scalable enough. 
 
@@ -424,6 +428,9 @@ sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/02-Cl
 * You can find your uploaded image objects with thumbnails.
 
 Is it OK? Let's move to the next TASK.
+
+**NOTE:** Click the `stop icon` to stop your application.
+![Stop application](images/stop-app.png)
 
 ## TASK 3. Go to Cognito
 In this TASK, you will add a sign-up/sign-in component to CloudAlbum application by using Amazon Cognito. After setting up Amazon Cognito, user information will retrieved from the Amazon Cognito.
@@ -600,6 +607,9 @@ session['refresh_token'] = response.json()["refresh_token"]
 
 Is it OK? Let's move to the next TASK.
 
+**NOTE:** Click the `stop icon` to stop your application.
+![Stop application](images/stop-app.png)
+
 ## TASK 4. Go to X-ray
 
 AWS [X-Ray](https://aws.amazon.com/xray/) helps developers analyze and debug production, distributed applications, such as those built using a microservices architecture. With X-Ray, you can understand how your application and its underlying services are performing to identify and troubleshoot the root cause of performance issues and errors. X-Ray provides an end-to-end view of requests as they travel through your application, and shows a map of your application’s underlying components. You can use X-Ray to analyze both applications in development and in production, from simple three-tier applications to complex microservices applications consisting of thousands of services.
@@ -687,7 +697,14 @@ def print_abc():
 73. Examine X-Ray Console dashboard
 ![Cognito Console](images/lab02-task4-x-ray.png)
 
+Is it OK? Let's go to next LAB.
+
+**NOTE:** Click the `stop icon` to stop your application.
+![Stop application](images/stop-app.png)
+
+
 ## Congratulation! You completed LAB02.
+
 
 
 

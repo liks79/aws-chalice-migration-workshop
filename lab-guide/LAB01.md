@@ -301,4 +301,7 @@ Check the application.
     * How about scalability?
 
 
-## TASK 6. Terminate your application 
+## TASK 6. Stop your application 
+* Click the `stop icon` to stop your application.
+![Stop application](images/stop-app.png)
+
