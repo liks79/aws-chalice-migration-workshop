@@ -643,7 +643,7 @@ Resources deployed:
    * v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api
 
 ```console
-aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api" --type "SecureString" --overwrite
 ```
 
 

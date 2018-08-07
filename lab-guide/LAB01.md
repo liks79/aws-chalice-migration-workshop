@@ -5,7 +5,7 @@ In this hands-on lab, you'll configure the AWS [Cloud9](https://aws.amazon.com/c
 **GoGreen** company provides a hosted photo image album services (CloudAlbum) to it's end user. Customer access the web application to :
 
 * To watch their personal photos with internet access.
-* Upload photos to the AlbumGo service for photo management.
+* Upload photos to the CloudAlbum service for photo management.
 * Track geolocation of uploaded photos
 
 
