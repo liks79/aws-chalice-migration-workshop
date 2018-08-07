@@ -150,6 +150,7 @@ def check_variables_gmaps():
         print('Check your environment variables!', file=sys.stderr)
         exit(-1)
 
+
 def log_path_check(log_path):
     """
 

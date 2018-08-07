@@ -278,6 +278,12 @@ photo.delete()
 
 
 11. Open the `run.py` and run CloudAlbum application with DynamoDB.
+
+* Before application run, install required Python packages:
+```console
+sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-CloudAlbum-DDB/requirements.txt
+```
+
 * **NOTE:** **GMAPS_KEY** variable is must defined before you run.
 
 * Ensure **Runner: Python 3**
@@ -389,7 +395,13 @@ else:
 
 ```
 
-19. Run the application with DynamoDB and S3.
+19. Open the `run.py` and run the application with DynamoDB and S3.
+
+* Before application run, install required Python packages:
+```console
+sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/02-CloudAlbum-S3/requirements.txt
+```
+
 * Ensure **Runner: Python 3**
 ![Run Console](images/lab02-task1-run-console.png)
 
@@ -492,7 +504,7 @@ To begin, follow the steps below.
 
 57. Install required Python packages:
 ```console
-sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
+sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB02/03-CloudAlbum-COGNITO/requirements.txt
 ```
 
 58. Review 'LAB02/03.CloudAlbum-COGNITO/cloudalbum/config.py'
