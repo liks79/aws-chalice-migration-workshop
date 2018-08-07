@@ -82,7 +82,9 @@ chalice local --port 8080
 You can see the following message: `Serving on 127.0.0.1:8080`
 if you want detailed execution information, you can run Chalice as debug mode `chalice --debug local`
 
-For the convenience of test, we will use `httpie` in the shell.
+For the convenience of test, we will use `httpie` in the shell. 
+
+* You can open new terminal with bash shell and then type following command.
 
 ```
 sudo yum install httpie

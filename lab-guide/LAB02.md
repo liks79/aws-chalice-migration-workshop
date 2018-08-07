@@ -642,7 +642,7 @@ unzip aws-xray-daemon-linux-2.x.zip
 ./xray
 ```
 
-* Now, X-Ray daemon works.
+* Now, X-Ray daemon works and ready to use X-Ray to analyze applications. 
 
 70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
 
