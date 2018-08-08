@@ -36,6 +36,36 @@ aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance
 aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile
 ```
 
+* Review the `workshop-cloud9-policy.json` policy.
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:*",
+                "s3:*",
+                "ec2:*",
+                "cloudwatch:*",
+                "iam:*",
+                "ssm:*",
+                "lambda:*",
+                "dynamodb:*",
+                "xray:*"
+            ],
+            "Resource": "*",
+                "Condition": {
+                    "DateLessThan": {"aws:CurrentTime": "2018-08-31T23:59:59Z"}
+                }
+        }
+    ]
+
+}
+
+```
+
 #### Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
 * Get instance-id of Cloud9 instance **in the Cloud9 terminal**
@@ -49,14 +79,16 @@ i-087afxxxxxxxxxxx
 
 * Attach an Instance Profile to Cloud9 Instance. 
   * **NOTE:** Like above step, this operation required enough privileges such as `AdministratorAccess` privilege.
+
+  * Replcace `i-087afxxxxxxxxxxx` to real instance id value.
 ```
-$ aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id i-087afxxxxxxxxxxx
+$ aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id <real instance id>
 ```
 
 ### [2] Using Environment Variables ###
 This is alternative way of `Using Instance Profile`. 
 
-* You can configure below variables before run application or CLI commands.
+* You can configure below variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
 ```
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
