@@ -15,12 +15,13 @@
                 "dynamodb:*",
                 "xray:*"
             ],
-            "Resource": "*"
+            "Resource": "*",
+                "Condition": {
+                    "DateLessThan": {"aws:CurrentTime": "2018-08-31T23:59:59Z"}
+                }
         }
     ]
-    "Condition": {
-      "DateLessThan": {"aws:CurrentTime": "2018-08-31T23:59:59Z"}
-    }
+
 }
 
 
