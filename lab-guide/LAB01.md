@@ -23,6 +23,23 @@ It has following several features.
 
 ![Legacy application](images/lab01-02.png)
 
+## TASK 0. Create instance profile for AWS Cloud9
+
+```console
+$ PARN=$(aws iam create-policy --policy-name workshop-cloud9-policy --policy-document file://workshop-cloud9-policy.json --query "Policy.Arn" --output text)
+$ aws iam create-role --role-name workshop-cloud9-instance-profile-role --assume-role-policy-document file://workshop-cloud9-instance-profile-role-trust.json
+$ aws iam attach-role-policy --role-name workshop-cloud9-instance-profile-role --policy-arn $PARN
+$ aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance-profile
+$ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile 
+```
+
+
+
+* Related document : [Create and Use an Instance Profile to Manage Temporary Credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/credentials.html)
+
+
+
+
 ## TASK 1. Create AWS Cloud9 environment and explore the environment.
 
 In this section, you will create an AWS Cloud9 environment and explore the environment.
@@ -33,7 +50,7 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 
 3. Click **Create environment** at the top-right corner.
 
-4. For **Name**, type **TechSummit-workshop** (or anything you want)
+4. For **Name**, type **workshop-\<initial\>** (or anything you want)
 
 5. Click Next step.
 
@@ -48,12 +65,12 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 10. Explore the terminal by typing this command: 
 
 ```
-aws ec2 describe-instances
+$ aws ec2 describe-instances
 ``` 
 * Is it works well? Cool. Go to next stage.
 
 ```
-sudo pip-3.6 install boto3
+$ sudo pip-3.6 install boto3
 ```
 
 11. At the terminal, type **python3** and press ENTER.
@@ -82,20 +99,20 @@ client.describe_instances()
 Check out the workshop repository from the Github.
 
 ```
-cd ~/environment
-git clone https://github.com/liks79/aws-chalice-migration-workshop.git
+$ cd ~/environment
+$ git clone https://github.com/liks79/aws-chalice-migration-workshop.git
 ```
 
 14. Install the requirements for the project by executing the command below in your AWS Cloud9 terminal.
 
 ```
-sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
+$ sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
 ```
 
 15. Check the** config.py.** Open this file in your terminal or Cloud9 editor
 
 ```
-vi ~/environment/aws-chalice-migration-workshop/LAB01/CloudAlbum/cloudalbum/config.py
+$ vi ~/environment/aws-chalice-migration-workshop/LAB01/CloudAlbum/cloudalbum/config.py
 ```
 
 

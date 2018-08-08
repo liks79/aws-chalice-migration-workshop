@@ -1,6 +1,68 @@
 # LAB 02 - Move to serverless
 We will move the components of legacy application which has constraints of scalability and high availability to serverless environment one by one.
 
+## TASK 0. Permission configuration for Cloud9
+
+There are two ways. One is to use [1] **Using Instance Profile** with temporary credentials and this is recommended. The other way is **Using Environment Variables**  register the [2] **AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variable** which related administrator privileadge already you used. **You can also use environment variables to speed up the workshop.**
+
+* Related document : [Create and Use an Instance Profile to Manage Temporary Credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/credentials.html)
+
+* Choose following one.
+
+### [1] Using Instance Profile
+
+#### Create an Instance Profile with the AWS CLI ###
+**NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
+
+* You may have `AdministratorAccess` privileged **AWS CLI environment in your LOCAL MACHINE.**
+
+```console
+$ wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/generate_instance_profile.sh
+
+$ chmod +x generate_instance_profile.sh
+
+$ ./generate_instance_profile.sh
+```
+
+* Review the `generate_instance_profile.sh` file.
+```console
+wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-instance-profile-role-trust.json
+wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-policy.json
+
+PARN=$(aws iam create-policy --policy-name workshop-cloud9-policy --policy-document file://workshop-cloud9-policy.json --query "Policy.Arn" --output text)
+aws iam create-role --role-name workshop-cloud9-instance-profile-role --assume-role-policy-document file://workshop-cloud9-instance-profile-role-trust.json
+aws iam attach-role-policy --role-name workshop-cloud9-instance-profile-role --policy-arn $PARN
+aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance-profile
+aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile
+```
+
+#### Attach an Instance Profile to Cloud9 Instance with the AWS CLI
+
+* Get instance-id of Cloud9 instance **in the Cloud9 terminal**
+```console
+$ curl http://169.254.169.254/latest/meta-data/instance-id
+```
+* output:
+```
+i-087afxxxxxxxxxxx
+```
+
+* Attach an Instance Profile to Cloud9 Instance. 
+  * **NOTE:** Like above step, this operation required enough privileges such as `AdministratorAccess` privilege.
+```
+$ aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id i-087afxxxxxxxxxxx
+```
+
+### [2] Using Environment Variables ###
+This is alternative way of `Using Instance Profile`. 
+
+* You can configure below variables before run application or CLI commands.
+```
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+```
+
+
 ## TASK 1. Go to DynamoDB
 Amazon [DynamoDB](https://aws.amazon.com/dynamodb/) is a nonrelational database that delivers reliable performance at any scale. It's a fully managed, multi-region, multi-master database that provides consistent single-digit millisecond latency, and offers built-in security, backup and restore, and in-memory caching.
 

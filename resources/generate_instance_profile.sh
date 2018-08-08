@@ -1,4 +1,4 @@
-wget https://github.com/liks79/aws-chalice-migration-workshop/raw/master/resources/workshop-cloud9-instance-profile-role-trust.json
+wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-instance-profile-role-trust.json
 wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-policy.json
 
 PARN=$(aws iam create-policy --policy-name workshop-cloud9-policy --policy-document file://workshop-cloud9-policy.json --query "Policy.Arn" --output text)
