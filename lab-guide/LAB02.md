@@ -193,7 +193,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 
 1. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
 
-2. Review the data model definition via **SQLAlchemy**.
+2. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's db.Model and are represented in Python classes.
 ```python
 from sqlalchemy import Float, DateTime, ForeignKey, Integer, String
 from flask_login import UserMixin
