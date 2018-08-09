@@ -624,7 +624,7 @@ To begin, follow the steps below.
 
 23. In the AWS Console, go to the **Amazon Cognito**
 
-24. Make sure you are still in the **Singapore(ap-southeast-1)**region.
+24. Make sure you are still in the **Singapore(ap-southeast-1)** region.
 
 25. Click **Manage your User Pools**.
 
@@ -827,7 +827,7 @@ unzip aws-xray-daemon-linux-2.x.zip
 
 * Now, X-Ray daemon works and ready to use X-Ray to analyze applications. 
 
-70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
+70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.py' file.
 
 ```python
 (...)
