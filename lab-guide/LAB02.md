@@ -167,7 +167,7 @@ aws configure set aws_secret_access_key <YOUR OWN ACCESS KEY ID>
 aws configure set region ap-southeast-1	
 ```
 
-* OK, all thinsg are done. Go to TASK 1.
+* OK, all things are done. Go to TASK 1.
 
 * **ALTERNATIVE**: You can configure following variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
 `export AWS_ACCESS_KEY_ID=<YOUR OWN ACCESS KEY ID>` and `export AWS_SECRET_ACCESS_KEY=<YOUR OWN ACCESS KEY ID>`
