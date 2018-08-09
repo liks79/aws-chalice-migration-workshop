@@ -197,9 +197,9 @@ sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-Cl
 ```
 
 
-1. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
+2. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
 
-2. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's **db.Model** and are represented in **Python classes**.
+3. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's **db.Model** and are represented in **Python classes**.
 ```python
 from sqlalchemy import Float, DateTime, ForeignKey, Integer, String
 from flask_login import UserMixin
@@ -286,12 +286,12 @@ class Photo(db.Model):
         return '<%r %r %r>' % (self.__tablename__, self.user_id, self.upload_date)
 ```
 
-3. Open the **models_ddb.py** which located in  'LAB02/01-CloudAlbum-DDB/cloudalbum/model/models_ddb.py'.
+4. Open the **models_ddb.py** which located in  'LAB02/01-CloudAlbum-DDB/cloudalbum/model/models_ddb.py'.
 ![Open models_ddb.py](images/lab02-task1-models_ddb.png)
 
 
 
-4. Review the data model definition via **PynamoDB**. This will show how DynamoDB tables and GSI are defined in PynamoDB. They are all expressed in **Python Class.**
+5. Review the data model definition via **PynamoDB**. This will show how DynamoDB tables and GSI are defined in PynamoDB. They are all expressed in **Python Class.**
 
 ```python
 from pynamodb.models import Model
@@ -365,7 +365,7 @@ class Photo(Model):
     address = UnicodeAttribute(null=False)
 ```
 
-5. Review the `__init__.py` in the model package. The DynamoDB 'User' and 'Photo' **tables will be created automatically** for the convenience. **Note** the `create_table` function. 
+6. Review the `__init__.py` in the model package. The DynamoDB 'User' and 'Photo' **tables will be created automatically** for the convenience. **Note** the `create_table` function. 
 
 ```python
 from cloudalbum.config import conf
@@ -381,7 +381,7 @@ if not Photo.exists():
     print('DynamoDB Photo table created!')
 ```
 
-6. Review the 'LAB02/01-CloudAlbum-DDB/cloudalbum/config.py' file. **New attributes** are added for DynamoDB.
+7. Review the 'LAB02/01-CloudAlbum-DDB/cloudalbum/config.py' file. **New attributes** are added for DynamoDB.
 ```python
 import os
 
@@ -401,7 +401,7 @@ conf = {
 ```
 * The second parameter of **os.getenv** function is the default value to use when the first parameter does not exist.
 
-7. Review following code for user signup.
+8. Review following code for user signup.
 * find **TODO #1** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
     if not user_exist:
@@ -417,7 +417,7 @@ conf = {
 
 **NOTE**: The partition key value of User table used **uuid.uuid4().hex** for the appropriate key distribution.
 
-8. Review following code to update user profile to DynamoDB.
+9. Review following code to update user profile to DynamoDB.
 * find **TODO #2** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
     ## TODO #2 : Review following code to update user profile to DynamoDB.
@@ -432,7 +432,7 @@ conf = {
 * Above code shows the way of `update` DynamoDB table via PynamoDB query mapper.
 
 
-9. Review following code to search result via keyword in the DynamoDB.
+10. Review following code to search result via keyword in the DynamoDB.
 * find **TODO #3** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
 ```python
     ## TODO #3 : Review following code to search result via keyword in the DynamoDB.
@@ -446,7 +446,7 @@ conf = {
 * Above code shows how to use query filter via PynamoDB.
 
 
-10. Review following code to delete uploaded photo information in DynamoDB.
+11. Review following code to delete uploaded photo information in DynamoDB.
 * find **TODO #4** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
 ```python
     ## TODO #4 : Review following code to delete uploaded photo information in DynamoDB.
@@ -456,7 +456,7 @@ conf = {
     ## -- end --
 ```
 
-11. Open the `run.py` and run CloudAlbum application with DynamoDB.
+12. Open the `run.py` and run CloudAlbum application with DynamoDB.
 
 * **NOTE:** **GMAPS_KEY** variable is must defined before you run.
 
@@ -464,11 +464,11 @@ conf = {
 ![Run Console](images/lab02-task1-run-console.png)
 
 
-12. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
+13. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 ![Legacy application](images/lab01-08.png)
 * You need to **Sign-up** first.
 
-13. Perform application test.
+14. Perform application test.
 ![Legacy application](images/lab01-02.png)
 
 * Sign in / up
@@ -480,17 +480,24 @@ conf = {
 * Find photos with Search tool
 * Check the Photo Map
 
-14. Then look into AWS DynamoDB console.
+15. Then look into AWS DynamoDB console.
 * User and Photo tables are auto generated with 'user-email-index'
 * Review saved data of each DynamoDB tables.
 ![DDB data](images/lab02-task1-ddb_result.png)
-
 
 Is it OK? Let's move to the next TASK.
 
 **NOTE:** Click the `stop icon` to stop your application.
 ![Stop application](images/stop-app.png)
 
+16. Delete data in the DynamoDB table for the next TASK.
+```console
+aws dynamodb scan --table-name Photos --attributes-to-get "$KEY" \
+  --query "Items[].$KEY.S" --output text | \
+  tr "\t" "\n" | \
+  xargs -t -I keyvalue aws dynamodb delete-item --table-name $TABLE_NAME \
+  --key "{\"$KEY\": {\"S\": \"keyvalue\"}}"
+```
 
 ## TASK 2. Go to S3
 CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). However these storage is not scalable enough. 
