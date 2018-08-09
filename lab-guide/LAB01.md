@@ -163,26 +163,37 @@ DB_URL or GMAPS_KEY are not configured!
 Check your environment variables!
 ```
 
-22. To successfully run the code, you will need to set environment variables. To do so, follow the instructions below.
+22. To successfully run the code, you will need to **set environment variables.** To do so, follow the instructions below.
+
 
 23. On the right side of the Run Configuration pane at the bottom, click ENV, as in the screenshot below.
 ![Cloud9 env variables](images/lab01-04.png)
 
-24. First, In the Name column, type **DB_URL**. In the Value column, type the **SQLITE** file DB URL (*for the test purpose only*) like this. DB table will be created automatically via [SQLAlchemy](https://www.sqlalchemy.org/).
 
-```
+24. First, In the **Name column**, type **DB_URL**. In the Value column, type the **SQLITE** file DB URL (*for the test purpose only*) like this. **DB table will be created automatically** via [SQLAlchemy](https://www.sqlalchemy.org/).
+
+```python
 sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite.db
 ```
 
-25. Second, in the Name column, type **GMAPS_KEY**. In the Value column, type the **Google MAP API KEY** (**Temporary API Key** will be provided to the workshop attendees by presenter).
+* **ALTERNATIVE WAY:** You can set the **DB_URL** value directly in `config.py`.
+```python
+    'DB_URL': os.getenv('DB_URL', 'sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite.db'),
+```
 
-* You can issue **your own** API Key, refer to following links (Credit card is needed): https://console.developers.google.com/apis/dashboard
+25. Second, in the **Name column**, type **GMAPS_KEY**. In the Value column, type the **Google MAP API KEY** (**Temporary API Key** will be provided to the workshop attendees by presenter).
+
+* **ALTERNATIVE WAY:** You can set the **GMAPS_KEY** value directly in `config.py`.
+```python
+    'GMAPS_KEY': os.getenv('GMAPS_KEY', 'REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR'),
+```
 
 
-**NOTE** : Google Maps API changes billing rules from July 16. Users must have their own API KEY for the Google Map access. 
-* https://developers.google.com/maps/documentation/javascript/usage-and-billing#previous-payg
+**NOTE:** You can issue **your own** Google Maps API Key, refer to following links (Credit card is needed): https://console.developers.google.com/apis/dashboard
+ * Google Maps API **changes billing rules from July 16**. Users must have their own API KEY for the Google Map access. 
+   * https://developers.google.com/maps/documentation/javascript/usage-and-billing#previous-payg
 
-* https://www.i-programmer.info/news/145-mapping-a-gis/11978-google-maps-api-changes-billing-rules.html
+   * https://www.i-programmer.info/news/145-mapping-a-gis/11978-google-maps-api-changes-billing-rules.html
 
 26. Run application again. You may succeed.
 ![Run console](images/lab01-task2-run-console.png)
