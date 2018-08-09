@@ -509,13 +509,13 @@ CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). Ho
 
 * We will retrieve image object with pre-signed URL for authorized user.
 
-15. Make a bucket to save photo image objects and retriev it from Amazon S3. 
+17. Make a bucket to save photo image objects and retriev it from Amazon S3. 
 
 ```
-aws s3 mb s3://cloudalbum-<your name initial>
+aws s3 mb s3://cloudalbum-<initial>
 ```
 
-16. Review the config.py file which located in 'LAB02/02-CloudAlbum-S3/cloudalbum/config.py'
+18. Review the config.py file which located in 'LAB02/02-CloudAlbum-S3/cloudalbum/config.py'
 
 ```python
 import os
@@ -525,7 +525,7 @@ conf = {
     (....)
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'aws-chalice-workshop')
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<initial>')
 }
 ```
 
