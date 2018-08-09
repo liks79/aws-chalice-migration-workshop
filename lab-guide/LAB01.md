@@ -82,21 +82,23 @@ client.describe_instances()
 
 Check out the workshop repository from the Github.
 
+```console
+cd ~/environment
 ```
-$ cd ~/environment
-$ git clone https://github.com/liks79/aws-chalice-migration-workshop.git
+```console
+git clone https://github.com/liks79/aws-chalice-migration-workshop.git
 ```
 
 14. Install the requirements for the project by executing the command below in your AWS Cloud9 terminal.
 
-```
-$ sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
+```console
+sudo pip-3.6 install -r aws-chalice-migration-workshop/LAB01/CloudAlbum/requirements.txt
 ```
 
-15. Check the** config.py.** Open this file in your terminal or Cloud9 editor
+15. Check the **config.py** Open this file in **Cloud9 terminal window** or **Cloud9 IDE editor**.
 
-```
-$ vi ~/environment/aws-chalice-migration-workshop/LAB01/CloudAlbum/cloudalbum/config.py
+```console
+vi ~/environment/aws-chalice-migration-workshop/LAB01/CloudAlbum/cloudalbum/config.py
 ```
 
 
