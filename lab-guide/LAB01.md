@@ -1,6 +1,6 @@
 # LAB 01 - Take a look around
 
-In this hands-on lab, you'll configure the AWS [Cloud9](https://aws.amazon.com/cloud9/) service to look around legacy application. You can run application 'CloudAlbum' in the AWS Cloud9 EC2 instance.
+In this hands-on lab, you'll configure the **AWS [Cloud9](https://aws.amazon.com/cloud9/)** service to look around legacy application. You can run application 'CloudAlbum' in the AWS Cloud9 EC2 instance.
 
 **GoGreen** company provides a hosted photo image album services (CloudAlbum) to it's end user. Customer access the web application to :
 
@@ -9,7 +9,7 @@ In this hands-on lab, you'll configure the AWS [Cloud9](https://aws.amazon.com/c
 * Track geolocation of uploaded photos
 
 
-*CloudAlbum* has a general three-tier architecture.
+**CloudAlbum** has a general three-tier architecture.
 ![Legacy architecture](images/lab01-legacy-arc.png)
 
 The application has following software stack.
@@ -48,13 +48,13 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 
 10. Explore the terminal by typing this command: 
 
-```
-$ aws ec2 describe-instances
+```console
+aws ec2 describe-instances
 ``` 
-* Is it works well? Cool. Go to next stage.
+* Is it works well? Cool. Go to next step.
 
-```
-$ sudo pip-3.6 install boto3
+```console
+sudo pip-3.6 install boto3
 ```
 
 11. At the terminal, type **python3** and press ENTER.
