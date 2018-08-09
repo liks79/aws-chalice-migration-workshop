@@ -191,7 +191,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 * Legacy application has simple data model and we can design DynamoDB table easily.
   ![Data Modeling](images/lab02-task1-modeling.png)
 
-1. Open the **models.py** which located in  'LAB02/01-CloudAlbum-DDB/cloudalbum/model/models.py'.
+1. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
 
 2. Review the data model definition via **SQLAlchemy**.
 ```python
