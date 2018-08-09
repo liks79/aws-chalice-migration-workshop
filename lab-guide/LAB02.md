@@ -669,9 +669,13 @@ To begin, follow the steps below.
 
 46. For **Enabled Identity Providers**, check **Cognito User Pool**.
 
-47. For **Callback URL(s)**, type **http://localhost:8080/callback**
+47. For **Callback URL(s)**, 
+**Cloud9 preview**: **http://<preview-address>/callback** (Click your preview browser address bar to find your preview address.)
+**SSH tunnel**: **http://localhost:8080/callback**
 
-48. For **Sign out URL(s)**, type **http://localhost:8080/**
+48. For **Sign out URL(s)**, 
+**Cloud9 preview**: **http://<preview-address>** (Click your preview browser address bar to find your preview address.)
+**SSH tunnel**: **http://localhost:8080**
 
 49. Under **OAuth 2.0**, for **Allowed OAuth Flows**, select **Authorization code grant** and for **Allowed OAuth Scopes**, select **openid**.
 
