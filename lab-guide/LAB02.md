@@ -726,9 +726,8 @@ options = {
 ----|---- 
 | COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
 | COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
-|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com (for example(without `https://`): YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com)
-|
-|BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
+|COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com (for example(without `https://`): YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com)|
+| BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
 
 
 59. Write your code to retrieve JSON Web Key (JWK) from cognito.
