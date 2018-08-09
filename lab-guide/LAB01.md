@@ -158,7 +158,7 @@ conf = {
 
 21. You may fail due to following reason.
 
-```
+```console
 DB_URL or GMAPS_KEY are not configured!
 Check your environment variables!
 ```
