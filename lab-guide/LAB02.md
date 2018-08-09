@@ -16,7 +16,9 @@ There are two ways. One is to use [1] **Using Instance Profile** with temporary 
 * `[1] Using Instance Profile` is recommended. However If you want **quick start**, you can choose `[2] Store Permanent Access Credentials` with enough permission.
 
 ### [1] Using Instance Profile
-* Check the AWS credentials in Cloud9 instance.
+
+### [1-1] Check the AWS credentials in Cloud9 instance.
+* Run following command, then you can see the AWS managed temporary credentials.
 ``` console
 aws configure list
 ```
@@ -31,7 +33,7 @@ secret_key     ****************F240 shared-credentials-file
     region           ap-southeast-1      config-file    ~/.aws/config
 ```
 
-### [1-1] Disable AWS managed temporary credentials
+### [1-2] Disable AWS managed temporary credentials
 ![Cloud9 credential](images/lab02-task0-aws-setup.png)
 * (1) Click the setup(gear) icon
 * (2) Select `AWS SETTINGS`.
@@ -53,7 +55,7 @@ secret_key                <not set>             None    None
 
 * OK, done. Move to next step.
 
-#### [1-2] Create an Instance Profile with the AWS CLI ###
+#### [1-3] Create an Instance Profile with the AWS CLI ###
 **NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
 
 * You may have `AdministratorAccess` privileged **AWS CLI environment** such as your LOCAL MACHINE.
@@ -111,7 +113,7 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 
 ```
 
-#### [1-3] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
+#### [1-4] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
 * Get instance-id of Cloud9 instance **in the Cloud9 terminal**.
 ```console
@@ -153,13 +155,19 @@ secret_key     ****************hK+3         iam-role
 ### [2] Store Permanent Access Credentials ###
 This is alternative way of `[1] Using Instance Profile`. If you complete `[1] Using Instance Profile`, You can pass below steps and **go to TASK 1.**
 
+* **NOTE:** Before you proceed, please complet following steps:
+  * [1-1] Check the AWS credentials in Cloud9 instance.
+  *  [1-2] Disable AWS managed temporary credentials
+
+
+* Configure your own credentials:
 ```console
 aws configure set aws_access_key_id <YOUR OWN ACCESS KEY ID>
 aws configure set aws_secret_access_key <YOUR OWN ACCESS KEY ID>
 aws configure set region ap-southeast-1	
 ```
 
-* OK, it's done. Go to TASK 1.
+* OK, all thinsg are done. Go to TASK 1.
 
 * **ALTERNATIVE**: You can configure following variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
 `export AWS_ACCESS_KEY_ID=<YOUR OWN ACCESS KEY ID>` and `export AWS_SECRET_ACCESS_KEY=<YOUR OWN ACCESS KEY ID>`
