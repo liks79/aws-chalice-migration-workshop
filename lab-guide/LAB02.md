@@ -9,8 +9,8 @@ There are two ways. One is to use [1] **Using Instance Profile** with temporary 
 
 * Related document : [Create and Use an Instance Profile to Manage Temporary Credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/credentials.html)
 
-* **Choose following one** : 
-  * `[1] Using Instance Profile` or 
+* **Choose following one** :
+  * `[1] Using Instance Profile` or
   * `[2] Store Permanent Access Credentials`
 
 * `[1] Using Instance Profile` is recommended. However If you want **quick start**, you can choose `[2] Store Permanent Access Credentials` with enough permission.
@@ -56,7 +56,7 @@ secret_key                <not set>             None    None
 * OK, done. Move to next step.
 
 #### [1-3] Create an Instance Profile with the AWS CLI ###
-**NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
+**NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police).
 
 * You may have `AdministratorAccess` privileged **AWS CLI environment** such as your LOCAL MACHINE.
 
@@ -65,7 +65,7 @@ secret_key                <not set>             None    None
 ```console
 wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/generate_instance_profile.sh
 ```
- * Add `execute` permission and run: 
+ * Add `execute` permission and run:
 ```console
 chmod +x generate_instance_profile.sh; ./generate_instance_profile.sh
 ```
@@ -124,11 +124,11 @@ curl http://169.254.169.254/latest/meta-data/instance-id
 i-087afxxxxxxxxxxx
 ```
 
-* Attach an Instance Profile to Cloud9 Instance. 
+* Attach an Instance Profile to Cloud9 Instance.
   * **NOTE:** Like above step, this operation required enough privileges such as `AdministratorAccess` privilege.
 
   * Replcace `i-087afxxxxxxxxxxx` to real instance id value.
-```console 
+```console
 aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id <real instance id>
 ```
  * Configure default region:
@@ -164,7 +164,7 @@ secret_key     ****************hK+3         iam-role
 ```console
 aws configure set aws_access_key_id <YOUR OWN ACCESS KEY ID>
 aws configure set aws_secret_access_key <YOUR OWN ACCESS KEY ID>
-aws configure set region ap-southeast-1	
+aws configure set region ap-southeast-1
 ```
 
 * OK, all things are done. Go to TASK 1.
@@ -191,7 +191,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 * Legacy application has simple data model and we can design DynamoDB table easily.
   ![Data Modeling](images/lab02-task1-modeling.png)
 
-1. Install required Python packaged: 
+1. Install required Python packaged:
 ```console
 sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-CloudAlbum-DDB/requirements.txt
 ```
@@ -365,7 +365,7 @@ class Photo(Model):
     address = UnicodeAttribute(null=False)
 ```
 
-6. Review the `__init__.py` in the model package. The DynamoDB 'User' and 'Photo' **tables will be created automatically** for the convenience. **Note** the `create_table` function. 
+6. Review the `__init__.py` in the model package. The DynamoDB 'User' and 'Photo' **tables will be created automatically** for the convenience. **Note** the `create_table` function.
 
 ```python
 from cloudalbum.config import conf
@@ -386,12 +386,12 @@ if not Photo.exists():
 import os
 
 conf = {
-   
+
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', 'REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR'),
-    
+
     ( ... )
-    
+
     # DynamoDB
     'AWS_REGION': os.getenv('AWS_REGION', 'ap-southeast-1'),
     'DDB_RCU': os.getenv('DDB_RCU', 10),
@@ -473,7 +473,7 @@ conf = {
 
 * Sign in / up
 * Upload Sample Photos
-* Sample images download here 
+* Sample images download here
   *  https://d2r3btx883i63b.cloudfront.net/temp/sample-photo.zip
 * Look your Album
 * Change Profile
@@ -498,18 +498,18 @@ Is it OK? Let's move to the next TASK.
 
 
 ## TASK 2. Go to S3
-CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). However these storage is not scalable enough. 
+CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). However these storage is not scalable enough.
 
 [Amazon S3](https://aws.amazon.com/s3/) has a simple web services interface that you can use to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, fast, inexpensive data storage infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
 
 ![Move to S3](images/lab02-task2-arc.png)
 
 * We will use Boto3 - S3 API to handle uploaded photo image object from the user.
-   * visit: https://boto3.readthedocs.io/en/latest/reference/services/s3.html 
+   * visit: https://boto3.readthedocs.io/en/latest/reference/services/s3.html
 
 * We will retrieve image object with pre-signed URL for authorized user.
 
-17. Make a bucket to save photo image objects and retriev it from Amazon S3. 
+17. Make a bucket to save photo image objects and retriev it from Amazon S3.
 
 ```
 aws s3 mb s3://cloudalbum-<initial>
@@ -595,7 +595,7 @@ sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/02-Cl
 
 * Sign in / up
 * Upload Sample Photos
-* Sample images download here 
+* Sample images download here
   *  https://d2r3btx883i63b.cloudfront.net/temp/sample-photo.zip
 * Look your Album
 * Change Profile
@@ -723,9 +723,9 @@ options = {
 * The second parameter of os.getenv is the default value to use when the first parameter does not exist.
 
 | COGNITO_POOL_ID | Copy and paste the pool ID you noted earlier. |
-----|---- 
+----|----
 | COGNITO_CLIENT_ID | Copy and paste the App Client ID you noted earlier. |
-| COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. | 
+| COGNITO_CLIENT_SECRET | Copy and paste the App Client Secret you noted earlier. |
 |COGNITO_DOMAIN |Copy and paste the domain name you created earlier. It should look similar to the example below. Do not copy the entire URL starting with https://YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com (for example(without `https://`): YOUR_DOMAIN_NAME.auth.ap-southeast-1.amazoncognito.com)|
 | BASE_URL | http://localhost:8080 Do not include a trailing / for the BASE_URL. |
 
@@ -774,7 +774,7 @@ session['refresh_token'] = response.json()["refresh_token"]
 
 * Sign in / up
 * Upload Sample Photos
-* Sample images download here 
+* Sample images download here
   *  https://d2r3btx883i63b.cloudfront.net/temp/sample-photo.zip
 * Look your Album
 * Change Profile
@@ -796,7 +796,7 @@ AWS [X-Ray](https://aws.amazon.com/xray/) helps developers analyze and debug pro
 
 **Download and run the AWS X-Ray daemon on your AWS Cloud9 instance.**
 
-64. Go to the AWS X-Ray daemon documentation link below: 
+64. Go to the AWS X-Ray daemon documentation link below:
 https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html
 
 65. On the documentation page, scroll down until you see a link to **Linux (executable)-aws-xray-daemon-linux-2.x.zip (sig).** Right-click the link and copy the link address.
@@ -822,9 +822,14 @@ unzip aws-xray-daemon-linux-2.x.zip
 ./xray
 ```
 
-* Now, X-Ray daemon works and ready to use X-Ray to analyze applications. 
+* Now, X-Ray daemon works and ready to use X-Ray to analyze applications.
 
-70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
+70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.py' file.
+
+Before execute run.py, install required Python packages.
+```console
+sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/04-CloudAlbum-XRAY/requirements.txt
+```
 
 ```python
 (...)
@@ -844,7 +849,7 @@ from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
 ```
 
-**NOTE**: You can use 'xray_recorder' decorator for capture function execution information. 
+**NOTE**: You can use 'xray_recorder' decorator for capture function execution information.
 ```python
 ## for example:
 
@@ -867,7 +872,7 @@ def print_abc():
 
 * Sign in / up
 * Upload Sample Photos
-* Sample images download here 
+* Sample images download here
   *  https://d2r3btx883i63b.cloudfront.net/temp/sample-photo.zip
 * Look your Album
 * Change Profile
@@ -891,4 +896,3 @@ Is it OK? Let's go to next LAB.
 * [LAB 01 - Take a look around](LAB01.md)
 * [LAB 02 - Move to serverless](LAB02.md)
 * [LAB 03 - Serverless with AWS Chalice](LAB03.md)
-
