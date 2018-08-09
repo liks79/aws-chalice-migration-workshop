@@ -1,4 +1,4 @@
-# LAB 01 - Hands-on lab (30min) : Take a look around
+# LAB 01 - Take a look around
 
 In this hands-on lab, you'll configure the AWS [Cloud9](https://aws.amazon.com/cloud9/) service to look around legacy application. You can run application 'CloudAlbum' in the AWS Cloud9 EC2 instance.
 
@@ -22,22 +22,6 @@ Legacy application is **not Restful** and application backend is **tightly coupl
 It has following several features.
 
 ![Legacy application](images/lab01-02.png)
-
-## TASK 0. Create instance profile for AWS Cloud9
-
-```console
-$ PARN=$(aws iam create-policy --policy-name workshop-cloud9-policy --policy-document file://workshop-cloud9-policy.json --query "Policy.Arn" --output text)
-$ aws iam create-role --role-name workshop-cloud9-instance-profile-role --assume-role-policy-document file://workshop-cloud9-instance-profile-role-trust.json
-$ aws iam attach-role-policy --role-name workshop-cloud9-instance-profile-role --policy-arn $PARN
-$ aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance-profile
-$ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile 
-```
-
-
-
-* Related document : [Create and Use an Instance Profile to Manage Temporary Credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/credentials.html)
-
-
 
 
 ## TASK 1. Create AWS Cloud9 environment and explore the environment.
