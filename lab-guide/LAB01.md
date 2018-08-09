@@ -153,7 +153,7 @@ conf = {
 
 19. Select **aws-chalice-migration-workshop/LAB01/CloudAlbum/run.py** in the tree view.
 
-20. First, **open the run.py** on the top menu bar, click **Run → Run With → Python 3**. Ensure that you are using the **Python 3 runner**, as shown in the screenshot below.
+20. First, **open the run.py**(double click) on the top menu bar, click **Run → Run With → Python 3**. Ensure that you are using the **Python 3 runner**, as shown in the screenshot below.
 ![Cloud9 run](images/lab01-03.png)
 
 21. You may fail due to following reason.
@@ -201,7 +201,7 @@ sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite
  
 ## TASK 3: Connect to your application (Cloud9)
 
-To test the application, you can configure your envirionment. There are two way to configure your environment. Choose your option.
+To test the application, you can configure your envirionment. There are **two way to configure your environment**. **Choose your option.**
 
  * You can use **Cloud9 preview** feature.
     *  Previewing Running Applications in the AWS Cloud9 Integrated Development Environment (IDE) 
@@ -227,14 +227,14 @@ To test the application, you can configure your envirionment. There are two way 
 
 * In your MAC/Linux terminal, type the command below to get the public portion from **your existing any key pair .pem** file. Make sure to replace YOUR_KEY with the name of the key pair .pem file
 
-```
+```console
 ssh-keygen -f <YOUR_KEY.pem> -y
 ```
 
 * The output looks like the example below. Copy the output of your command.
-```
+```console
 ssh-rsa
-CXCAAB3NzaC1yc2EAAAADAQABAAABAQDWGRZsPraV6v4UqfZTFKAXK9bhjWVkONEKyAA1CeOkxSN+9WdY7gKgjbPOeUx3LFqRudBvSrP+eKTtthPrl Nx9UBvXniVK252i4h0xnIcrRO1PUpq0EzyqX+n3u2YwytT+on6x98PRjtD4oCKyfFviWBqnRHtWvRre8CWhULuJrmUeo2aPrVTPXo/TwJpZupXv63YyUMPC 2wyDMDsKNZhsqUedkJ8575PGXCg9gEkPg2ulR8NUrzDSfbXIrZLgCcIziwDQ0dA9B28OAQ9saPyXYzrZF1ZmCxKgzSHHiKdBAJ0E/X/s53N5Hg04SIWy4D4lMT 9g+AZG38YPNq68mo4b
+ASDASDASDASDAyc2EAAAADAQABAAABAQDWGRZsPraV6v4UqfZTFKAXK9bhjWVkONEKyAA1CeOkxSN+9WdY7gKgjbPOeUx3LFqRudBvSrP+eKTtthPrl Nx9UBvXniVK252i4h0xnIcrRO1PUpq0EzyqX+n3u2YwytT+on6x98PRjtD4oCKyfFviWBqnRHtWvRre8CWhULuJrmUeo2aPrVTPXo/TwJpZupXv63YyUMPC 2wyDMDsKNZhsqUedkJ8575PGXCg9gEkPg2ulR8NUrzDSfbXIrZLgCcIziwDQ0dA9B28OAQ9saPyXYzrZF1ZmCxKgzSHHiKdBAJ0E/X/s53N5Hg04SIWy4D4lMT 9g+AZG38YPNq68mo4b
 ```
 
 * In your AWS Cloud9 instance, on the left pane, click the **Settings** icon. Click **Show Home in Favorites** and **Show Hidden Files** as shown in the screenshot below.
@@ -247,7 +247,7 @@ CXCAAB3NzaC1yc2EAAAADAQABAAABAQDWGRZsPraV6v4UqfZTFKAXK9bhjWVkONEKyAA1CeOkxSN+9Wd
 
 * Paste the public key you copied earlier in the authorized_keys file. **Important:** Make sure to paste the public key below the message in the authorized_keys file as shown below. **Do not delete or overwrite** the public key already present in the file. Deleting or overwriting the existing public key will make your Cloud9 instance unusable.
 
-```
+```console
  #
  # Add any additional keys below this line
  #
@@ -256,21 +256,21 @@ CXCAAB3NzaC1yc2EAAAADAQABAAABAQDWGRZsPraV6v4UqfZTFKAXK9bhjWVkONEKyAA1CeOkxSN+9Wd
 
 **NOTE:** You also can paste it using cli command like below. (Paste public key then press CTRL+D for EOF)
 
-```
+```console
 cat >> ~/.ssh/authorized_keys
 ssh-rsa CXCAAB3Nzaxxyc2EAAAADAQABAAABAQDThHERqJJMcZqitA5DZ35j41UFE0zIO5XxVqElCHNHUXYnmffqFNyTFkfpkHAWsR5zGMnR5I46eZazu4sWNcg3LZx937/STOfN4TCzps/uuooHx/p3whGXIFqsz25Xq1RzI/LsFiSRm3+/I1E482pss3OgCXALR/rF9g7Mud1frt9POq82Zg0R1YHB5hCK6Ldx3U3AnFxdViKHVnDgVijAYO+ua1MFtaSn+FqYoXbMniFiQpOJz2ZTvM/ZhwvfAYJkJPYwQ+7T99pIEb0L/pLecaFkxUcbAiwzW6L79bKAQYwA7vEzI4ndqhyLKwIzadVJnog1hRs0ItiUqDOSLYLN sungshik@8c85904c36cf.ant.amazon.com
 
 ```
 
 * Check public-ip of your Cloud9 EC2 instance.
-```
+```console
 curl http://169.254.169.254/latest/meta-data/public-ipv4 
 ```
 
 * Try to SSH tunneling like this
 
 * **NOTE:** Make sure **your Cloud9 instance Security group port 22** is opened for SSH tunneling.
-```
+```console
 ssh -i YOUR_KEY.pem -L 8080:localhost:8080 ec2-user@<public-ip of your Cloud9 EC2 instance>
 ```
 
