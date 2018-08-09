@@ -193,7 +193,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 
 1. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
 
-2. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's db.Model and are represented in Python classes.
+2. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's **db.Model** and are represented in **Python classes**.
 ```python
 from sqlalchemy import Float, DateTime, ForeignKey, Integer, String
 from flask_login import UserMixin
@@ -359,7 +359,7 @@ class Photo(Model):
     address = UnicodeAttribute(null=False)
 ```
 
-5. Review the '__init__.py' in the model package. The DynamoDB table 'User' and 'Photo' will be created automatically for the convenience. 
+5. Review the `__init__.py` in the model package. The DynamoDB 'User' and 'Photo' **tables will be created automatically** for the convenience. **Note** the `create_table` function. 
 
 ```python
 from cloudalbum.config import conf
@@ -375,7 +375,7 @@ if not Photo.exists():
     print('DynamoDB Photo table created!')
 ```
 
-6. Review the 'LAB02/01-CloudAlbum-DDB/cloudalbum/config.py' file. Additional attributes are added for DynamoDB.
+6. Review the 'LAB02/01-CloudAlbum-DDB/cloudalbum/config.py' file. **New attributes** are added for DynamoDB.
 ```python
 import os
 
