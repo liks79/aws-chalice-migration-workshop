@@ -1,30 +1,74 @@
 # LAB 02 - Move to serverless
 We will move the components of legacy application which has constraints of scalability and high availability to serverless environment one by one.
 
-## TASK 0. Permission configuration for Cloud9
+## TASK 0. Permission grant for Cloud9
 
-There are two ways. One is to use [1] **Using Instance Profile** with temporary credentials and this is recommended. The other way is **Using Environment Variables**  register the [2] **AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variable** which related administrator privileadge already you used. **You can also use environment variables to speed up the workshop.**
+AWS Cloud9 is configured with **AWS managed temporary credentials** as default. However we will **not use** AWS managed temporary credentials due to our application need various service such as DynamoDB, S3, Lambda and so on. We will use our own policy for this workshop.
+
+There are two ways. One is to use [1] **Using Instance Profile** with temporary credentials and this is recommended. The other way is **Store Permanent Access Credentials** in the credential file which related administrator privileadge already you used. (You can also use environment variables as a alternative way)
 
 * Related document : [Create and Use an Instance Profile to Manage Temporary Credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/credentials.html)
 
-* Choose following one.
+* **Choose following one** : 
+  * `[1] Using Instance Profile` or 
+  * `[2] Store Permanent Access Credentials`
+
+* `[1] Using Instance Profile` is recommended. However If you want **quick start**, you can choose `[2] Store Permanent Access Credentials` with enough permission.
 
 ### [1] Using Instance Profile
-
-#### [1-1] Create an Instance Profile with the AWS CLI ###
-**NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
-
-* You may have `AdministratorAccess` privileged **AWS CLI environment in your LOCAL MACHINE.**
-
-```console
-$ wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/generate_instance_profile.sh
-
-$ chmod +x generate_instance_profile.sh
-
-$ ./generate_instance_profile.sh
+* Check the AWS credentials in Cloud9 instance.
+``` console
+aws configure list
+```
+* output
+``` console
+lachesis:~/environment $ aws configure list
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile                <not set>             None    None
+access_key     ****************YV3J shared-credentials-file    
+secret_key     ****************F240 shared-credentials-file    
+    region           ap-southeast-1      config-file    ~/.aws/config
 ```
 
-* Review the `generate_instance_profile.sh` file.
+### [1-1] Disable AWS managed temporary credentials
+![Cloud9 credential](images/lab02-task0-aws-setup.png)
+* (1) Click the setup(gear) icon
+* (2) Select `AWS SETTINGS`.
+* (3) Disable `AWS managed temporary credentials`
+
+* Check the AWS credentials in Cloud9 instance.
+```console
+aws configure list
+```
+* output:
+```console
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile                <not set>             None    None
+access_key                <not set>             None    None
+secret_key                <not set>             None    None
+    region                <not set>             None    None
+```
+
+* OK, done. Move to next step.
+
+#### [1-2] Create an Instance Profile with the AWS CLI ###
+**NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
+
+* You may have `AdministratorAccess` privileged **AWS CLI environment** such as your LOCAL MACHINE.
+
+  * Download `generate_instance_profile.sh`.
+
+```console
+wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/generate_instance_profile.sh
+```
+ * Add `execute` permission and run: 
+```console
+chmod +x generate_instance_profile.sh; ./generate_instance_profile.sh
+```
+
+* If you want, **review** the `generate_instance_profile.sh` file.
 ```console
 wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-instance-profile-role-trust.json
 wget https://raw.githubusercontent.com/liks79/aws-chalice-migration-workshop/master/resources/workshop-cloud9-policy.json
@@ -36,7 +80,7 @@ aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance
 aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile
 ```
 
-* Review the `workshop-cloud9-policy.json` policy.
+* If you want, **review** the `workshop-cloud9-policy.json` policy.
 ```json
 {
     "Version": "2012-10-17",
@@ -67,14 +111,14 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 
 ```
 
-#### [1-2] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
+#### [1-3] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
-* Get instance-id of Cloud9 instance **in the Cloud9 terminal**
+* Get instance-id of Cloud9 instance **in the Cloud9 terminal**.
 ```console
-$ curl http://169.254.169.254/latest/meta-data/instance-id
+curl http://169.254.169.254/latest/meta-data/instance-id
 ```
 * output:
-```
+```console
 i-087afxxxxxxxxxxx
 ```
 
@@ -82,18 +126,43 @@ i-087afxxxxxxxxxxx
   * **NOTE:** Like above step, this operation required enough privileges such as `AdministratorAccess` privilege.
 
   * Replcace `i-087afxxxxxxxxxxx` to real instance id value.
+```console 
+aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id <real instance id>
 ```
-$ aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id <real instance id>
+ * Configure default region:
+```console
+aws configure set region ap-southeast-1
+```
+ * Check the configured credentials
+```console
+aws configure list
+```
+* output:
+```console
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile                <not set>             None    None
+access_key     ****************LZOJ         iam-role    
+secret_key     ****************hK+3         iam-role    
+    region           ap-southeast-1      config-file    ~/.aws/config
 ```
 
-### [2] Using Environment Variables ###
-This is alternative way of `Using Instance Profile`. 
+* You can see the `iam-role` type of access_key and secret_key. Well done.
 
-* You can configure below variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
+
+### [2] Store Permanent Access Credentials ###
+This is alternative way of `[1] Using Instance Profile`. If you complete `[1] Using Instance Profile`, You can pass below steps and **go to TASK 1.**
+
+```console
+aws configure set aws_access_key_id <YOUR OWN ACCESS KEY ID>
+aws configure set aws_secret_access_key <YOUR OWN ACCESS KEY ID>
+aws configure set region ap-southeast-1	
 ```
-export AWS_ACCESS_KEY_ID=
-export AWS_SECRET_ACCESS_KEY=
-```
+
+* OK, it's done. Go to TASK 1.
+
+* **ALTERNATIVE**: You can configure following variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
+`export AWS_ACCESS_KEY_ID=<YOUR OWN ACCESS KEY ID>` and `export AWS_SECRET_ACCESS_KEY=<YOUR OWN ACCESS KEY ID>`
 
 
 ## TASK 1. Go to DynamoDB
