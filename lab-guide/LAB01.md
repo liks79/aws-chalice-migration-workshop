@@ -134,12 +134,12 @@ conf = {
     'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 300),
 }
 ```
-* The second parameter of **os.getenv** function is the default value to use when the first parameter does not exist.
+* The second parameter of **os.getenv** function is the default value to use when the **first parameter does not exist.**
 
 16. Check the following variables
     * **GMAPS_KEY** and **DB_URL**  variables are mandatory for this application.
 
-```
+```python
     # Mandatory variable
     'GMAPS_KEY': os.getenv('GMAPS_KEY', None),
     'DB_URL': os.getenv('DB_URL', None),

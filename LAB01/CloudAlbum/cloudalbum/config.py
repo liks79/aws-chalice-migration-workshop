@@ -8,6 +8,7 @@ conf = {
     # Default config values
     'APP_HOST': os.getenv('APP_HOST', '0.0.0.0'),
     'APP_PORT': os.getenv('APP_PORT', 8080),
+
     'FLASK_SECRET': os.getenv('FLASK_SECRET', os.urandom(24)),
     'SESSION_TIMEOUT': os.getenv('SESSION_TIMEOUT', 30),
     'SQLALCHEMY_TRACK_MODIFICATIONS': os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', False),
