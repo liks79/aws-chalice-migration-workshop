@@ -491,13 +491,11 @@ Is it OK? Let's move to the next TASK.
 ![Stop application](images/stop-app.png)
 
 16. Delete data in the DynamoDB table for the next TASK.
-```console
-aws dynamodb scan --table-name Photos --attributes-to-get "$KEY" \
-  --query "Items[].$KEY.S" --output text | \
-  tr "\t" "\n" | \
-  xargs -t -I keyvalue aws dynamodb delete-item --table-name $TABLE_NAME \
-  --key "{\"$KEY\": {\"S\": \"keyvalue\"}}"
-```
+* Filesystem will be changed from local disk to Amazon S3.
+* So, if you don't delete your album article which submitted this task, then you will see your album article without images when you run the application on the next TASK,
+
+![Delete](images/lab02-task2-delete.png)
+
 
 ## TASK 2. Go to S3
 CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). However these storage is not scalable enough. 
@@ -624,7 +622,7 @@ To begin, follow the steps below.
 
 23. In the AWS Console, go to the **Amazon Cognito**
 
-24. Make sure you are still in the **Singapore(ap-southeast-1)** region.
+24. Make sure you are still in the **Singapore(ap-southeast-1)**region.
 
 25. Click **Manage your User Pools**.
 
@@ -827,7 +825,7 @@ unzip aws-xray-daemon-linux-2.x.zip
 
 * Now, X-Ray daemon works and ready to use X-Ray to analyze applications. 
 
-70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.py' file.
+70. Review, '### x-ray set up' in the 'LAB02/04-CloudAlbum-XRAY/run.pyrun.py' file.
 
 ```python
 (...)
