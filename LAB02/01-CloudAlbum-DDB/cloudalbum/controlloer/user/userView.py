@@ -79,7 +79,7 @@ def signup():
                 user_exist = item.email
 
             if not user_exist:
-                ## TODO #1 : Write your code to save user information
+                ## TODO #1 : Review following code to save user information
                 ## -- begin --
                 user = User(uuid.uuid4().hex)
                 user.email = form.email.data
@@ -87,9 +87,6 @@ def signup():
                 user.username = form.username.data
                 user.save()
                 ## -- end --
-
-
-
 
                 # app.logger.debug(user)
                 flash('You have been signed up successfully!')
@@ -129,7 +126,7 @@ def edit(user_id):
             data = request.get_json()
             app.logger.debug(data)
 
-            ## TODO #3 : Write your code to update user profile to DynamoDB.
+            ## TODO #2 : Review following code to update user profile to DynamoDB.
             ## -- begin --
             user = User.get(user_id)
             user.update(actions=[

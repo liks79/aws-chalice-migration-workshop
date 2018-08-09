@@ -191,6 +191,12 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 * Legacy application has simple data model and we can design DynamoDB table easily.
   ![Data Modeling](images/lab02-task1-modeling.png)
 
+1. Install required Python packaged: 
+```console
+sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-CloudAlbum-DDB/requirements.txt
+```
+
+
 1. Open the **models.py** which located in  '**LAB02/01-CloudAlbum-DDB**/cloudalbum/model/models.py'.
 
 2. Review the data model definition via **SQLAlchemy**. `User` tables and `Photo` tables are inherited from SQLAlchemy's **db.Model** and are represented in **Python classes**.
@@ -395,70 +401,62 @@ conf = {
 ```
 * The second parameter of **os.getenv** function is the default value to use when the first parameter does not exist.
 
-7. Write your code for user signup.
+7. Review following code for user signup.
 * find **TODO #1** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
-if not user_exist:
-    ## TODO #1 : Write your code to save user information
-```
-* solution:
-
-```python
-user = User(uuid.uuid4().hex)
-user.email = form.email.data
-user.password = generate_password_hash(form.password.data)
-user.username = form.username.data
-user.save()
+    if not user_exist:
+        ## TODO #1 : Review following code to save user information
+        ## -- begin --
+        user = User(uuid.uuid4().hex)
+        user.email = form.email.data
+        user.password = generate_password_hash(form.password.data)
+        user.username = form.username.data
+        user.save()
+        ## -- end --
 ```
 
 **NOTE**: The partition key value of User table used **uuid.uuid4().hex** for the appropriate key distribution.
 
-8. Write your code to search result via keyword in the DynamoDB.
-* find **TODO #2** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
+8. Review following code to update user profile to DynamoDB.
+* find **TODO #2** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
-## TODO #2 : Write your code to search result via keyword in the DynamoDB.
+    ## TODO #2 : Review following code to update user profile to DynamoDB.
+    ## -- begin --
+    user = User.get(user_id)
+    user.update(actions=[
+        User.username.set(data['username']),
+        User.password.set(generate_password_hash(data['password']))
+    ])
+    ## --end --
 ```
+* Above code shows the way of `update` DynamoDB table via PynamoDB query mapper.
 
-* solution:
+
+9. Review following code to search result via keyword in the DynamoDB.
+* find **TODO #3** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
 ```python
-keyword = request.form['search']
-photo_pages = Photo.query(current_user.id, Photo.tags.contains(keyword) | Photo.desc.contains(keyword))
+    ## TODO #3 : Review following code to search result via keyword in the DynamoDB.
+    ## -- begin --
+    keyword = request.form['search']
+    photo_pages = Photo.query(current_user.id,
+                                Photo.tags.contains(keyword) |
+                                Photo.desc.contains(keyword))
+    ## -- end --
 ```
+* Above code shows how to use query filter via PynamoDB.
 
-9. Write your code to update user profile to DynamoDB.
-* find **TODO #3** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
-```python
-## TODO #3 : Write your code to update user profile to DynamoDB.
-```
 
-* solution:
-```python
-user = User.get(user_id)
-user.update(actions=[
-    User.username.set(data['username']),
-    User.password.set(generate_password_hash(data['password']))
-])
-```
-
-10. Write your code to delete uploaded photo information in DynamoDB.
+10. Review following code to delete uploaded photo information in DynamoDB.
 * find **TODO #4** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
 ```python
-## TODO #4 : Write your code to delete uploaded photo information in DynamoDB.
+    ## TODO #4 : Review following code to delete uploaded photo information in DynamoDB.
+    ## -- begin --
+    photo = Photo.get(current_user.id, photo_id)
+    photo.delete()
+    ## -- end --
 ```
-
-* solution : 
-```python
-photo = Photo.get(current_user.id, photo_id)
-photo.delete()
-```
-
 
 11. Open the `run.py` and run CloudAlbum application with DynamoDB.
-
-* Before application run, install required Python packages:
-```console
-sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/01-CloudAlbum-DDB/requirements.txt
-```
 
 * **NOTE:** **GMAPS_KEY** variable is must defined before you run.
 
