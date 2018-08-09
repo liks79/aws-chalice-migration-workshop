@@ -153,7 +153,7 @@ secret_key     ****************hK+3         iam-role
 
 
 ### [2] Store Permanent Access Credentials ###
-This is alternative way of `[1] Using Instance Profile`. If you complete `[1] Using Instance Profile`, You can pass below steps and **go to TASK 1.**
+**NOTE:** This is **an alternative way** of `[1] Using Instance Profile`. If you complete `[1] Using Instance Profile`, You can pass below steps and **go to TASK 1.**
 
 * **NOTE:** Before you proceed, please complet following steps:
   * [1-1] Check the AWS credentials in Cloud9 instance.
