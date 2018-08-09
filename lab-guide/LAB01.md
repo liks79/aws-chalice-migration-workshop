@@ -306,3 +306,7 @@ Check the application.
 * Click the `stop icon` to stop your application.
 ![Stop application](images/stop-app.png)
 
+## LAB GUIDE LINKS
+* [LAB 01 - Take a look around](LAB01.md)
+* [LAB 02 - Move to serverless](LAB02.md)
+* [LAB 03 - Serverless with AWS Chalice](LAB03.md)

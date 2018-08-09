@@ -685,3 +685,9 @@ aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "v1mehmiqsj.execute-
 ## Go further
 
 ## Congratulation! You completed LAB03.
+
+
+## LAB GUIDE LINKS
+* [LAB 01 - Take a look around](LAB01.md)
+* [LAB 02 - Move to serverless](LAB02.md)
+* [LAB 03 - Serverless with AWS Chalice](LAB03.md)
