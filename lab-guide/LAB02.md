@@ -381,6 +381,9 @@ import os
 
 conf = {
    
+    # Mandatory variable
+    'GMAPS_KEY': os.getenv('GMAPS_KEY', 'REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR'),
+    
     ( ... )
     
     # DynamoDB
