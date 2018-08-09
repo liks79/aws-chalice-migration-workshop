@@ -10,7 +10,7 @@ from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 app = Flask(__name__)
 
 if __name__ == '__main__':
-    util.check_variables()
+    util.check_variables_gmaps()
 
     app = CloudAlbum.init_app(app)
 
@@ -20,9 +20,6 @@ if __name__ == '__main__':
     XRayMiddleware(app, xray_recorder)
     patch_all()
 
-    app.logger.debug('DB_URL: {0}'.format(conf['DB_URL']))
     app.logger.debug('GMAPS_KEY: {0}'.format(conf['GMAPS_KEY']))
 
     app.run(host=conf['APP_HOST'], port=conf['APP_PORT'], debug=True)
-
-
