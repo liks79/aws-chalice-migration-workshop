@@ -153,7 +153,7 @@ conf = {
 
 19. Select **aws-chalice-migration-workshop/LAB01/CloudAlbum/run.py** in the tree view.
 
-20. First, **open the run.py**(double click) on the top menu bar, click **Run → Run With → Python 3**. Ensure that you are using the **Python 3 runner**, as shown in the screenshot below.
+20. First, **open the run.py**(double click), and on the top menu bar, click **Run → Run With → Python 3**. Ensure that you are using the **Python 3 runner**, as shown in the screenshot below.
 ![Cloud9 run](images/lab01-03.png)
 
 21. You may fail due to following reason.
