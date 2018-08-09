@@ -178,14 +178,14 @@ sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite
 
 * **ALTERNATIVE WAY:** You can set the **DB_URL** value directly in `config.py`.
 ```python
-    'DB_URL': os.getenv('DB_URL', 'sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite.db'),
+'DB_URL': os.getenv('DB_URL', 'sqlite:////home/ec2-user/environment/aws-chalice-migration-workshop/LAB01/sqlite.db'),
 ```
 
 25. Second, in the **Name column**, type **GMAPS_KEY**. In the Value column, type the **Google MAP API KEY** (**Temporary API Key** will be provided to the workshop attendees by presenter).
 
 * **ALTERNATIVE WAY:** You can set the **GMAPS_KEY** value directly in `config.py`.
 ```python
-    'GMAPS_KEY': os.getenv('GMAPS_KEY', 'REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR'),
+'GMAPS_KEY': os.getenv('GMAPS_KEY', 'REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR'),
 ```
 
 
