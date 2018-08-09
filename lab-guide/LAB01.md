@@ -44,7 +44,7 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 
 8. Review the details and click **Create environment**. This should launch your AWS Cloud9 environment in a few minutes.
 
-9. Upon environment creation, notice the **terminal window on the bottom pane**. The terminal provides a remote login to the instance on which the AWS Cloud9 environment is hosted, just as you used SSH for remote login. A pre-authenticated AWS CLI is installed in your terminal.
+9. Upon environment creation, notice the **terminal window on the bottom pane**. The terminal provides a remote login to the instance on which the AWS Cloud9 environment is hosted, just as you used SSH for remote login. A **pre-authenticated AWS CLI** is installed in your terminal.
 
 10. Explore the terminal by typing this command: 
 
