@@ -285,7 +285,8 @@ class Photo(db.Model):
 
 
 
-4. Review the data model definition via **PynamoDB**.
+4. Review the data model definition via **PynamoDB**. This will show how DynamoDB tables and GSI are defined in PynamoDB. They are all expressed in **Python Class.**
+
 ```python
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute
