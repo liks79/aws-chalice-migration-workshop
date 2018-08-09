@@ -11,7 +11,7 @@ There are two ways. One is to use [1] **Using Instance Profile** with temporary 
 
 ### [1] Using Instance Profile
 
-#### Create an Instance Profile with the AWS CLI ###
+#### [1-1] Create an Instance Profile with the AWS CLI ###
 **NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` police). 
 
 * You may have `AdministratorAccess` privileged **AWS CLI environment in your LOCAL MACHINE.**
@@ -52,6 +52,7 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
                 "iam:*",
                 "ssm:*",
                 "lambda:*",
+                "cloud9:*",
                 "dynamodb:*",
                 "xray:*"
             ],
@@ -66,7 +67,7 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 
 ```
 
-#### Attach an Instance Profile to Cloud9 Instance with the AWS CLI
+#### [1-2] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
 * Get instance-id of Cloud9 instance **in the Cloud9 terminal**
 ```console

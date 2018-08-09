@@ -12,6 +12,7 @@
                 "iam:*",
                 "ssm:*",
                 "lambda:*",
+                "cloud9:*",
                 "dynamodb:*",
                 "xray:*"
             ],
