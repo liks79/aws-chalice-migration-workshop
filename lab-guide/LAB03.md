@@ -586,6 +586,9 @@ aws ssm get-parameters --names "/cloudalbum/DDB_RCU" --with-decryption
 }
 ```
 
+* You can also check the **System Manager - Parameter Store console**.
+<img src="./images/lab03-task3-ps-console.png" width="600">
+
 
 19. Review `config.py` file located in '**LAB03/02-CloudAlbum-Chalice/cloudalbum/chalicelib/config.py**'.
 
