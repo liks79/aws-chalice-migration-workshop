@@ -1,0 +1,187 @@
+{% extends "layout-service.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <script>
+        var metadata = {};
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div id="alert-container">
+      {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <div class="alert alert-warning" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+         {% endif %}
+      {% endwith %}
+      </div>
+
+      <div class="row">
+
+      <!-- photo list iterator: begin -->
+      {% for photo in photos %}
+        <div class="col-lg-4 portfolio-item">
+          <div class="card h-100">
+            <a href="#" onClick="show('{{url_for('photoView.photo_url', photo_id=photo.id)}}', {{ photo.id }});">
+                <img class="card-img-top" src="{{url_for("photoView.photo_url", photo_id=photo.id)}}?mode=thumbnail" alt="">
+            </a>
+                <div align="right">
+                    <a id="edit" href="{{ url_for('photoView.edit', photo_id=photo.id) }}" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a id="map-view" href="{{ url_for('photoView.map_view', photo_id=photo.id) }}" data-toggle="tooltip" title="Map view">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                    <a id="delete" href="#" data-toggle="tooltip" title="Delete" onClick="delete_photo({{ photo.id }});">
+                        <i class="fas fa-trash-alt"></i>
+                    </a> &nbsp;
+                </div>
+
+            <div class="card-body" style="margin-top: -15px">
+                {{ photo.desc }}
+              <p class="card-text">
+                  <span class="badge badge-info"><i class="fas fa-tags"></i> Tags</span>
+                  {% for tag in photo.tags.split(',') %}
+                      <span class="badge badge-secondary">{{ tag }} </span>
+                  {% endfor %}
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <script>
+            var items_{{ photo.id }} = [];
+            items_{{ photo.id }}.push("{{ photo.taken_date }}");
+            items_{{ photo.id }}.push("{{ photo.make }}");
+            items_{{ photo.id }}.push("{{ photo.model }}");
+            items_{{ photo.id }}.push("{{ photo.width }}");
+            items_{{ photo.id }}.push("{{ photo.height }}");
+            items_{{ photo.id }}.push("{{ photo.city }}");
+            items_{{ photo.id }}.push("{{ photo.nation }}");
+            items_{{ photo.id }}.push("{{ photo.address }}");
+            metadata['{{ photo.id }}'] = items_{{ photo.id }};
+        </script>
+      {% endfor %}
+      <!-- photo list iterator: end -->
+
+      {% if not photos %}
+        <script>
+            msgAlert("No photos found. <strong>Upload</strong> your photo!");
+        </script>
+      {% endif %}
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+
+    <script>
+        // Enable tooltip plugin
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        // Show specific photo information which user clicked.
+        function show(url, id){
+            console.log(metadata[id]);
+            taken_date = metadata[id][0];
+            make = metadata[id][1];
+            model = metadata[id][2];
+            width = metadata[id][3];
+            height = metadata[id][4];
+            city = metadata[id][5];
+            nation = metadata[id][6];
+            address = metadata[id][7];
+
+            var result;
+
+            // With EXIF metadata
+            if (make.length > 0) {
+                result =  "<span class=\"badge badge-info\"><i class=\"fas fa-camera\"></i> EXIF</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+taken_date+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+make+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+model+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+width+" x "+height+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+city+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+nation+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+address+"</span>";
+            }
+            // Without EXIF metadata
+            else {
+                result =  "<span class=\"badge badge-warning\"><i class=\"fas fa-exclamation-triangle\"></i> No EXIF</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+taken_date+"</span>&nbsp;" +
+                          "<span class=\"badge badge-secondary\">"+width+" x "+height+"</span>&nbsp;";
+
+            }
+
+            // Show selected photo
+            bootbox.alert({
+              size: "large",
+              message: "<a href='"+url+"' target='_blank' title='Original image'><img src='"+url+"' style='width:100%;' alt='Click to download'></a>" + result,
+              callback: function(){ }
+            })
+        }
+
+
+        //Delete selected photo information (including image files)
+        function delete_photo(id){
+            bootbox.confirm({
+                message: "Do you want to delete this photo?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-secondary'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-dark'
+                    }
+                },
+                callback: function (result) {
+
+                    if (result == true) {
+                        $.ajax({
+                            type: "delete",
+                            url: '/photos/' + id,
+                            data: {_method: 'delete', _token: csrf_token},
+                            success: function (data) {
+                                console.log(data);
+                                //msgAlert('Deleted!');
+                                location.reload();
+                            },
+                            error: function (data) {
+                                console.log('Error:', data);
+                                msgAlert('Error occurred! Please try again.');
+                            }
+                        });
+                    }
+                }
+            }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+                }
+            });
+        }
+
+    </script>
+
+
+{% endblock %}

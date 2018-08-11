@@ -1,0 +1,16 @@
+certifi==2018.4.16
+chardet==3.0.4
+click==6.7
+idna==2.7
+itsdangerous==0.24
+oauthlib==2.1.0
+Pillow==5.1.0
+requests==2.19.1
+requests-oauthlib==1.0.0
+urllib3==1.23
+boto3
+import_string
+pynamodb
+python_jose<2.1
+aws-xray-sdk<0.96
+tzlocal==1.5.1
