@@ -270,7 +270,7 @@ curl http://169.254.169.254/latest/meta-data/public-ipv4
 
 * **NOTE:** Make sure **your Cloud9 instance Security group port 22** is opened for SSH tunneling.
 ```console
-ssh -i YOUR_KEY.pem -L 8080:localhost:8080 ec2-user@<public-ip of your Cloud9 EC2 instance>
+ssh -i <YOUR_KEY.pem> -L 8080:localhost:8080 ec2-user@<public-ip of your Cloud9 EC2 instance>
 ```
 
 
