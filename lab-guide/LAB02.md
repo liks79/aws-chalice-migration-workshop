@@ -78,6 +78,16 @@ aws iam create-instance-profile --instance-profile-name workshop-cloud9-instance
 aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profile-role --instance-profile-name workshop-cloud9-instance-profile
 ```
 
+ * Add `execute` permission
+```console
+chmod +x generate_instance_profile.sh
+```
+
+ * **Run** script with enough privileges.** (such as `AdministratorAccess` policy. **You can not Run you Cloud9 terminal.**):
+```console
+./generate_instance_profile.sh
+```
+
 * If you want, **review** the `workshop-cloud9-policy.json` policy.
 ```json
 {
@@ -109,15 +119,6 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 
 ```
 
- * Add `execute` permission
-```console
-chmod +x generate_instance_profile.sh
-```
-
- * **Run** script with enough privileges.** (such as `AdministratorAccess` policy. **You can not Run you Cloud9 terminal.**):
-```console
-./generate_instance_profile.sh
-```
 
 #### [1-4] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
