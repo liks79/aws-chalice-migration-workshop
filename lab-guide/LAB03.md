@@ -577,7 +577,7 @@ aws ssm get-parameters --names "/cloudalbum/DDB_RCU" --with-decryption
     "InvalidParameters": [], 
     "Parameters": [
         {
-            "Version": 2, 
+            "Version": 1, 
             "Type": "SecureString", 
             "Name": "/cloudalbum/DDB_RCU", 
             "Value": "10"
