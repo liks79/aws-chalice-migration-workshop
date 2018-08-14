@@ -721,12 +721,27 @@ To begin, follow the steps below.
 47. In the left navigation menu, under **App integration**, click **App client settings**.
 
 48. For **Enabled Identity Providers**, check **Cognito User Pool**.
-
+* Check the Cloud9 ResourceId. 
+  * **Note:** You need your <INSTANCE_ID> noted at TASK 0 - Step [1-4].
+```console 
+aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resource-id, Values=<INSTANCE_ID>" "Name=key, Values=aws:cloud9:environment" --output text
+```
+* output:
+```
+3c860e50e30146cdbb97e3eb1f1b4e1f
+```
+* **\<YOUR PREVIEW URL\>** is : 
+```
+https://<CLOUD9_RESOURCE_ID>.vfs.cloud9.ap-southeast-1.amazonaws.com
+```
  * For **Cloud9 Preview** user:
    * For **Callback URL(s)** type `https://<YOUR PREVIEW URL>/callback`
    * For **Sign out URL(s)** type `https://<YOUR PREVIEW URL>`
+   * **NOTE:** This is an **alternative way** of check ResourceId. If you complete checking <YOUR PREVIEW URL>, You can pass below steps and go to STEP 49. 
+   
    <img src='images/lab02-task3-cloud9-preview.png' width='550'>
 
+   
  * For **SSH Tunneling** user:
    * For **Callback URL(s)** type `https://localhost:8080/callback`
    * For **Sign out URL(s)** type `https://localhost:8080`
