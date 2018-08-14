@@ -130,12 +130,9 @@ chmod +x generate_instance_profile.sh
 
 * Attach an **Instance Profile** which made previous step to Cloud9 Instance.
 
-* Replace **workshop-\<initial\>** to real value.
+* Replace **workshop-\<INITIAL\>** to real value.
 ```console
-export CLOUD9_ENV_NAME=workshop-<initial>
-```
-```console
-INSTANCE_ID=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId" --filter "Name=tag:Name, Values=aws-cloud9-$CLOUD9_ENV_NAME*" --output=text)
+INSTANCE_ID=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId" --filter "Name=tag:Name, Values=aws-cloud9-workshop-<INITIAL>*" --output=text)
 
 echo $INSTANCE_ID
 
@@ -724,7 +721,7 @@ To begin, follow the steps below.
 * Check the Cloud9 ResourceId. 
   * **Note:** You need your <INSTANCE_ID> noted at TASK 0 - Step [1-4].
 ```console 
-aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resource-id, Values=<INSTANCE_ID>" "Name=key, Values=aws:cloud9:environment" --output text
+RESOURCE_ID=$(aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resource-id, Values=<INSTANCE_ID>" "Name=key, Values=aws:cloud9:environment" --output text)
 ```
 * output:
 ```
