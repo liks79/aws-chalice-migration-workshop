@@ -722,10 +722,9 @@ To begin, follow the steps below.
   * **Note:** You need your <INSTANCE_ID> noted at TASK 0 - Step [1-4].
 ```console 
 RESOURCE_ID=$(aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resource-id, Values=<INSTANCE_ID>" "Name=key, Values=aws:cloud9:environment" --output text)
-```
-* output:
-```
-3c860e50e30146cdbb97e3eb1f1b4e1f
+
+echo "https://$RESOURCE_ID.vfs.cloud9.ap-southeast-1.amazonaws.com"
+
 ```
 * **\<YOUR PREVIEW URL\>** is : 
 ```
