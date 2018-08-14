@@ -853,6 +853,8 @@ aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<YOUR REST API URL>
 * It means almost request returned rendered HTML.
 * If you want to build **more flexible backend**, you can **re-design your client code rendering it self using data response from backend API**.
 * AWS Chalice is suitable for **RESTful API** server.
+* Continuous Deployment (CD)
+   * Related document: https://chalice.readthedocs.io/en/latest/topics/cd.html
 
 # Congratulation! You completed LAB03.
 
