@@ -434,7 +434,7 @@ Deleting IAM role: myapp-dev
 ```
 
 * **NOTE: AWS Chalice support AWS Lambda event sources**
-  * You can consider event driven processing with AWS Lambda schedule, Amazon SQS, Amazon S3, AWS SNS.
+  * You can consider **event driven processing with AWS Lambda** schedule, Amazon SQS, Amazon S3, AWS SNS.
   * Refer to the following code
 
 ```python
