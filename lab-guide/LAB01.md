@@ -297,7 +297,15 @@ Check the application.
 * Check the Photo Map
 
 
-## TASK 5. Challenges (Optional)
+## TASK 5. Stop your application 
+* Click the `stop icon` to stop your application.
+<img src=./images/stop-app.png width=800>
+
+# Congratulation! You completed LAB01.
+* Go to : [LAB 02 - Move to serverless](LAB02.md)
+
+
+## Optional Challenges
 * Deploy legacy application:
    * Configure EC2, RDS, and ELB.
       * DB_URL of MySQL for SQLAlchemy : 'mysql+pymysql://<user>:<password>@<host>:<port>/cloudalbum?charset=utf8'
@@ -314,14 +322,6 @@ Check the application.
     * How about user login session?
     * How about photo file storage?
     * How about scalability?
-
-
-## TASK 6. Stop your application 
-* Click the `stop icon` to stop your application.
-<img src=./images/stop-app.png width=800>
-
-# Congratulation! You completed LAB01.
-* Go to : [LAB 02 - Move to serverless](LAB02.md)
 
 
 ## LAB GUIDE LINKS

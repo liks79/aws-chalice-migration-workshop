@@ -22,9 +22,9 @@ Thanks to the following people for their assistance with this lab:
 	* [TASK 3. Connect to your application (Cloud9)](lab-guide/LAB01.md#task-3-optional-task-connect-to-your-application-ssh-tunneling)
 	* [TASK 3 [OPTIONAL-TASK]: Connect to your application (SSH Tunneling)](lab-guide/LAB01.md#task-3-optional-task-connect-to-your-application-ssh-tunneling)
 	* [TASK 4. Take a look around](lab-guide/LAB01.md#task-4-take-a-look-around)
-	* [TASK 5. Challenges (Optional)](lab-guide/LAB01.md#task-5-challenges-optional)
-	* [TASK 6. Stop your application](lab-guide/LAB01.md#task-6-stop-your-application)
-
+	* [TASK 5. Stop your application](lab-guide/LAB01.md#task-5-stop-your-application)
+	* [Optional Challenges](lab-guide/LAB01.md#optional-challenges)
+	
 * [LAB 02 - Move to serverless](lab-guide/LAB02.md)
 	* [TASK 0. Permission grant for Cloud9](lab-guide/LAB02.md#task-0-permission-grant-for-cloud9)
 	* [TASK 1. Go to DynamoDB](lab-guide/LAB02.md#task-1-go-to-dynamodb)
