@@ -88,7 +88,9 @@ chalice --version
 chalice 1.6.0, python 3.6.5, linux 4.14.47-56.37.amzn1.x86_64
 ```
 
-4. Install required packages for this lab.
+4. Install required packages for this lab. 
+
+* **Now, we are using `venv`. So we can run `pip` not `pip-3.6`.**
 ```Console
 pip install -r ~/environment/aws-chalice-migration-workshop/LAB03/02-CloudAlbum-Chalice/cloudalbum/requirements.txt
 ```

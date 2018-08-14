@@ -430,7 +430,7 @@ conf = {
 * The second parameter of **os.getenv** function is the default value to use when the first parameter does not exist.
 
 8. Review following code for user signup.
-* find **TODO #1** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
+* Find **TODO #1** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
     if not user_exist:
         ## TODO #1 : Review following code to save user information
@@ -446,7 +446,7 @@ conf = {
 **NOTE**: The partition key value of User table used **uuid.uuid4().hex** for the appropriate key distribution.
 
 9. Review following code to update user profile to DynamoDB.
-* find **TODO #2** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
+* Find **TODO #2** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/user/userView.py' file.
 ```python
     ## TODO #2 : Review following code to update user profile to DynamoDB.
     ## -- begin --
@@ -475,7 +475,7 @@ conf = {
 
 
 11. Review following code to delete uploaded photo information in DynamoDB.
-* find **TODO #4** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
+* Find **TODO #4** in the 'LAB02/01-CloudAlbum-DDB/cloudalbum/controlloer/photo/photoView.py' file.
 ```python
     ## TODO #4 : Review following code to delete uploaded photo information in DynamoDB.
     ## -- begin --
@@ -572,7 +572,7 @@ conf = {
 
 
 19. Review following code to save thumbnail image object to S3.
-* find **TODO #5** in the 'LAB02/02-CloudAlbum-S3/cloudalbum/util.py' file.
+* Find **TODO #5** in the 'LAB02/02-CloudAlbum-S3/cloudalbum/util.py' file.
 ```python
     ## TODO #5 : Review following code to save thumbnail image object to S3
     ## -- begin --
@@ -593,7 +593,7 @@ upload_file_stream.stream.seek(0) like below.
 ```
 
 20. Review your code to retrieve pre-signed URL from S3.
-* find **TODO #6** in the 'LAB02/02-CloudAlbum-S3/cloudalbum/util.py' file.
+* Find **TODO #6** in the 'LAB02/02-CloudAlbum-S3/cloudalbum/util.py' file.
 ```python
     ## TODO #6 : Review following code to retrieve pre-signed URL from S3.
     ## -- begin --
@@ -794,7 +794,7 @@ options = {
 
 
 59. Review following code to retrieve JSON Web Key (JWK) from cognito.
-* find **TODO #7** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
+* Find **TODO #7** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
 ```python
 ## TODO #7: Review following code to retrieve JSON Web Key (JWK) from cognito
 ## https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
@@ -807,7 +807,7 @@ JWKS = requests.get(JWKS_URL).json()["keys"]
 
 
 60. Review following code to set up User objedct using id_token from Cognito.
-* find **TODO #8** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
+* Find **TODO #8** in the 'LAB02/03-CloudAlbum-COGNITO/cloudalbum/controlloer/site/siteView.py' file.
 ```python
     ## TODO #8: Review following code to set up User objedct using id_token from Cognito
     ## -- begin --
