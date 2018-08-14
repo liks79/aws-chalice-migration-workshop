@@ -126,7 +126,7 @@ chmod +x generate_instance_profile.sh
 
 #### [1-4] Attach an Instance Profile to Cloud9 Instance with the AWS CLI
 
-* Get instance-id of Cloud9 environment, For this we need **Cloud9 environment name**. We defined it LAB 01. (**workshop-\<initial\>**). 
+* Get instance-id of Cloud9 environment, For this we need **Cloud9 environment name**. We defined it LAB 01. (**workshop-\<INITIAL\>**). 
 
 * Attach an **Instance Profile** which made previous step to Cloud9 Instance.
 
@@ -542,14 +542,14 @@ CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). Ho
 17. Make a bucket to save photo image objects and retriev it from Amazon S3.
 
 ```
-aws s3 mb s3://cloudalbum-<initial>
+aws s3 mb s3://cloudalbum-<INITIAL>
 ```
 
 18. Review the config.py file which located in 'LAB02/02-CloudAlbum-S3/cloudalbum/config.py'
 
 * Set up `GMAPS_KEY` value : Replace `<REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR>` to **real API key** which used previous hands-on lab.
 
-* Set up the value of 'S3_PHOTO_BUCKET'. Please change the `cloudalbum-<initial>` to your **real bucket name** which made above.
+* Set up the value of 'S3_PHOTO_BUCKET'. Please change the `cloudalbum-<INITIAL>` to your **real bucket name** which made above.
 
 ```python
 import os
@@ -567,7 +567,7 @@ conf = {
     'DDB_WCU': os.getenv('DDB_WCU', 10),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<initial>')
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<INITIAL>')
 }
 ```
 
@@ -678,7 +678,7 @@ To begin, follow the steps below.
 
 28. At the top right corner, click **Create a user pool**.
 
-29. For **Pool name**, type **cloudalbum-pool-\<your name initial\>**.
+29. For **Pool name**, type **cloudalbum-pool-\<INITIAL\>**.
 
 30. Click **Step through settings**.
 
@@ -749,7 +749,7 @@ https://<CLOUD9_RESOURCE_ID>.vfs.cloud9.ap-southeast-1.amazonaws.com
 
 51. In the left navigation menu, under **App integration**, click **Domain name**.
 
-52. Type a **domain name**(for example: `cloudalbum-<initial>`, check its availability, and click **Save changes**. Write down the domain name for later use.
+52. Type a **domain name**(for example: `cloudalbum-<INITIAL>`, check its availability, and click **Save changes**. Write down the domain name for later use.
 <img src="images/lab03-task2-cognito-domain.png" width="500">
 
 53. In the left navigation menu, under **General settings**, click **App clients**.
@@ -787,7 +787,7 @@ options = {
     'DDB_WCU': os.getenv('DDB_WCU', 10),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<initial>'),
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<INITIAL>'),
 
     # COGNITO
     'COGNITO_POOL_ID': os.getenv('COGNITO_POOL_ID', '<YOUR_POOL_ID>'),
@@ -980,7 +980,7 @@ options = {
     'DDB_WCU': os.getenv('DDB_WCU', 10),
 
     # S3
-    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<initial>'),
+    'S3_PHOTO_BUCKET': os.getenv('S3_PHOTO_BUCKET', 'cloudalbum-<INITIAL>'),
 
     # COGNITO
     'COGNITO_POOL_ID': os.getenv('COGNITO_POOL_ID', '<YOUR_POOL_ID>'),

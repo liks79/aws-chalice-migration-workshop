@@ -810,7 +810,7 @@ Resources deployed:
    * `Rest API URL` : v1mehmiqsj.execute-api.ap-southeast-1.amazonaws.com/api
 
 ```console
-aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<YOUR Rest API URL>" --type "SecureString" --overwrite
+aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<YOUR REST API URL>" --type "SecureString" --overwrite
 ```
 
 
