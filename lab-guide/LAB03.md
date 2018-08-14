@@ -265,7 +265,8 @@ myapp - DEBUG - {'query_params': None, 'headers': {'host': 'localhost:8080', 'us
 ```console
 echo '{"name": "David", "age": 22, "job": "student"}' | http localhost:8080/users
 ```
-```console
+* output:
+```
 HTTP/1.1 200 OK
 Content-Length: 46
 Content-Type: application/json; charset=utf-8
@@ -293,8 +294,8 @@ myapp - DEBUG - {'query_params': None, 'headers': {'host': 'localhost:8080', 'us
 ```console
 chalice deploy
 ```
-
-```console
+* output
+```
 Creating deployment package.
 Updating policy for IAM role: myapp-dev
 Creating lambda function: myapp-dev
