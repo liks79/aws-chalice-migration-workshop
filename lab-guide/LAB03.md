@@ -27,23 +27,49 @@ The `Serverless` Framework (https://serverless.com) is an MIT open source framew
  * Perform following command:
 
 ```Console
-$ cd ~/environment/aws-chalice-migration-workshop/LAB03/
+cd ~/environment/aws-chalice-migration-workshop/LAB03/
+```
 
-$ unalias python
+```console
+unalias python
+```
 
-$ python --version
+```console
+python --version
+
+```
+* output:
+```
 Python 2.7.14
-
-$ which python
+```
+```console
+which python
+```
+* output:
+```
 /usr/bin/python
+```
 
-$ which python36
+```console
+which python36
+```
+* output:
+```
 /usr/bin/python36
+```
 
-$ virtualenv --version
+```console
+virtualenv --version
+```
+* output:
+```
 16.0.0
-
-$ virtualenv -p /usr/bin/python36 venv
+```
+```console
+virtualenv -p /usr/bin/python36 venv
+```
+* output:
+```
 Running virtualenv with interpreter /usr/bin/python36
 Using base prefix '/usr'
 New python executable in /home/ec2-user/environment/aws-chalice-migration-workshop/LAB03/venv/bin/python36
