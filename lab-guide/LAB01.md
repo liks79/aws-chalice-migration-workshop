@@ -15,7 +15,9 @@ In this hands-on lab, you'll configure the **AWS [Cloud9](https://aws.amazon.com
 The application has following software stack.
 
 <img src=./images/lab01-01.png>
+
 Legacy application is **not Restful** and application backend is **tightly coupled with Jinja2** Template Engine.
+
 <img src=./images/lab01-legacy-template-enging.png>
 
 It has following several features.
@@ -225,6 +227,7 @@ To test the application, you can configure your envirionment. There are **two wa
 28. **[OPTIONAL-TASK]** : **SSH tunnelFor MAC/Linux users:**
 
 <img src=./images/lab01-task3-ssh-tunnel.png width=1000>
+
 * In your MAC/Linux terminal, type the command below to get the public portion from **your existing any key pair .pem** file. Make sure to replace YOUR_KEY with the name of the key pair .pem file
 
 ```console
