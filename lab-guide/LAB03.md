@@ -436,6 +436,8 @@ Deleting IAM role: myapp-dev
 * **NOTE: AWS Chalice support AWS Lambda event sources**
   * You can consider **event driven processing with AWS Lambda** schedule, Amazon SQS, Amazon S3, AWS SNS.
   * Refer to the following code
+      * Related document: https://chalice.readthedocs.io/en/latest/topics/events.html?highlight=event
+
 
 ```python
 @app.on_s3_event('mybucket', events=['s3:ObjectCreated:Put'],
@@ -445,12 +447,15 @@ with tempfile.NamedTemporaryFile('w') as f:
     s3.download_file(event.bucket, event.key, f.name)
     resize_image(f.name)
     s3.upload_file(event.bucket, 'resized/%s' % event.key, f.name)
-```
+```   
 
-   * Related document: https://chalice.readthedocs.io/en/latest/topics/events.html?highlight=event
-   
+* **NOTE: Authorization** 
+   * Chalice supports multiple mechanisms for authorization. This topic covers how you can integrate authorization into your Chalice pplications.
+     * https://chalice.readthedocs.io/en/latest/topics/authorizers.html?highlight=authorizer
+
 
 * If it works well, let's go to next TASK!
+
 
 ## TASK 3 : CloudAlbum with AWS Chalice
 We have removed server based components via LAB02. We are now going serverless by removing Web Server Tier and App Server Tier.
