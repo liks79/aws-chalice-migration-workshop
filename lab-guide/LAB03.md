@@ -433,6 +433,21 @@ Deleting function: arn:aws:lambda:ap-southeast-1:123456789012:function:myapp-dev
 Deleting IAM role: myapp-dev
 ```
 
+* **NOTE: AWS Chalice support AWS Lambda event sources**
+  * You can consider event driven processing with AWS Lambda schedule, Amazon SQS, Amazon S3, AWS SNS.
+  * Refer to the following code
+  ```python
+  @app.on_s3_event('mybucket', events=['s3:ObjectCreated:Put'],
+                 prefix='images/', suffix='.jpg')
+def resize_image(event):
+    with tempfile.NamedTemporaryFile('w') as f:
+        s3.download_file(event.bucket, event.key, f.name)
+        resize_image(f.name)
+        s3.upload_file(event.bucket, 'resized/%s' % event.key, f.name)
+  ```
+   * Related document: https://chalice.readthedocs.io/en/latest/topics/events.html?highlight=event
+   
+
 * If it works well, let's go to next TASK!
 
 ## TASK 3 : CloudAlbum with AWS Chalice
