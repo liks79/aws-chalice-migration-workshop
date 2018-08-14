@@ -8,10 +8,10 @@ This workshop content will handle the server based Python Flask web application 
  * Sungshik Jou (Technical Trainer)
  * JinUk Lee (Technical Trainer)
 
-### Lab Supporters
+### Lab Instructors
 Thanks to the following people for their assistance with this lab:
- * Sungmin Hong (Technical Trainer)
  * KyoungSu Lee (ProServ)
+ * Sungmin Hong (Technical Trainer)
  * ChungHo Min (Technical Trainer)
  * Dayoungle Jun (Technical Trainer)
 
