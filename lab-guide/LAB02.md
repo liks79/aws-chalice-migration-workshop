@@ -725,7 +725,7 @@ To begin, follow the steps below.
 
  * For **SSH Tunneling** user:
    * For **Callback URL(s)** type `https://localhost:8080/callback`
-   * For **Sign out URL(s)** type `https://localhost:8090`
+   * For **Sign out URL(s)** type `https://localhost:8080`
 
 49. Under **OAuth 2.0**, for **Allowed OAuth Flows**, select **Authorization code grant** and for **Allowed OAuth Scopes**, select **openid**.
 <img src="images/lab03-task2-cognito-app-client.png" width="500">
