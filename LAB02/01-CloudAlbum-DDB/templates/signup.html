@@ -39,7 +39,7 @@
                   </div>
 
                     <div class="form-label-group">
-                      <input type="text" id="username" name="username" class="form-control" placeholder="Name" required autofocus
+                      <input type="text" id="username" name="username" class="form-control" placeholder="Name" required
                         {% if user %}
                             value="{{ user.username }}"
                         {% endif %}
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-label-group">
-                      <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required autofocus
+                      <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required
                         {% if user %}
                             value="{{ user.email }}"
                             disabled
