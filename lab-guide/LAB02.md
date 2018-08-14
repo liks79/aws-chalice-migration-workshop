@@ -493,7 +493,7 @@ conf = {
 <img src=./images/lab02-task1-run-console.png width=700>
 
 
-13. Connect to your application using **Cloud9 preview** or http://localhost:8090 in your browser. (After SSH tunnel established.)
+13. Connect to your application using **Cloud9 preview** or http://localhost:8080 in your browser. (After SSH tunnel established.)
 <img src=images/lab01-08.png width=500>
 
 * You need to **Sign-up** first.
