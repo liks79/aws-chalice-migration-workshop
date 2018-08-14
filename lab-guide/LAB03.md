@@ -298,7 +298,7 @@ Updating policy for IAM role: myapp-dev
 Creating lambda function: myapp-dev
 Creating Rest API
 Resources deployed:
-  - Lambda ARN: arn:aws:lambda:ap-southeast-1:1234567890:function:myapp-dev
+  - Lambda ARN: arn:aws:lambda:ap-southeast-1:123456789012:function:myapp-dev
   - Rest API URL: https://aavvueq9we.execute-api.ap-southeast-1.amazonaws.com/api/
 ```  
 
@@ -427,7 +427,7 @@ chalice delete
 * output:
 ```
 Deleting Rest API: w2t3ueq9we
-Deleting function: arn:aws:lambda:ap-southeast-1:1234567890:function:myapp-dev
+Deleting function: arn:aws:lambda:ap-southeast-1:123456789012:function:myapp-dev
 Deleting IAM role: myapp-dev
 ```
 
@@ -541,7 +541,7 @@ aws ssm describe-parameters
             "Type": "SecureString",
             "KeyId": "alias/aws/ssm",
             "LastModifiedDate": 1533589218.29,
-            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "LastModifiedUser": "arn:aws:iam::123456789012:user/poweruser",
             "Version": 1
         },
         {
@@ -549,7 +549,7 @@ aws ssm describe-parameters
             "Type": "SecureString",
             "KeyId": "alias/aws/ssm",
             "LastModifiedDate": 1533589322.314,
-            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "LastModifiedUser": "arn:aws:iam::123456789012:user/poweruser",
             "Version": 1
         },
         {
@@ -557,7 +557,7 @@ aws ssm describe-parameters
             "Type": "SecureString",
             "KeyId": "alias/aws/ssm",
             "LastModifiedDate": 1533589258.2,
-            "LastModifiedUser": "arn:aws:iam::1234567890:user/poweruser",
+            "LastModifiedUser": "arn:aws:iam::123456789012:user/poweruser",
             "Version": 1
         },
         {

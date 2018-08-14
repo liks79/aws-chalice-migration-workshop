@@ -146,7 +146,7 @@ aws ec2 describe-instances --query "Reservations[].Instances[].IamInstanceProfil
 ```
 [
     {
-        "Arn": "arn:aws:iam::1234567890:instance-profile/workshop-cloud9-instance-profile",
+        "Arn": "arn:aws:iam::123456789012:instance-profile/workshop-cloud9-instance-profile",
         "Id": "AIPAIFQCLU7KO6ML343DDD"
     }
 ]
