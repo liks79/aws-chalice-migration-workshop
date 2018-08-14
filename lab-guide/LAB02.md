@@ -593,7 +593,7 @@ conf = {
 ```
 **NOTE**: To reuse file stream, we need to call **seek(0)**.
 ```
-upload_file_stream.stream.seek(0) like below.
+upload_file_stream.stream.seek(0)
 ```
 
 20. Review your code to retrieve pre-signed URL from S3.
