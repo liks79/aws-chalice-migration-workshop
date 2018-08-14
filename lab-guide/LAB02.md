@@ -56,7 +56,11 @@ secret_key                <not set>             None    None
 
 * OK, done. Move to next step.
 
+
 #### [1-3] Create an Instance Profile with the AWS CLI ###
+
+### Working on your LOCAL MACHINE terminal or your EC2
+
 **NOTE:** Before you run below command, **make sure you have enough privileges.** (such as `AdministratorAccess` policy).
 
 * You may have `AdministratorAccess` privileged **AWS CLI environment** such as your LOCAL MACHINE or your EC2.

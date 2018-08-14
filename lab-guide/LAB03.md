@@ -841,6 +841,12 @@ aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<YOUR Rest API URL>
 * Check the Photo Map
 
 ## Go further
+* Legacy backend is tightly coupled with Jinja2 Template Engine!
+<img src"./images/lab03-task3-go-further-jinja2.png" width="550">
+
+* It means almost request returned rendered HTML.
+* If you want to build more flexible backend, you can re-design your client code rendering it self using data response from backend API.
+* AWS Chalice is suitable for API server.
 
 # Congratulation! You completed LAB03.
 
