@@ -823,7 +823,7 @@ aws ssm put-parameter --name "/cloudalbum/BASE_URL" --value "<YOUR Rest API URL>
 
 ## Go further
 
-## Congratulation! You completed LAB03.
+# Congratulation! You completed LAB03.
 
 
 ## LAB GUIDE LINKS

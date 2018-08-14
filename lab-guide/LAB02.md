@@ -1005,8 +1005,8 @@ Is it OK? Let's go to next LAB.
 <img src=images/stop-app.png width=700>
 
 
-## Congratulation! You completed LAB02.
-
+# Congratulation! You completed LAB02.
+* Go to : [LAB 03 - Move to serverless](LAB03.md)
 
 
 ## LAB GUIDE LINKS

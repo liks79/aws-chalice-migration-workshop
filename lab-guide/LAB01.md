@@ -320,6 +320,10 @@ Check the application.
 * Click the `stop icon` to stop your application.
 <img src=./images/stop-app.png width=800>
 
+# Congratulation! You completed LAB01.
+* Go to : [LAB 02 - Move to serverless](LAB02.md)
+
+
 ## LAB GUIDE LINKS
 * [LAB 01 - Take a look around](LAB01.md)
 * [LAB 02 - Move to serverless](LAB02.md)
