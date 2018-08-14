@@ -206,7 +206,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
 
 
 * Leagacy application uses RDBMS(MySQL), we will replace it to DynamoDB. DynamoDB is fully managed service.It means that automatically scales throughput up or down, and continuously backs up your data for protection.
-<img src=./images/lab02-task1-ddb.png width=500>
+<img src=./images/lab02-task1-ddb.png width=600>
 
 * Legacy application uses **SQLAlchemy** for OR-Mapping. SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL.
   * visit : https://www.sqlalchemy.org/
@@ -215,7 +215,7 @@ In this TASK, we will introduce DynamoDB for CloudAlbum application. We also int
   * visit : https://github.com/pynamodb/PynamoDB
 
 * Legacy application has simple data model and we can design DynamoDB table easily.
-  <img src=./images/lab02-task1-modeling.png width=500>
+  <img src=./images/lab02-task1-modeling.png width=600>
 
 1. Install required Python packaged:
 ```console
@@ -524,7 +524,7 @@ Is it OK? Let's move to the next TASK.
 * File system will be changed from **local disk** to **Amazon S3**.
 * So, if you don't delete your album article which submitted this task, then **you will see your album article without images** when you run the application on the next TASK,
 
-<img src=images/lab02-task2-delete.png width=500>
+<img src=images/lab02-task2-delete.png width=400>
 
 
 ## TASK 2. Go to S3
@@ -532,7 +532,7 @@ CloudAlbum stored user uploaded images into disk based storage. (EBS or NAS). Ho
 
 [Amazon S3](https://aws.amazon.com/s3/) has a simple web services interface that you can use to store and retrieve any amount of data, at any time, from anywhere on the web. It gives any developer access to the same highly scalable, reliable, fast, inexpensive data storage infrastructure that Amazon uses to run its own global network of web sites. The service aims to maximize benefits of scale and to pass those benefits on to developers.
 
-<img src=./images/lab02-task2-arc.png width=500>
+<img src=./images/lab02-task2-arc.png width=600>
 
 * We will use Boto3 - S3 API to handle uploaded photo image object from the user.
    * visit: https://boto3.readthedocs.io/en/latest/reference/services/s3.html
@@ -664,7 +664,7 @@ Is it OK? Let's move to the next TASK.
 ## TASK 3. Go to Cognito
 In this TASK, you will add a sign-up/sign-in component to CloudAlbum application by using Amazon Cognito. After setting up Amazon Cognito, user information will retrieved from the Amazon Cognito.
 
-<img src=./images/lab02-task3-cognito-arc.png width=500>
+<img src=./images/lab02-task3-cognito-arc.png width=600>
 
 To begin, follow the steps below.
 
@@ -683,7 +683,7 @@ To begin, follow the steps below.
 30. Click **Step through settings**.
 
 31. For **How do you want your end users to sign in?**, select **Email address or phone number**.
-<img src=./images/lab02-task3-cognito-setup.png width=900>
+<img src=./images/lab02-task3-cognito-setup.png width=800>
 
 32. For **Which standard attributes do you want to require?**, select **name**.
 
@@ -750,6 +750,7 @@ https://<CLOUD9_RESOURCE_ID>.vfs.cloud9.ap-southeast-1.amazonaws.com
 51. In the left navigation menu, under **App integration**, click **Domain name**.
 
 52. Type a **domain name**(for example: `cloudalbum-<INITIAL>`, check its availability, and click **Save changes**. Write down the domain name for later use.
+ * **NOTE:** Domain name You have to use **lowercase**.
 <img src="images/lab03-task2-cognito-domain.png" width="500">
 
 53. In the left navigation menu, under **General settings**, click **App clients**.
@@ -878,6 +879,7 @@ Is it OK? Let's move to the next TASK.
 
 AWS [X-Ray](https://aws.amazon.com/xray/) helps developers analyze and debug production, distributed applications, such as those built using a microservices architecture. With X-Ray, you can understand how your application and its underlying services are performing to identify and troubleshoot the root cause of performance issues and errors. X-Ray provides an end-to-end view of requests as they travel through your application, and shows a map of your application’s underlying components. You can use X-Ray to analyze both applications in development and in production, from simple three-tier applications to complex microservices applications consisting of thousands of services.
 
+<img src="./images/lab02-task4-x-ray-arc.png" width="600">
 
 64. Install required Python packages for AWS X-Ray.
 ```console

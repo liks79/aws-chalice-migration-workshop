@@ -309,12 +309,12 @@ Check the application.
 * Deploy legacy application:
    * Configure EC2, RDS, and ELB.
       * DB_URL of MySQL for SQLAlchemy : 'mysql+pymysql://<user>:<password>@<host>:<port>/cloudalbum?charset=utf8'
-        <img src=./images/lab01-06.png width=700>    
+        <img src=./images/lab01-06.png width=500>    
 
 
 * Deploy legacy application:
    * Configure ElasticBeanstalk
-   <img src=./images/lab01-07.png width=700>
+   <img src=./images/lab01-07.png width=500>
 
 
 * Find problems:
