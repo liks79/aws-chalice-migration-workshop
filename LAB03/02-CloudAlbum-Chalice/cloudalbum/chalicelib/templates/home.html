@@ -65,6 +65,7 @@
           </div>
         </div>
         <script>
+            var loop_index = 0;
             var items_{{ photo.id }} = [];
             items_{{ photo.id }}.push("{{ photo.taken_date }}");
             items_{{ photo.id }}.push("{{ photo.make }}");
@@ -78,6 +79,14 @@
         </script>
       {% endfor %}
       <!-- photo list iterator: end -->
+
+
+        <script>
+            if (typeof loop_index == 'undefined') {
+                msgAlert("No photos found. <strong>Upload</strong> your photo!");
+            }
+        </script>
+
 
       </div>
       <!-- /.row -->
