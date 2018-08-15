@@ -132,11 +132,11 @@ chmod +x generate_instance_profile.sh
 
 * Replace **workshop-\<INITIAL\>** to real value.
 ```console
-INSTANCE_ID=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId" --filter "Name=tag:Name, Values=aws-cloud9-workshop-<INITIAL>*" --output=text)
+INSTANCE_ID=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId" --filter "Name=tag:Name, Values=aws-cloud9-workshop-<INITIAL>*" --region ap-southeast-1 --output=text)
 
 echo $INSTANCE_ID
 
-aws ec2 associate-iam-instance-profile --iam-instance-profile Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id $INSTANCE_ID
+aws ec2 associate-iam-instance-profile --iam-instance-profile  Name=workshop-cloud9-instance-profile --region ap-southeast-1 --instance-id $INSTANCE_ID
 ```
 * Run the following command to check the result: 
 
