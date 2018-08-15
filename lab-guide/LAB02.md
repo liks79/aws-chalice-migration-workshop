@@ -721,7 +721,6 @@ To begin, follow the steps below.
 
 48. For **Enabled Identity Providers**, check **Cognito User Pool**.
 * Check the Cloud9 ResourceId. 
-  * **Note:** You need your <INSTANCE_ID> noted at TASK 0 - Step [1-4].
 ```console 
 RESOURCE_ID=$(aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resource-id, Values=`ec2-metadata --instance-id | cut -f2 -d ' '`" "Name=key, Values=aws:cloud9:environment" --output text)
 
