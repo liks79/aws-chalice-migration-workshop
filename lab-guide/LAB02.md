@@ -87,7 +87,7 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 chmod +x generate_instance_profile.sh
 ```
 
- * **Run** script with enough privileges.** (such as `AdministratorAccess` policy. **You can not Run you Cloud9 terminal.**):
+ * **Run** script with enough privileges.** (such as `AdministratorAccess` policy. **Currently, you can not run this command in Cloud9 terminal.**):
 ```console
 ./generate_instance_profile.sh
 ```
