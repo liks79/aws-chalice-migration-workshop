@@ -727,10 +727,12 @@ RESOURCE_ID=$(aws ec2 describe-tags --query "Tags[].Value" --filters "Name=resou
 echo "https://$RESOURCE_ID.vfs.cloud9.ap-southeast-1.amazonaws.com"
 
 ```
-* **\<YOUR PREVIEW URL\>** is : 
+* **\<YOUR PREVIEW URL\>** is :  
 ```
 https://<CLOUD9_RESOURCE_ID>.vfs.cloud9.ap-southeast-1.amazonaws.com
 ```
+* **KEEP THIS VALUE FOR LATER USE**
+
  * For **Cloud9 Preview** user:
    * For **Callback URL(s)** type `https://<YOUR PREVIEW URL>/callback`
    * For **Sign out URL(s)** type `https://<YOUR PREVIEW URL>`

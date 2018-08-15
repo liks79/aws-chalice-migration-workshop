@@ -36,3 +36,8 @@ Thanks to the following people for their assistance with this lab:
 	* [TASK 1 : Setup virtualenv.](lab-guide/LAB03.md#task-1--seyup-virtualenv)
 	* [TASK 2 : Build a simple AWS Chalice serverless app.](lab-guide/LAB03.md#task-2--build-a-simple-aws-chalice-serverless-app)
 	* [TASK 3 : CloudAlbum with AWS Chalice](lab-guide/LAB03.md#task-3--cloudalbum-with-aws-chalice)
+
+
+## Feedback 
+* Please leave your feed back.
+  * https://goo.gl/forms/bwBueUpcAq2wF1iy1 
