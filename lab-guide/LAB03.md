@@ -80,7 +80,8 @@ Installing setuptools, pip, wheel...done.
 2. Now you can activate your **virtualenv** (`venv`).
 ```Console
 source ~/environment/aws-chalice-migration-workshop/LAB03/venv/bin/activate
-echo "unalias python" >> ~/.bash_profileecho "source ~/environment/aws-chalice-migration-workshop/LAB03/venv/bin/activate" >> ~/.bash_profile
+echo "unalias python" >> ~/.bash_profile
+echo "source ~/environment/aws-chalice-migration-workshop/LAB03/venv/bin/activate" >> ~/.bash_profile
 ```
 <img src="./images/lab03-task1-venv.png" width="600">
 
