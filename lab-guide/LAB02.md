@@ -141,7 +141,7 @@ aws ec2 associate-iam-instance-profile --iam-instance-profile  Name=workshop-clo
 * Run the following command to check the result: 
 
 ```console
-aws ec2 describe-instances --query "Reservations[].Instances[].IamInstanceProfile" --instance-id $INSTANCE_ID
+aws ec2 describe-instances --query "Reservations[].Instances[].IamInstanceProfile" --instance-id $INSTANCE_ID --region ap-southeast-1
 ```
 * output: 
 ```
