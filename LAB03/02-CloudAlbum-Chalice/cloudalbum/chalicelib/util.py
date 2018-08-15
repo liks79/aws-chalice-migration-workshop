@@ -298,7 +298,7 @@ def make_thumbnails_s3(file_p, app):
         im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
         im.save(result_bytes_stream, 'JPEG')
     except Exception as e:
-        app.logger.debug(e)
+        app.log.debug(e)
 
     return result_bytes_stream.getvalue()
 
