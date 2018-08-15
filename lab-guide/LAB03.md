@@ -558,8 +558,8 @@ either specified in `requirements.txt` or placed in the `vendor/` directory.
 
 ```console
 
-aws ssm put-parameter --name "/cloudalbum/GMAPS_KEY" --value "<GMAPS_KEY>" --type "SecureString"
-aws ssm put-parameter --name "/cloudalbum/S3_PHOTO_BUCKET" --value "<S3_PHOTO_BUCKET>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/GMAPS_KEY" --value "<REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR>" --type "SecureString"
+aws ssm put-parameter --name "/cloudalbum/S3_PHOTO_BUCKET" --value "cloudalbum-<INITIAL>" --type "SecureString"
 aws ssm put-parameter --name "/cloudalbum/COGNITO_POOL_ID" --value "<COGNITO_POOL_ID>" --type "SecureString"
 aws ssm put-parameter --name "/cloudalbum/COGNITO_CLIENT_ID" --value "<COGNITO_CLIENT_ID>" --type "SecureString"
 aws ssm put-parameter --name "/cloudalbum/COGNITO_CLIENT_SECRET" --value "<COGNITO_CLIENT_SECRET>" --type "SecureString"
