@@ -769,9 +769,9 @@ sudo pip-3.6 install -r ~/environment/aws-chalice-migration-workshop/LAB02/03-Cl
 ```
 
 58. Review 'LAB02/03.CloudAlbum-COGNITO/cloudalbum/config.py'
-* Set up **GMAPS_KEY** value : Replace <REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR> to real value which used previous hands-on lab.
+* Set up **GMAPS_KEY** value : Replace **\<REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR\>** to real value which used previous hands-on lab.
 
-* Set up **S3_PHOTO_BUCKET** value : Replace <REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR> to real value which used previous hands-on lab.
+* Set up **S3_PHOTO_BUCKET** value : Replace **cloudalbum-\<INITIAL\>** to real value which used previous hands-on lab.
 
 ```python
 import os
@@ -963,9 +963,9 @@ def print_abc():
   * https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-patching.html
 
 71. Review 'LAB02/04.CloudAlbum-XRAY/cloudalbum/config.py' (This is same step above `step 58` for `03.CloudAlbum-COGNITO`)
-* Set up **GMAPS_KEY** value : Replace <REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR> to real value which used previous hands-on lab.
+* Set up **GMAPS_KEY** value : Replace **\<REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR\>** to real value which used previous hands-on lab.
 
-* Set up **S3_PHOTO_BUCKET** value : Replace <REAL_GMAPS_KEY_PROVIDED_BY_INSTRUCTOR> to real value which used previous hands-on lab.
+* Set up **S3_PHOTO_BUCKET** value : Replace **cloudalbum-\<INITIAL\>** to real value which used previous hands-on lab.
 
 ```python
 import os
