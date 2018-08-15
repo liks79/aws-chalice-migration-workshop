@@ -40,4 +40,4 @@ Thanks to the following people for their assistance with this lab:
 
 ## Feedback 
 * Please leave your feed back.
-  * https://goo.gl/forms/bwBueUpcAq2wF1iy1 
+  * http://bit.ly/2018_feedback 
