@@ -734,9 +734,9 @@ def get_param(param_name):
 
 
 21. Copy static files to your S3 Bucket for **static file hosting** such as **CSS** and **JavaScript**.
- * Following **\<S3_PHOTO_BUCKET\>** value must replace **YOUR OWN VALUE.**
+ * Following **cloudalbum-\<INITIAL\>** value must replace **YOUR OWN VALUE.**
 ```console
-aws s3 sync ~/environment/aws-chalice-migration-workshop/resources/static s3://<S3_PHOTO_BUCKET>/static/ --acl public-read
+aws s3 sync ~/environment/aws-chalice-migration-workshop/resources/static s3://cloudalbum-<INITIAL>/static/ --acl public-read
 ```
 
 22. Enable S3 bucket CORS configuration in your S3 Console. (https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html)
