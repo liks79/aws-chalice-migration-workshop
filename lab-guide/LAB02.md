@@ -177,7 +177,28 @@ secret_key     ****************hK+3         iam-role
 
 * You can see the `iam-role` type of access_key and secret_key. Well done.
 
-* Is it OK? Go to TASK 1.
+* Is it OK? 
+  * **Go to TASK 1**
+
+### [2] Store Permanent Access Credentials ###
+**NOTE:** This is **an ALTERNATIVE WAY** of `[1] Using Instance Profile`. If you complete `[1] Using Instance Profile`, You can pass below steps and **go to TASK 1.**
+
+* **NOTE:** Before you proceed, please complet following steps:
+  * [1-1] Check the AWS credentials in Cloud9 instance.
+  * [1-2] You must disable AWS managed temporary credentials
+
+
+* Configure your own credentials:
+```console
+aws configure set aws_access_key_id <YOUR OWN ACCESS KEY ID>
+aws configure set aws_secret_access_key <YOUR OWN ACCESS KEY ID>
+aws configure set region ap-southeast-1
+```
+
+* OK, all things are done. Go to TASK 1.
+
+* **ALTERNATIVE**: You can configure following variables before run application or CLI commands. `AdministratorAccess` privilege is recommended. (refer to above `workshop-cloud9-policy.json`.)
+`export AWS_ACCESS_KEY_ID=<YOUR OWN ACCESS KEY ID>` and `export AWS_SECRET_ACCESS_KEY=<YOUR OWN ACCESS KEY ID>`
 
 
 ## TASK 1. Go to DynamoDB
