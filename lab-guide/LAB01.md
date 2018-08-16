@@ -307,7 +307,9 @@ Check the application.
 
 ## TASK 5. Stop your application 
 * Click the `stop icon` to stop your application.
-<img src=./images/stop-app.png width=800>
+* **Close your terminal** after application stop.
+* **Close all your opened file tab.**
+<img src=./images/stop-app.png width=700>
 
 # Congratulation! You completed LAB01.
 * Go to : [LAB 02 - Move to serverless](LAB02.md)

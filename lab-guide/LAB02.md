@@ -520,6 +520,8 @@ conf = {
 Is it OK? Let's move to the next TASK.
 
 **NOTE:** Click the `stop icon` to stop your application.
+  * **Close your terminal** after application stop.
+  * **Close all your opened file tab.**
 <img src=./images/stop-app.png width=500>
 
 16. Delete data in the application for the next TASK.
@@ -661,6 +663,8 @@ generate_presigned_url(ClientMethod, Params=None, ExpiresIn=3600, HttpMethod=Non
 Is it OK? Let's move to the next TASK.
 
 **NOTE:** Click the `stop icon` to stop your application.
+  * **Close your terminal** after application stop.
+  * **Close all your opened file tab.**
 <img src=./images/stop-app.png width=500>
 
 ## TASK 3. Go to Cognito
@@ -876,6 +880,8 @@ JWKS = requests.get(JWKS_URL).json()["keys"]
 Is it OK? Let's move to the next TASK.
 
 **NOTE:** Click the `stop icon` to stop your application.
+  * **Close your terminal** after application stop.
+  * **Close all your opened file tab.**
 <img src=./images/stop-app.png width=500>
 
 ## TASK 4. Go to X-ray
@@ -1022,6 +1028,8 @@ options = {
 Is it OK? Let's go to next LAB.
 
 **NOTE:** Click the `stop icon` to stop your application.
+  * **Close your terminal** after application stop.
+  * **Close all your opened file tab.**
 <img src=images/stop-app.png width=700>
 
 
