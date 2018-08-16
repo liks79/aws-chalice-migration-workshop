@@ -147,6 +147,7 @@ conf = {
 
 16. Check the following variables in **config.py**.
     * **GMAPS_KEY** and **DB_URL**  variables are mandatory for this application.
+    * **You will set up these values in step 23**
 
 ```python
     # Mandatory variable
