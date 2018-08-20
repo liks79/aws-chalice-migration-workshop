@@ -1,4 +1,4 @@
-# How to migrate to AWS Serverless application
+# How to migrate to AWS Serverless application with AWS Chalice framework.
 <img src="lab-guide/images/TechSummitMacau_white_Logo.png" width=420>
 
 ## WELCOME! ##
