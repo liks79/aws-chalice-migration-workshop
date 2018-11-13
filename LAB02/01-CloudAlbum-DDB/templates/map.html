@@ -15,8 +15,14 @@
             {% for photo in photos %}
 
                 {%  if loop.first %}
+                    //Wednesday, November 14, 2018
+                    //'lat' and 'lng' value is required, if it is omitted 'map.setCenter()' will do not work.
+                    //commented by Sungshik Jou
                     map = new GMaps({
-                        div: '#map-large'
+                        div: '#map-large',
+                        lat: {{ photo.geotag_lat }},
+                        lng: {{ photo.geotag_lng }}
+
                     });
                 {% endif %}
 
@@ -33,13 +39,13 @@
                 {%  if loop.last %}
                     latest_lat = {{ photo.geotag_lat }};
                     latest_lng = {{ photo.geotag_lng }};
-
                     map.setCenter(latest_lat, latest_lng);
-                {% endif %}
 
+                {% endif %}
 
             {% endfor %}
         });
+
 
 
         function popupImage(url) {
