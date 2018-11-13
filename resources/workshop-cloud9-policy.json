@@ -14,12 +14,10 @@
                 "lambda:*",
                 "cloud9:*",
                 "dynamodb:*",
+                "cognito-idp:*",
                 "xray:*"
             ],
             "Resource": "*"
         }
     ]
-
 }
-
-
