@@ -12,7 +12,7 @@ MarkupSafe==1.0
 oauthlib==2.1.0
 Pillow==5.1.0
 PyMySQL==0.8.1
-requests==2.19.1
+requests>=2.20.0
 requests-oauthlib==1.0.0
 SQLAlchemy==1.2.8
 urllib3==1.23
