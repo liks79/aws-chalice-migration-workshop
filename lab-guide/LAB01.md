@@ -43,7 +43,7 @@ In this section, you will create an AWS Cloud9 environment and explore the envir
 
 3. Click **Create environment** at the top-right corner.
 
-4. For **Name**, type **workshop-\<INITIAL\>** (or anything you want)
+4. For **Name**, type **workshop-\<INITIAL\>** (keep in mind this, it will be reused.)
 
 5. Click **Next step.**
 
@@ -140,7 +140,7 @@ conf = {
     'LOGGING_LEVEL': os.getenv('LOGGING_LEVEL', 'debug'),
     'PER_PAGE': os.getenv('PER_PAGE', 6),
     'THUMBNAIL_WIDTH': os.getenv('THUMBNAIL_WIDTH', 300),
-    'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 300),
+    'THUMBNAIL_HEIGHT': os.getenv('THUMBNAIL_HEIGHT', 200),
 }
 ```
 * The second parameter of **os.getenv** function is the default value to use when the **first parameter does not exist.**
