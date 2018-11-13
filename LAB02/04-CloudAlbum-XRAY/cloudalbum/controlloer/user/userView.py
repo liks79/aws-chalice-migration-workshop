@@ -88,11 +88,11 @@ def edit(user_id):
     :param user_id: target user id
     :return: Render signup template or return Json data
     """
-    password_reset = "https://cloudalbum.auth." \
-                     "{0}.amazoncognito.com/forgotPassword?response_type=code&client_id=" \
+    password_reset = "https://" \
+                     "{0}/forgotPassword?response_type=code&client_id=" \
                      "{1}&redirect_uri=" \
                      "{2}"\
-        .format(conf['AWS_REGION'],
+        .format(conf['COGNITO_DOMAIN'],
                 conf['COGNITO_CLIENT_ID'],
                 conf['BASE_URL']+'/callback')
 
