@@ -84,6 +84,8 @@ aws iam add-role-to-instance-profile --role-name workshop-cloud9-instance-profil
 
  * Add `execute` permission
 ```console
+aws configure set region ap-southeast-1
+
 chmod +x generate_instance_profile.sh
 ```
 
