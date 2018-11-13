@@ -16,10 +16,7 @@
                 "dynamodb:*",
                 "xray:*"
             ],
-            "Resource": "*",
-                "Condition": {
-                    "DateLessThan": {"aws:CurrentTime": "2018-08-31T23:59:59Z"}
-                }
+            "Resource": "*"
         }
     ]
 
