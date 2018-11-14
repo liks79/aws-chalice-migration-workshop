@@ -9,6 +9,7 @@
                 "s3:*",
                 "ec2:*",
                 "cloudwatch:*",
+                "logs:*",
                 "iam:*",
                 "ssm:*",
                 "lambda:*",
