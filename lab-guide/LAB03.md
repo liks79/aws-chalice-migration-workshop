@@ -112,7 +112,7 @@ chalice --version
 ```
 * output:
 ```
-chalice 1.6.0, python 3.6.5, linux 4.14.47-56.37.amzn1.x86_64
+chalice 1.6.1, python 3.6.5, linux 4.14.47-56.37.amzn1.x86_64
 ```
 
 4. Install required packages for this lab. 
@@ -626,15 +626,17 @@ aws ssm get-parameters --names "/cloudalbum/DDB_RCU" --with-decryption
 * output: 
 ```
 {
-    "InvalidParameters": [], 
     "Parameters": [
         {
-            "Version": 1, 
-            "Type": "SecureString", 
-            "Name": "/cloudalbum/DDB_RCU", 
-            "Value": "10"
+            "Name": "/cloudalbum/DDB_RCU",
+            "Type": "SecureString",
+            "Value": "10",
+            "Version": 1,
+            "LastModifiedDate": 1542092269.552,
+            "ARN": "arn:aws:ssm:ap-southeast-1:389833669077:parameter/cloudalbum/DDB_RCU"
         }
-    ]
+    ],
+    "InvalidParameters": []
 }
 ```
 
