@@ -1,18 +1,16 @@
 from chalice import Response
-from chalice import Chalice, AuthResponse
+from chalice import Chalice
 from chalicelib import util
 from chalicelib.config import conf, S3_STATIC_URL, cors_config
 from chalicelib.util import verify, get_user
 from chalicelib.models_ddb import User, Photo
 from requests.auth import HTTPBasicAuth
 from urllib.parse import parse_qs
-from datetime import datetime, timedelta
+from datetime import datetime
 from jinja2 import Environment, PackageLoader, select_autoescape
 import requests
 import uuid
 import logging
-import tempfile
-import io
 import boto3
 
 
@@ -124,20 +122,13 @@ def upload():
     user = get_user(app, User())
     form = util.get_parts(app)
 
-    filename_orig = form['filename_origin'][0].decode('utf-8')
-    ext = (filename_orig.rsplit('.', 1)[1]).lower()
-    filename = "{0}{1}.{2}".format(next(tempfile._get_candidate_names()), uuid.uuid4().hex, ext)
-
-    stream = io.BytesIO(form['photo'][0])
-    size = util.save_s3_chalice(stream, filename, user.email, app)
-
     taken_date = datetime.strptime(form['taken_date'][0].decode('utf-8'), "%Y:%m:%d %H:%M:%S")
     photo = Photo(user.id, util.current_milli_time())
     photo.tags = form['tags'][0].decode('utf-8')
     photo.desc = form['desc'][0].decode('utf-8')
-    photo.filename_orig = 'test'
-    photo.filename = filename
-    photo.filesize = size
+    photo.filename_orig = form['filename_origin'][0].decode('utf-8')
+    photo.filename = form['filename_s3_key'][0].decode('utf-8')
+    photo.filesize = int(form['file_size'][0].decode('utf-8'))
     photo.geotag_lat = form['lat'][0].decode('utf-8')
     photo.geotag_lng = form['lng'][0].decode('utf-8')
     photo.upload_date = util.the_time_now()
@@ -156,6 +147,30 @@ def upload():
         headers={'Location': '/api/home'},
         body=''
     )
+
+
+@app.route('/photo/upload/{uuid}/{file_name}', methods=['PUT'], content_types=['application/octet-stream'])
+def upload_to_s3(uuid, file_name):
+    s3_client = boto3.client('s3')
+
+    ext = (file_name.rsplit('.', 1)[1]).lower()
+    filename = "{0}.{1}".format(uuid, ext)
+    user = get_user(app, User())
+
+    body = app.current_request.raw_body
+
+    try:
+        size = util.save_s3_chalice(body, filename, user.email, app)
+
+        return Response(body='upload successful',
+                        headers={'Content-Type': 'text/plain'},
+                        status_code=200)
+
+    except Exception as e:
+        app.log.error('error occurred during upload %s' % e)
+        return Response(body='upload failed',
+                        headers={'Content-Type': 'text/plain'},
+                        status_code=400)
 
 
 @app.route('/photos/{photo_id}', methods=['DELETE'],
