@@ -177,7 +177,7 @@ def save_s3(upload_file_stream, filename, email, app):
     return len(original_bytes)
 
 
-def save_s3_chalice(upload_file_stream, filename, email, app):
+def save_s3_chalice(bytes, filename, email, app):
 
     prefix = "photos/{0}/".format(email_normalize(email))
     prefix_thumb = "photos/{0}/thumbnails/".format(email_normalize(email))
@@ -186,40 +186,31 @@ def save_s3_chalice(upload_file_stream, filename, email, app):
     key_thumb = "{0}{1}".format(prefix_thumb, filename)
 
     s3_client = boto3.client('s3')
-    original_bytes = upload_file_stream.read()
+    # original_bytes = upload_file_stream.read()
+
 
     try:
-        # Save original file
-        s3_client.put_object(
-                Bucket=conf['S3_PHOTO_BUCKET'],
-                Key=key,
-                Body=original_bytes,
-                ContentType='image/jpeg',
-                StorageClass='STANDARD'
-        )
+        temp_file = '/tmp/' + filename
+        with open(temp_file, 'wb') as f:
+            f.write(bytes)
+            statinfo = os.stat(temp_file)
+            app.log.debug(statinfo)
 
-        app.log.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key))
+        s3_client.upload_file(temp_file, conf['S3_PHOTO_BUCKET'], key)
+        thumb_path = make_thumbnails('/tmp', temp_file, app)
+        app.log.debug('thumb_path for upload: {0}'.format(thumb_path))
+        app.log.debug('prefix_thumb: {0}'.format(prefix_thumb))
 
-        # Save thumbnail file
-        upload_file_stream.seek(0)
+        statinfo = os.stat(temp_file)
+        app.log.debug(statinfo)
 
-        s3_client.put_object(
-                Bucket=conf['S3_PHOTO_BUCKET'],
-                Key=key_thumb,
-                # Body=resize_image(upload_file_stream, (conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'])),
-                Body=make_thumbnails_s3(upload_file_stream, app),
-                ContentType='image/jpeg',
-                StorageClass='STANDARD'
-        )
-
-        app.log.debug('s3://{0}/{1} uploaded'.format(conf['S3_PHOTO_BUCKET'], key_thumb))
-        upload_file_stream.seek(0)
+        s3_client.upload_file(thumb_path, conf['S3_PHOTO_BUCKET'], key_thumb)
 
     except Exception as e:
         app.log.error('Error occurred while saving file:%s', e)
         raise e
 
-    return len(original_bytes)
+    return len(bytes)
 
 
 def delete(app, filename, current_user):
@@ -268,25 +259,19 @@ def make_thumbnails(path, filename, app):
     :param app: Falsk.app
     :return: None
     """
-    thumb_path = os.path.join(path, 'thumbnails')
-    thumb_full_path = os.path.join(thumb_path, filename)
-
-    app.logger.debug(thumb_path)
-    app.logger.debug(thumb_full_path)
+    thumb_full_path = '/tmp/thumbnail.jpg'
 
     try:
-        if not os.path.exists(thumb_path):
-            os.makedirs(thumb_path)
-            app.logger.info("Create folder for thumbnails: %s", path)
-
         im = Image.open(os.path.join(path, filename))
         im = im.convert('RGB')
-        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail((int(conf['THUMBNAIL_WIDTH']), int(conf['THUMBNAIL_HEIGHT']), Image.ANTIALIAS))
         im.save(thumb_full_path)
 
     except Exception as e:
-        app.logger.error("Thumbnails creation error : %s, %s", thumb_full_path, e)
+        app.log.error("Thumbnails creation error : %s, %s", thumb_full_path, e)
         raise e
+
+    return thumb_full_path
 
 
 def make_thumbnails_s3(file_p, app):
@@ -295,7 +280,7 @@ def make_thumbnails_s3(file_p, app):
     try:
         im = Image.open(file_p)
         im = im.convert('RGB')
-        im.thumbnail((conf['THUMBNAIL_WIDTH'], conf['THUMBNAIL_HEIGHT'], Image.ANTIALIAS))
+        im.thumbnail([int(conf['THUMBNAIL_WIDTH']), int(conf['THUMBNAIL_HEIGHT'])], Image.ANTIALIAS)
         im.save(result_bytes_stream, 'JPEG')
     except Exception as e:
         app.log.debug(e)
