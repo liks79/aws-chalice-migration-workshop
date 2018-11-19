@@ -23,6 +23,81 @@
             }
         }
     });
+
+
+    function guid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+
+    function file_upload(){
+
+        var fileInput = document.getElementById("photo");
+        var files = fileInput.files;
+        var file = files[0];
+        var reader = new FileReader();
+
+        reader.onload = function() {
+            var arrayBuffer = this.result;
+            var bytes = new Uint8Array(arrayBuffer);
+            var size = bytes.length;
+
+            filename = $('#photo').val();
+            console.log('=========');
+            console.log(filename);
+            console.log(size);
+            console.log(arrayBuffer);
+            console.log('=========');
+
+            var uuid = guid();
+            var filename = $('#photo').val().replace(/^.*\\/, "");
+
+            // There is a difficult point to parse multipart-form data via API-GW using chalice.
+            // So, upload binary file with 'application/octet-stream' and then call form submit for input field data save.
+            $.ajax({
+              url: '/api/photo/upload/' + uuid + '/' + filename,
+              type: 'PUT',
+              contentType: 'application/octet-stream',
+              data: bytes,
+              async: false,
+              processData: false,
+                success: function (data) {
+
+                    console.log(data);
+                    console.log('Successfully updated!');
+
+                    $('[name=filename_origin]').val(filename);
+                    $('[name=filename_s3_key]').val(uuid+'.jpg');
+                    $('[name=file_size]').val(size);
+
+                    console.log($('[name=filename_origin]').val());
+                    console.log($('[name=filename_s3_key]').val());
+                    console.log($('[name=file_size]').val());
+
+                    $('#upload').submit();
+                    console.log('submitted');
+
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                    console.log('Error occurred! Please try again.');
+                }
+            });
+
+        }
+
+        reader.readAsArrayBuffer(file);
+
+
+    }
+
+
+
   </script>
 
 {% endblock %}
@@ -94,7 +169,7 @@
                                    <i class="fas fa-edit"></i> Update
                             </button>
                         {% else %}
-                            <button class="btn btn-lg btn-dark btn-block" type="submit">
+                            <button class="btn btn-lg btn-dark btn-block" type="button" onClick="file_upload();">
                                    <i class="fas fa-upload"></i> Upload
                             </button>
                         {% endif %}
@@ -130,6 +205,8 @@
             <input id="nation" name="nation" type="hidden" value="">
             <input id="formatted_address" name="formatted_address" type="hidden" value="">
             <input id="filename_origin" name="filename_origin" type="hidden" value="">
+            <input id="filename_s3_key" name="filename_s3_key" type="hidden" value="">
+            <input id="file_size" name="file_size" type="hidden" value="">
       </form>
 
 
@@ -245,6 +322,7 @@
 
 
       {% if photo %}
+
          function update(){
 
            $.ajax({
