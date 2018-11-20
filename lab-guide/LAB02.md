@@ -107,20 +107,18 @@ chmod +x generate_instance_profile.sh
                 "s3:*",
                 "ec2:*",
                 "cloudwatch:*",
+                "logs:*",
                 "iam:*",
                 "ssm:*",
                 "lambda:*",
                 "cloud9:*",
                 "dynamodb:*",
+                "cognito-idp:*",
                 "xray:*"
             ],
-            "Resource": "*",
-                "Condition": {
-                    "DateLessThan": {"aws:CurrentTime": "2018-08-31T23:59:59Z"}
-                }
+            "Resource": "*"
         }
     ]
-
 }
 
 ```
