@@ -18,7 +18,7 @@ SQLAlchemy==1.2.8
 twython==3.7.0
 urllib3==1.23
 uWSGI==2.0.17
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 WTForms==2.2.1
 boto3
 import_string
