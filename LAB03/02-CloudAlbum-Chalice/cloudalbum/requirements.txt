@@ -7,7 +7,7 @@ oauthlib==2.1.0
 Pillow==5.1.0
 requests>=2.20.0
 requests-oauthlib==1.0.0
-urllib3==1.23
+urllib3==1.26.5
 boto3
 import_string
 pynamodb
